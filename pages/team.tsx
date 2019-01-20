@@ -394,7 +394,7 @@ class Team extends React.Component<Props, State> {
                                             rating,
                                             userId: !isLoggedIn ? null : userId,
                                             clipId: clip.id,
-                                            playerId: clip.playerId
+                                            playerId: clip.player.id
                                           }
                                         ]
                                       }}
