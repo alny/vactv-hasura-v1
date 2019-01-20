@@ -59,47 +59,6 @@ class Players extends React.Component<Props, State> {
     });
   };
 
-  setFilters = async () => {
-    let orderByOption;
-    this.setState({ playerLength: 0 });
-    if (this.state.sort === "Newest") {
-      orderByOption = { createdAt: "desc_nulls_last" };
-    }
-    if (this.state.sort === "Most Votes") {
-      orderByOption = { ratings_aggregate: { count: "desc_nulls_last" } };
-    }
-    if (this.state.sort === "Highest Rated") {
-      orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } }
-      };
-    }
-    const data = await this.props.client.query({
-      query: fetchTopPlayers,
-      variables: {
-        filters: this.state.filters,
-        offset: this.state.playerLength,
-        orderBy: orderByOption,
-        limit: 12
-      }
-    });
-    this.setState({
-      orderBy: orderByOption,
-      players: [...data.data.player],
-      playerLength: data.data.player.length
-    });
-  };
-
-  handleChange = name => value => {
-    this.setState(
-      //@ts-ignore
-      {
-        [name]: value.value,
-        playerLength: 0
-      },
-      () => this.setFilters()
-    );
-  };
-
   async componentDidMount() {
     console.log(this.props);
     const data = await this.props.client.query({
@@ -129,89 +88,82 @@ class Players extends React.Component<Props, State> {
             <div className="container">
               <div className="above">
                 <h1>Top Pro Players</h1>
-                <div className="buttons">
-                  <Select
-                    menuPlacement="auto"
-                    minMenuHeight={200}
-                    onChange={this.handleChange("sort")}
-                    className="sortBySelect"
-                    isSearchable={false}
-                    placeholder="Sort By"
-                    options={sortMoreOptions}
-                  />
-                </div>
               </div>
               <div className="row">
-                {players.map((player, i) => (
-                  <div key={player.id} className="col-md-3">
-                    <span className="totalPlayerClips"># {i + 1}</span>
-                    <div className="inside">
-                      <Link route="player" id={player.id}>
-                        <a>
-                          <img
-                            className="card-img-top"
-                            src={player.image}
-                            alt={player.image}
-                          />
-                        </a>
-                      </Link>
-
-                      <div className="middle">
-                        <div>
-                          <h3
-                            style={{
-                              textTransform: "capitalize"
-                            }}
-                          >
-                            <Link route="player" id={player.id}>
-                              <a>{player.nickName}</a>
-                            </Link>
-                          </h3>
-                          <h6
-                            style={{
-                              textTransform: "capitalize",
-                              fontSize: "12px"
-                            }}
-                          >
-                            {player.name}
-                          </h6>
-                        </div>
-                      </div>
-                      <div className="bottom">
-                        <Link route="team" id={player.team.id}>
+                {players ? (
+                  players.map((player, i) => (
+                    <div key={player.id} className="col-md-3">
+                      <span className="totalPlayerClips"># {i + 1}</span>
+                      <div className="inside">
+                        <Link route="player" id={player.id}>
                           <a>
                             <img
-                              src={player.team.image}
-                              alt={player.team.name}
+                              className="card-img-top"
+                              src={player.image}
+                              alt={player.image}
                             />
-                            <span>{player.team.name}</span>
                           </a>
                         </Link>
-                        <div
-                          style={{
-                            width: "32px",
-                            display: "inline-block",
-                            float: "right"
-                          }}
-                        >
-                          <CircularProgressbar
-                            percentage={
-                              toFixed(
+
+                        <div className="middle">
+                          <div>
+                            <h3
+                              style={{
+                                textTransform: "capitalize"
+                              }}
+                            >
+                              <Link route="player" id={player.id}>
+                                <a>{player.nickName}</a>
+                              </Link>
+                            </h3>
+                            <h6
+                              style={{
+                                textTransform: "capitalize",
+                                fontSize: "12px"
+                              }}
+                            >
+                              {player.name}
+                            </h6>
+                          </div>
+                        </div>
+                        <div className="bottom">
+                          <Link route="team" id={player.team.id}>
+                            <a>
+                              <img
+                                src={player.team.image}
+                                alt={player.team.name}
+                              />
+                              <span>{player.team.name}</span>
+                            </a>
+                          </Link>
+                          <div
+                            style={{
+                              width: "32px",
+                              display: "inline-block",
+                              float: "right"
+                            }}
+                          >
+                            <CircularProgressbar
+                              percentage={
+                                toFixed(
+                                  player.rating_aggregate.aggregate.avg.rating
+                                ) * 10
+                              }
+                              text={toFixed(
                                 player.rating_aggregate.aggregate.avg.rating
-                              ) * 10
-                            }
-                            text={toFixed(
-                              player.rating_aggregate.aggregate.avg.rating
-                            )}
-                            styles={circleStyle(
-                              player.rating_aggregate.aggregate.avg.rating
-                            )}
-                          />
+                              )}
+                              styles={circleStyle(
+                                player.rating_aggregate.aggregate.avg.rating
+                              )}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <h2>Loading</h2>
+                )}
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ export const GET_FRONTPAGE_EVENTS = gql`
       order_by: { createdAt: desc }
       limit: 1
     ) {
+      id
       name
       clips_aggregate {
         aggregate {

@@ -98,7 +98,7 @@ aside {
 }
 .freelancers .inside:hover,
 .sign .inside:hover {
-  -webkit-transform: translateY(-5px) translateZ(0);
+  /* -webkit-transform: translateY(-5px) translateZ(0); */
 }
 .load-more .btn-primary:active,
 .load-more .btn-primary:focus {
@@ -433,7 +433,7 @@ aside {
   transition: all 0.3s;
 }
 .freelancers .inside:hover {
-  transform: translateY(-5px) translateZ(0);
+  transform: translateY(-5px) translateZ(5px);
 }
 .freelancers .inside img {
   border-top-left-radius: 3px;
@@ -505,7 +505,7 @@ aside {
 }
 .freelancers .middle h3 {
   font-size: 19px;
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1.7;
   margin-bottom: 6px;
 }
@@ -2195,36 +2195,36 @@ aside {
 
 .goldMedal {
   position: absolute;
-  top: 10px;
-  font-size: 32px;
+  top: 32px;
+  font-size: 16px;
   left: 30px;
   color: #f7ab00;
   font-weight: 800;
-  background: #ffffffb8;
+  background: #ffffff;
   padding: 3px;
   border-radius: 5px;
 }
 
 .silverMedal {
   position: absolute;
-  top: 10px;
-  font-size: 32px;
+  top: 32px;
+  font-size: 16px;
   left: 30px;
   color: #cdcdcd;
   font-weight: 800;
-  background: #ffffffb8;
+  background: #ffffff;
   padding: 3px;
   border-radius: 5px;
 }
 
 .bronzeMedal {
   position: absolute;
-  top: 10px;
-  font-size: 32px;
+  top: 32px;
+  font-size: 16px;
   left: 30px;
   color: #d24a17;
   font-weight: 800;
-  background: #ffffffb8;
+  background: #ffffff;
   padding: 3px;
   border-radius: 5px;
 }
@@ -2237,6 +2237,18 @@ aside {
   color: #f6f5f9;
   font-weight: 600;
   background: #000000a6;
+  padding: 0px 6px 0px 6px;
+  border-radius: 3px;
+}
+
+.topRatedThisMonth {
+  position: absolute;
+  top: 10px;
+  font-size: 12px;
+  left: 30px;
+  color: #212529;
+  font-weight: 600;
+  background: #fbfcfd;
   padding: 0px 6px 0px 6px;
   border-radius: 3px;
 }
@@ -2287,4 +2299,21 @@ aside {
   padding-right: 10px;
   padding-left: 10px;
   cursor: pointer;
+}
+
+.modalPlayerImg {
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  margin-top: 4px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.modalPlayerImgText {
+  margin-left: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+  top: 5px;
 }

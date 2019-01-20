@@ -397,24 +397,28 @@ class Uploads extends React.Component<Props, State> {
                                         height: "28px"
                                       }}
                                     >
-                                      <h4
-                                        style={{
-                                          marginLeft: "15px",
-                                          textTransform: "capitalize",
-                                          display: "inline-block",
-                                          fontSize: "16px",
-                                          marginTop: "10px"
-                                        }}
-                                      >
-                                        {clip.map} | 💢{" "}
-                                        <span
-                                          style={{
-                                            textTransform: "uppercase"
-                                          }}
-                                        >
-                                          {clip.weapon}
-                                        </span>
-                                      </h4>
+                                      <Link route="player" id={clip.player.id}>
+                                        <a>
+                                          <img
+                                            className="modalPlayerImg"
+                                            src={
+                                              clip.player === null
+                                                ? ""
+                                                : clip.player.image
+                                            }
+                                            alt={
+                                              clip.player === null
+                                                ? ""
+                                                : clip.player.nickName
+                                            }
+                                          />
+                                          <span className="modalPlayerImgText">
+                                            {clip.player === null
+                                              ? ""
+                                              : clip.player.nickName}
+                                          </span>
+                                        </a>
+                                      </Link>
                                       {!isLoggedIn ? (
                                         <div
                                           style={{
