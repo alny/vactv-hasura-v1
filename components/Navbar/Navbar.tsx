@@ -234,6 +234,7 @@ class Navbar extends React.Component<Props, State> {
             </div>
           </div>
         </nav>
+        <div className="corner-ribbon top-left sticky red shadow">BETA</div>
       </header>
     );
   }
