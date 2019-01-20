@@ -206,7 +206,7 @@ class Events extends React.Component<Props, State> {
           <div className="freelancers sidebar">
             <div className="container">
               <div className="above">
-                <h1>{eventProfile ? eventProfile.name : null}</h1>
+                <h1>{eventProfile ? eventProfile.name : null} 🔥</h1>
                 <div className="buttons">
                   <Select
                     menuPlacement="auto"

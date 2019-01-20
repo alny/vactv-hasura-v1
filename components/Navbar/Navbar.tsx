@@ -102,7 +102,16 @@ class Navbar extends React.Component<Props, State> {
                       className="btn btn-lg btn-primary btn-block"
                       type="submit"
                     >
-                      Join/Login
+                      Join/Login{" "}
+                      <i
+                        style={{
+                          position: "relative",
+                          top: "2px",
+                          left: "5px",
+                          fontSize: "18px"
+                        }}
+                        className="fa fa-sign-in"
+                      />
                     </button>
                   </a>
                 </div>
