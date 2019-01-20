@@ -146,6 +146,12 @@ class Navbar extends React.Component<Props, State> {
                             <i className="fa fa-user-circle" />
                             Your Profile
                           </a>
+                          <Link href="/moderator">
+                            <a className="dropdown-item">
+                              <i className="fa fa-user-secret" />
+                              Moderator
+                            </a>
+                          </Link>
                           <Link href="/add">
                             <a className="dropdown-item">
                               <i className="fa fa-youtube" />
