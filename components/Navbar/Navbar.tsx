@@ -91,7 +91,14 @@ class Navbar extends React.Component<Props, State> {
                 <div className="profile">
                   <a onClick={() => login()} href="#">
                     <button
-                      style={{ padding: "6px 25px", borderRadius: "100px" }}
+                      style={{
+                        padding: "8px 25px",
+                        borderRadius: "100px",
+                        color: "#32364f",
+                        background: "white",
+                        border: "2px solid #313245",
+                        boxShadow: "none"
+                      }}
                       className="btn btn-lg btn-primary btn-block"
                       type="submit"
                     >

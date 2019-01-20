@@ -35,7 +35,7 @@ class About extends React.Component<Props, State> {
                             <div className="company">
                               <img src="/static/img/vac.png" alt="" />
                               <div className="info">
-                                <h2>Vac.Tv Inc.</h2>
+                                <h2>Vac.Tv</h2>
                                 <span>
                                   <i className="fa fa-map-marker" /> Denmark
                                 </span>
