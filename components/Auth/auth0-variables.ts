@@ -7,5 +7,5 @@ export const AUTH_CONFIG = {
     : "urE2ZGI9B2orh5vKNnQYoNspSHSxU1uu",
   callbackUrl: dev
     ? "http://localhost:3000/callback"
-    : "https://vactv-web.herokuapp.com/"
+    : "https://vactv-web.herokuapp.com/callback"
 };
