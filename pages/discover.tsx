@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 //@ts-ignore
 import { Link } from "../server/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
+import moment from "moment";
 
 type Props = {
   isLoggedIn: boolean;
@@ -91,11 +92,10 @@ class Discover extends React.Component<Props, State> {
   };
 
   filters = (fetchMore, length) => {
-    var now = new Date();
-    var startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
-    var endofDay = new Date();
-    endofDay.setHours(23, 59, 59, 999);
+    this.setState({ sort: "latest" });
+    //@ts-ignore
+    var startDay = moment().startOf("day");
+    var endDay = moment().endOf("day");
 
     if (this.state.sort === "today") {
       this.setState(
@@ -105,8 +105,8 @@ class Discover extends React.Component<Props, State> {
           },
           filters: {
             _and: [
-              { createdAt: { _gte: startOfDay.toISOString() } },
-              { createdAt: { _lte: endofDay.toISOString() } }
+              { createdAt: { _gte: startDay.toISOString() } },
+              { createdAt: { _lte: endDay.toISOString() } }
             ]
           },
           withFilter: true
@@ -115,10 +115,11 @@ class Discover extends React.Component<Props, State> {
       );
     }
     if (this.state.sort === "week") {
-      var firstday = new Date(now.setDate(now.getDate() - now.getDay()));
-      var lastday = new Date(now.setDate(now.getDate() - now.getDay() + 6));
-      var firstDayFormatted = dateFormat(firstday, "isoDate");
-      var LastDayFormatted = dateFormat(lastday, "isoDate");
+      var currentDate = moment();
+      //@ts-ignore
+      var weekStart = currentDate.clone().startOf("isoweek");
+      //@ts-ignore
+      var weekEnd = currentDate.clone().endOf("isoweek");
       this.setState(
         {
           orderBy: {
@@ -126,8 +127,8 @@ class Discover extends React.Component<Props, State> {
           },
           filters: {
             _and: [
-              { createdAt: { _gte: firstDayFormatted } },
-              { createdAt: { _lte: LastDayFormatted } }
+              { createdAt: { _gte: weekStart.toISOString() } },
+              { createdAt: { _lte: weekEnd.toISOString() } }
             ]
           },
           withFilter: true
@@ -136,10 +137,8 @@ class Discover extends React.Component<Props, State> {
       );
     }
     if (this.state.sort === "month") {
-      var firstday = new Date(now.setDate(now.getDate() - now.getDay()));
-      var lastday = new Date(now.setDate(now.getDate() - now.getDay() + 30));
-      var firstDayFormatted = dateFormat(firstday, "isoDate");
-      var LastDayFormatted = dateFormat(lastday, "isoDate");
+      const startOfMonth = moment().startOf("month");
+      const endOfMonth = moment().endOf("month");
       this.setState(
         {
           orderBy: {
@@ -147,8 +146,8 @@ class Discover extends React.Component<Props, State> {
           },
           filters: {
             _and: [
-              { createdAt: { _gte: firstDayFormatted } },
-              { createdAt: { _lte: LastDayFormatted } }
+              { createdAt: { _gte: startOfMonth } },
+              { createdAt: { _lte: endOfMonth } }
             ]
           },
           withFilter: true
