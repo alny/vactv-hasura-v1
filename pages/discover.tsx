@@ -67,9 +67,6 @@ class Discover extends React.Component<Props, State> {
   }
 
   getMoreClips = (fetchMore, offset) => {
-    console.log(offset);
-    console.log(this.state.withFilter);
-
     // event.preventDefault();
     fetchMore({
       variables: {
@@ -86,9 +83,6 @@ class Discover extends React.Component<Props, State> {
             clip: [...fetchMoreResult.clip]
           });
         }
-        console.log("OLD", prev.clip);
-        console.log("NEW", fetchMoreResult.clip);
-
         return Object.assign({}, prev, {
           clip: [...prev.clip, ...fetchMoreResult.clip]
         });
@@ -97,14 +91,11 @@ class Discover extends React.Component<Props, State> {
   };
 
   filters = (fetchMore, length) => {
+    var now = new Date();
     var startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
-
     var endofDay = new Date();
     endofDay.setHours(23, 59, 59, 999);
-
-    console.log(startOfDay.toISOString());
-    console.log(endofDay.toISOString());
 
     if (this.state.sort === "today") {
       this.setState(
@@ -124,13 +115,10 @@ class Discover extends React.Component<Props, State> {
       );
     }
     if (this.state.sort === "week") {
-      var now = new Date();
-
       var firstday = new Date(now.setDate(now.getDate() - now.getDay()));
       var lastday = new Date(now.setDate(now.getDate() - now.getDay() + 6));
-      var firstDayFormatted = dateFormat(firstday, "isoDateTime");
-      var LastDayFormatted = dateFormat(lastday, "isoDateTime");
-
+      var firstDayFormatted = dateFormat(firstday, "isoDate");
+      var LastDayFormatted = dateFormat(lastday, "isoDate");
       this.setState(
         {
           orderBy: {
@@ -150,9 +138,8 @@ class Discover extends React.Component<Props, State> {
     if (this.state.sort === "month") {
       var firstday = new Date(now.setDate(now.getDate() - now.getDay()));
       var lastday = new Date(now.setDate(now.getDate() - now.getDay() + 30));
-      var firstDayFormatted = dateFormat(firstday, "isoDateTime");
-      var LastDayFormatted = dateFormat(lastday, "isoDateTime");
-      console.log(firstDayFormatted);
+      var firstDayFormatted = dateFormat(firstday, "isoDate");
+      var LastDayFormatted = dateFormat(lastday, "isoDate");
       this.setState(
         {
           orderBy: {
@@ -270,14 +257,19 @@ class Discover extends React.Component<Props, State> {
 
                       <section>
                         <InfiniteScroll
-                          dataLength={data.clip.length}
+                          dataLength={data.clip ? data.clip.length : 0}
                           next={() =>
-                            this.getMoreClips(fetchMore, data.clip.length)
+                            this.getMoreClips(
+                              fetchMore,
+                              data.clip ? data.clip.length : 0
+                            )
                           }
                           style={{ overflow: "visible" }}
                           hasMore={
-                            data.clip.length !==
-                            data.clip_aggregate.aggregate.count
+                            data.clip
+                              ? data.clip.length !==
+                                data.clip_aggregate.aggregate.count
+                              : false
                           }
                           loading={<div>Loading</div>}
                           endMessage={
