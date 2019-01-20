@@ -100,8 +100,8 @@ class Events extends React.Component<Props, State> {
       }
     });
     this.setState({
-      clips: [...this.state.clips, ...data.data.player[0].clips],
-      clipLength: this.state.clipLength + data.data.player[0].clips.length
+      clips: [...this.state.clips, ...data.data.event[0].clips],
+      clipLength: this.state.clipLength + data.data.event[0].clips.length
     });
   };
 
