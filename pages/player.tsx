@@ -1,7 +1,7 @@
 import * as React from "react";
 import Layout from "../components/Layout";
 import Select from "react-select";
-import { sortOptions, rateOptions, sortMoreOptions } from "../utils/Options";
+import { rateOptions, sortMoreOptions } from "../utils/Options";
 import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
 import { ToastContainer, toast } from "react-toastify";
 import { Mutation } from "react-apollo";
@@ -201,10 +201,7 @@ class Player extends React.Component<Props, State> {
   }
 
   render() {
-    const { sort, playerProfile, rating } = this.state;
-    const {
-      router: { query }
-    } = this.props;
+    const { playerProfile, rating } = this.state;
     return (
       <Layout title="Vac.Tv | Pro Player" isLoggedIn={isLoggedIn}>
         <main>
@@ -359,7 +356,7 @@ class Player extends React.Component<Props, State> {
                             marginRight: "10px"
                           }}
                         >
-                          Total Clips: {this.state.clips.length}
+                          Total Clips:
                         </span>
 
                         <span className="totalRating">
