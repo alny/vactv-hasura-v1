@@ -2,7 +2,13 @@ import { gql } from "apollo-boost";
 
 export const getTeamWithPlayers = gql`
   query getTeamWithPlayers($teamId: uuid!) {
-    clip(where: { player: { team: { id: { _eq: $teamId } } } }, limit: 12) {
+    clip(
+      where: {
+        isPublic: { _eq: true }
+        player: { team: { id: { _eq: $teamId } } }
+      }
+      limit: 12
+    ) {
       id
       title
       thumbNail

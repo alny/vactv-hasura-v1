@@ -105,7 +105,8 @@ class Discover extends React.Component<Props, State> {
           filters: {
             _and: [
               { createdAt: { _gte: startDay.toISOString() } },
-              { createdAt: { _lte: endDay.toISOString() } }
+              { createdAt: { _lte: endDay.toISOString() } },
+              { isPublic: { _eq: true } }
             ]
           },
           withFilter: true
@@ -127,7 +128,8 @@ class Discover extends React.Component<Props, State> {
           filters: {
             _and: [
               { createdAt: { _gte: weekStart.toISOString() } },
-              { createdAt: { _lte: weekEnd.toISOString() } }
+              { createdAt: { _lte: weekEnd.toISOString() } },
+              { isPublic: { _eq: true } }
             ]
           },
           withFilter: true
@@ -146,7 +148,8 @@ class Discover extends React.Component<Props, State> {
           filters: {
             _and: [
               { createdAt: { _gte: startOfMonth } },
-              { createdAt: { _lte: endOfMonth } }
+              { createdAt: { _lte: endOfMonth } },
+              { isPublic: { _eq: true } }
             ]
           },
           withFilter: true
@@ -210,6 +213,7 @@ class Discover extends React.Component<Props, State> {
               <Query
                 query={getClipsWithFilter}
                 variables={{
+                  filters: { isPublic: { _eq: true } },
                   orderBy,
                   offset: 0,
                   limit: 12

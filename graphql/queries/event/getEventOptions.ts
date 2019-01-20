@@ -9,12 +9,12 @@ export const GET_FRONTPAGE_EVENTS = gql`
     ) {
       id
       name
-      clips_aggregate {
+      clips_aggregate(where: { isPublic: { _eq: true } }) {
         aggregate {
           count
         }
       }
-      clips(limit: 4) {
+      clips(where: { isPublic: { _eq: true } }, limit: 4) {
         id
         title
         thumbNail

@@ -11,12 +11,17 @@ export const getSingleEventClips = gql`
       id
       image
       name
-      clips_aggregate {
+      clips_aggregate(where: { isPublic: { _eq: true } }) {
         aggregate {
           count
         }
       }
-      clips(order_by: $orderBy, offset: $offset, limit: $limit) {
+      clips(
+        order_by: $orderBy
+        offset: $offset
+        limit: $limit
+        where: { isPublic: { _eq: true } }
+      ) {
         id
         title
         thumbNail

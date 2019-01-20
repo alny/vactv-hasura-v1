@@ -17,7 +17,7 @@ export const getSinglePlayerClips = gql`
         image
         name
       }
-      clips_aggregate {
+      clips_aggregate(where: { isPublic: { _eq: true } }) {
         aggregate {
           count
         }
@@ -30,7 +30,12 @@ export const getSinglePlayerClips = gql`
           }
         }
       }
-      clips(order_by: $orderBy, offset: $offset, limit: $limit) {
+      clips(
+        order_by: $orderBy
+        offset: $offset
+        limit: $limit
+        where: { isPublic: { _eq: true } }
+      ) {
         id
         title
         thumbNail

@@ -171,7 +171,8 @@ class Browse extends React.Component<Props, State> {
         category: { _eq: this.state.category },
         weapon: { _eq: this.state.weapon },
         player: { id: { _eq: this.state.player } },
-        event: { id: { _eq: this.state.event } }
+        event: { id: { _eq: this.state.event } },
+        isPublic: { _eq: true }
       },
       orderBy: orderByOption
     });
@@ -311,7 +312,7 @@ class Browse extends React.Component<Props, State> {
               <Query
                 query={getClipsWithFilter}
                 variables={{
-                  // filters: { isPublic: { _eq: true } },
+                  filters: { isPublic: { _eq: true } },
                   offset: 0,
                   limit: 12
                 }}
