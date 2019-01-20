@@ -8,7 +8,7 @@ let apolloClient = null;
 if (!(process as any).browser) {
   (global as any).fetch = fetch;
 }
-// const dev = process.env.NODE_ENV !== "production";
+//const dev = process.env.NODE_ENV !== "production";
 
 function create(initialState, { getToken }) {
   const httpLink = new HttpLink({
