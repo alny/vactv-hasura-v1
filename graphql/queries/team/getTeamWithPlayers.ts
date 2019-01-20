@@ -34,7 +34,9 @@ export const getTeamWithPlayers = gql`
       id
       image
       name
-      players(order_by: { rating_aggregate: { avg: { rating: desc } } }) {
+      players(
+        order_by: { rating_aggregate: { avg: { rating: desc_nulls_last } } }
+      ) {
         id
         image
         name

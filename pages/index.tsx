@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { GET_FRONTPAGE_EVENTS } from "../graphql/queries/event/getEventOptions";
 //@ts-ignore
 import { Link } from "../server/routes";
+import Links from "next/link";
 
 type Props = {
   isLoggedIn: boolean;
@@ -349,9 +350,13 @@ class Home extends React.Component<Props, State> {
                           ))}
                         </div>
                         <div className="above">
-                          <h1 style={{ marginBottom: "24px" }}>
-                            Top Players 🏅
-                          </h1>
+                          <Links href="players">
+                            <a>
+                              <h1 style={{ marginBottom: "24px" }}>
+                                Top Players 🏅
+                              </h1>
+                            </a>
+                          </Links>
                         </div>
                         <section>
                           <div className="row">

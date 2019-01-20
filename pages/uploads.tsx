@@ -1,7 +1,7 @@
 import * as React from "react";
 import Layout from "../components/Layout";
 import Select from "react-select";
-import { sortOptions, rateOptions, sortMoreOptions } from "../utils/Options";
+import { rateOptions, sortMoreOptions } from "../utils/Options";
 import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
 import { ToastContainer, toast } from "react-toastify";
 import { Mutation } from "react-apollo";
@@ -183,7 +183,7 @@ class Uploads extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn, loggedInUser } = this.props;
-    const { sort, rating } = this.state;
+    const { rating } = this.state;
     return (
       <Layout title="Vac.Tv | Uploads by you" isLoggedIn={isLoggedIn}>
         <main>

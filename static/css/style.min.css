@@ -427,7 +427,7 @@ aside {
 }
 .freelancers .inside {
   background: #fff;
-  box-shadow: 1px 1px 22px rgba(157, 184, 209, 0.19);
+  box-shadow: 1px 1px 22px rgba(157, 184, 209, 0.4);
   border-radius: 3px;
   margin-bottom: 30px;
   transition: all 0.3s;

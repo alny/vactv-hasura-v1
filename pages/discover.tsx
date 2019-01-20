@@ -4,7 +4,6 @@ import { Query, Mutation } from "react-apollo";
 import { getClipsWithFilter } from "../graphql/queries/clips/getClipsWithFilter";
 import { sortOptions, rateOptions } from "../utils/Options";
 import Select from "react-select";
-import dateFormat from "dateformat";
 import defaultPage from "../components/hocs/defaultPage";
 import CircularProgressbar from "react-circular-progressbar";
 import { Modal } from "react-overlays";
@@ -91,7 +90,7 @@ class Discover extends React.Component<Props, State> {
     });
   };
 
-  filters = (fetchMore, length) => {
+  filters = fetchMore => {
     this.setState({ sort: "latest" });
     //@ts-ignore
     var startDay = moment().startOf("day");
@@ -157,14 +156,14 @@ class Discover extends React.Component<Props, State> {
     }
   };
 
-  handleSelectChange = (name, fetchMore, length) => value => {
+  handleSelectChange = (name, fetchMore) => value => {
     event.preventDefault();
     this.setState(
       //@ts-ignore
       {
         [name]: value.value
       },
-      () => this.filters(fetchMore, length)
+      () => this.filters(fetchMore)
     );
   };
 
@@ -240,8 +239,7 @@ class Discover extends React.Component<Props, State> {
                           <Select
                             onChange={this.handleSelectChange(
                               "sort",
-                              fetchMore,
-                              data.clip ? data.clip.length : 0
+                              fetchMore
                             )}
                             menuPlacement="auto"
                             minMenuHeight={200}

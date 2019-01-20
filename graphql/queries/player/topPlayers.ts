@@ -1,13 +1,18 @@
 import { gql } from "apollo-boost";
 
-export const getTopPlayers = gql`
+export const fetchTopPlayers = gql`
   query getTopPlayers(
     $filters: player_bool_exp
-    $orderBy: [clip_order_by!]
+    $orderBy: [player_order_by!]
     $offset: Int!
     $limit: Int!
   ) {
-    player(where: { _and: [$filters] }) {
+    player(
+      where: { _and: [$filters] }
+      order_by: $orderBy
+      limit: $limit
+      offset: $offset
+    ) {
       id
       image
       name
