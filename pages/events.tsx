@@ -374,7 +374,7 @@ class Events extends React.Component<Props, State> {
                                     rating,
                                     userId: !isLoggedIn ? null : userId,
                                     clipId: clip.id,
-                                    playerId: !clip.player.id
+                                    playerId: clip.player.id
                                   }
                                 ]
                               }}
