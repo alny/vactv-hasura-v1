@@ -207,7 +207,12 @@ class Discover extends React.Component<Props, State> {
     const { isLoggedIn } = this.props;
     return (
       <Layout title="Vac.Tv | Discover Clips" isLoggedIn={isLoggedIn}>
-        <main>
+        <main
+          style={{
+            backgroundImage:
+              "url(https://s3.eu-central-1.amazonaws.com/vactv/train2.jpg)"
+          }}
+        >
           <div style={{ paddingTop: "30px" }} className="freelancers sidebar">
             <div className="container">
               <Query

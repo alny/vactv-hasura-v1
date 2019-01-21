@@ -306,7 +306,13 @@ class Browse extends React.Component<Props, State> {
     const { isLoggedIn } = this.props;
     return (
       <Layout title="Vac.Tv | Browse Clips" isLoggedIn={isLoggedIn}>
-        <main>
+        <main
+          style={{
+            backgroundImage:
+              "url(https://s3.eu-central-1.amazonaws.com/vactv/inf.jpg)",
+            backgroundRepeat: "none"
+          }}
+        >
           <div className="freelancers sidebar">
             <div className="container">
               <Query

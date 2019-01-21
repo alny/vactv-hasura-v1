@@ -2451,6 +2451,8 @@ aside {
   border: 1px solid #bdbac2;
   border-radius: 4px;
   cursor: pointer;
+  padding: 5px;
+  font-size: 13px;
 }
 
 .filterSearchButton {

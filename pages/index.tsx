@@ -100,7 +100,12 @@ class Home extends React.Component<Props, State> {
         isLoggedIn={isLoggedIn}
         loggedInUser={loggedInUser}
       >
-        <main>
+        <main
+          style={{
+            backgroundImage:
+              "url(https://s3.eu-central-1.amazonaws.com/vactv/dd2.jpg)"
+          }}
+        >
           <div style={{ paddingTop: "35px" }} className="freelancers sidebar">
             <Query query={GET_FRONTPAGE_EVENTS}>
               {({ loading, error, data }) => {
