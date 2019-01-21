@@ -17,7 +17,7 @@ export const rateOptions = [
   { key: "5", value: "5", label: "5 - GJ m8 😊" },
   { key: "6", value: "6", label: "6 - Awesome 😄" },
   { key: "7", value: "7", label: "7 - Crazy 😆" },
-  { key: "8", value: "8", label: "8 - Money Shot 🤑" },
+  { key: "8", value: "8", label: "8 - Stunning 🤑" },
   { key: "9", value: "9", label: "9 - Absolutely Insane 🤪" },
   { key: "10", value: "10", label: "10 - Impossible 🤩😱" }
 ];
@@ -32,6 +32,14 @@ export const sortChartOptions = [
   { key: "week", value: "week", label: "This Week" },
   { key: "month", value: "month", label: "This Month" },
   { key: "overall", value: "overall", label: "Overall" }
+];
+
+export const clipTypeOption = [
+  { value: "Pro Clip", label: "Pro Clip" },
+  { value: "User Clip", label: "User Clip" },
+  { value: "Tutorial", label: "Tutorial" },
+  { value: "Highlight", label: "Highlight" },
+  { value: "Fragmovie", label: "Fragmovie" }
 ];
 
 export const sortMoreOptions = [

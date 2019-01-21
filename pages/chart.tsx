@@ -13,7 +13,8 @@ import {
   modalStyle,
   backdropStyle,
   medalPicker,
-  medalStylePicker
+  medalStylePicker,
+  filterModalStyle
 } from "../utils/Styles";
 import CircularProgressbar from "react-circular-progressbar";
 import { Modal } from "react-overlays";
@@ -43,6 +44,7 @@ interface State {
   weapon: any;
   category: any;
   map: any;
+  showFilterModal: any;
 }
 
 class Chart extends React.Component<Props, State> {
@@ -55,6 +57,7 @@ class Chart extends React.Component<Props, State> {
       rating: 0,
       weapon: null,
       category: null,
+      showFilterModal: false,
       map: null,
       orderBy: {
         ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
@@ -65,7 +68,7 @@ class Chart extends React.Component<Props, State> {
   }
 
   onCloseModal = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, showFilterModal: false });
   };
 
   onOpenModal(id, event) {
@@ -152,6 +155,10 @@ class Chart extends React.Component<Props, State> {
     return <div {...props} style={backdropStyle} />;
   }
 
+  open = () => {
+    this.setState({ showFilterModal: true });
+  };
+
   render() {
     const { isLoggedIn } = this.props;
     const { sort, orderBy, rating, category, map, weapon } = this.state;
@@ -211,49 +218,91 @@ class Chart extends React.Component<Props, State> {
                         >
                           Top Rated - This Month
                         </h1>
-                        <div
-                          style={{ marginRight: "-10px" }}
-                          className="buttons"
-                        >
-                          <Select
-                            menuPlacement="auto"
-                            minMenuHeight={200}
-                            className="chartSelect"
-                            onChange={this.handleChange("category", fetchMore)}
-                            value={category ? category.value : ""}
-                            isSearchable={true}
-                            placeholder="Category"
-                            options={categoryOptions}
-                          />
-                          <Select
-                            menuPlacement="auto"
-                            minMenuHeight={200}
-                            className="chartSelect"
-                            onChange={this.handleChange("map", fetchMore)}
-                            value={sort}
-                            isSearchable={false}
-                            placeholder="Map"
-                            options={mapOptions}
-                          />
-                          <Select
-                            menuPlacement="auto"
-                            minMenuHeight={200}
-                            className="chartSelect"
-                            onChange={this.handleChange("weapon", fetchMore)}
-                            value={sort}
-                            isSearchable={true}
-                            placeholder="Weapon"
-                            options={weaponOptions}
-                          />
-                          <Select
-                            menuPlacement="auto"
-                            minMenuHeight={200}
-                            className="chartSelect"
-                            value={sort}
-                            isSearchable={false}
-                            placeholder="Sort By"
-                            options={sortChartOptions}
-                          />
+                        <div className="buttons">
+                          <button
+                            onClick={() => this.open()}
+                            className="chartFilter"
+                          >
+                            <i
+                              className="fa fa-sort"
+                              style={{ marginRight: "5px" }}
+                            />
+                            Filter & Sort
+                          </button>
+                          <Modal
+                            onHide={this.onCloseModal}
+                            style={filterModalStyle()}
+                            aria-labelledby="modal-label"
+                            show={this.state.showFilterModal}
+                            renderBackdrop={this.renderBackdrop}
+                          >
+                            <div
+                              style={{
+                                width: "25%",
+                                paddingBottom: "20px",
+                                paddingTop: "20px",
+                                backgroundColor: "#fafafa",
+                                borderRadius: "5px"
+                              }}
+                            >
+                              <h5
+                                style={{
+                                  marginLeft: "20px",
+                                  marginBottom: "20px"
+                                }}
+                              >
+                                Filter & Sort
+                              </h5>
+                              <Select
+                                menuPlacement="auto"
+                                minMenuHeight={200}
+                                className="chartSelect"
+                                onChange={this.handleChange(
+                                  "category",
+                                  fetchMore
+                                )}
+                                value={category ? category.value : ""}
+                                isSearchable={true}
+                                placeholder="Category"
+                                options={categoryOptions}
+                              />
+                              <Select
+                                menuPlacement="auto"
+                                minMenuHeight={200}
+                                className="chartSelect"
+                                onChange={this.handleChange("map", fetchMore)}
+                                value={sort}
+                                isSearchable={false}
+                                placeholder="Map"
+                                options={mapOptions}
+                              />
+                              <Select
+                                menuPlacement="auto"
+                                minMenuHeight={200}
+                                className="chartSelect"
+                                onChange={this.handleChange(
+                                  "weapon",
+                                  fetchMore
+                                )}
+                                value={sort}
+                                isSearchable={true}
+                                placeholder="Weapon"
+                                options={weaponOptions}
+                              />
+                              <Select
+                                menuPlacement="auto"
+                                minMenuHeight={200}
+                                className="chartSelect"
+                                value={sort}
+                                isSearchable={false}
+                                placeholder="Sort By"
+                                options={sortChartOptions}
+                              />
+                              <button className="filterSearchButton">
+                                Search
+                              </button>
+                            </div>
+                          </Modal>
                         </div>
                       </div>
 

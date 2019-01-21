@@ -23,6 +23,20 @@ export const modalStyle = function() {
   };
 };
 
+export const filterModalStyle = function() {
+  return {
+    zIndex: 1040,
+    position: "absolute",
+    width: "50%",
+    height: "50%",
+    top: "-10%",
+    bottom: 0,
+    left: "36%",
+    right: 0,
+    margin: "auto"
+  };
+};
+
 export const circleStyle = rating => {
   return {
     root: {},

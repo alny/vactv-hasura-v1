@@ -172,7 +172,7 @@ class Moderator extends React.Component<Props, State> {
     const { isLoggedIn } = this.props;
     const { map, weapon, category } = this.state;
     return (
-      <Layout title="Vac.Tv | Discover Clips" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | Moderator" isLoggedIn={isLoggedIn}>
         <main>
           <div style={{ paddingTop: "30px" }} className="freelancers sidebar">
             <div className="container">

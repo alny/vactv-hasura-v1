@@ -823,7 +823,7 @@ aside {
 }
 .form-sign {
   width: 100%;
-  max-width: 480px;
+  max-width: 680px;
   transition: all 0.3s;
   padding: 63px 40px 70px;
   margin: auto auto 75px;
@@ -847,53 +847,19 @@ aside {
 .form-label-group > label {
   padding-left: 0;
 }
-.form-label-group > label {
-  position: absolute;
-  top: 0;
-  left: 0;
+
+.form-control {
   display: block;
   width: 100%;
-  margin-bottom: 0;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
   line-height: 1.5;
-  color: #bdbac2;
-  font-size: 16px;
-  border: 1px solid transparent;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
   border-radius: 0.25rem;
-  transition: all 0.1s ease-in-out;
-  padding-left: 0;
-}
-.form-label-group > input:focus,
-.form-label-group > textarea:focus {
-  box-shadow: none;
-  border-color: #4a5871;
-}
-.form-label-group input::-webkit-input-placeholder {
-  color: transparent;
-}
-.form-label-group input:-ms-input-placeholder {
-  color: transparent;
-}
-.form-label-group input::-ms-input-placeholder {
-  color: transparent;
-}
-.form-label-group input::-moz-placeholder {
-  color: transparent;
-}
-.form-label-group input::placeholder {
-  color: transparent;
-}
-.form-label-group input:not(:placeholder-shown) ~ label {
-  font-size: 12px;
-  color: #4a5871;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.form-control {
-  border: none;
-  border-bottom: 2px solid #f6f5f9;
-  border-radius: 0;
-  padding: 0.375rem 0;
-  color: #212529;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .form-sign .btn-primary {
   margin-top: 42px;
@@ -2116,8 +2082,9 @@ aside {
 }
 
 .chartSelect {
-  width: 150px;
+  width: 210px;
   margin-left: 15px;
+  margin-bottom: 20px;
 }
 
 .browseSelect {
@@ -2398,4 +2365,102 @@ aside {
   float: right;
   margin-left: 10px;
   margin-top: 4px;
+}
+
+.addSelect-Right {
+  width: 48%;
+  float: right;
+}
+.addSelect-Left {
+  width: 48%;
+  float: left;
+}
+.addSelect {
+  display: inline-block;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.formControlAdd {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-label-group > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  line-height: 1.5;
+  color: #bdbac2;
+  font-size: 16px;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  transition: all 0.1s ease-in-out;
+  padding-left: 0;
+}
+.form-label-group > input:focus,
+.form-label-group > textarea:focus {
+  box-shadow: none;
+  border-color: #4a5871;
+}
+.form-label-group input::-webkit-input-placeholder {
+  color: hsl(0, 0%, 50%);
+}
+.form-label-group input:-ms-input-placeholder {
+  color: hsl(0, 0%, 50%);
+}
+.form-label-group input::-ms-input-placeholder {
+  color: hsl(0, 0%, 50%);
+}
+.form-label-group input::-moz-placeholder {
+  color: hsl(0, 0%, 50%);
+}
+.form-label-group input::placeholder {
+  color: hsl(0, 0%, 50%);
+}
+.form-label-group input:not(:placeholder-shown) ~ label {
+  font-size: 10px;
+  color: #4a5871;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.form-control {
+  border: none;
+  border-bottom: 2px solid #f6f5f9;
+  border-radius: 0;
+  padding: 0.375rem 0;
+  color: #212529;
+}
+
+.chartFilter {
+  color: #343a40;
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid #bdbac2;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filterSearchButton {
+  width: 87%;
+  margin-left: 15px;
+  background-color: #e9ecef;
+  border-color: hsl(0, 0%, 80%);
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 9px;
+  cursor: pointer;
 }

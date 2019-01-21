@@ -42,13 +42,8 @@ class About extends React.Component<Props, State> {
                               </div>
                             </div>
                             <div className="middle">
-                              <h2>Who runs Vac.Tv</h2>
-                              <p>
-                                The site is run by a bunch of gamers and current
-                                Computer Science students, who has a passion for
-                                eSport, software development and especially
-                                CS:GO.
-                              </p>
+                              <h2>Vac.Tv Community</h2>
+                              <p>The site is run by the community</p>
                             </div>
                           </div>
                         </a>
