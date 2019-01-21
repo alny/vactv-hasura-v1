@@ -232,6 +232,10 @@ class Add extends React.Component<Props, State> {
                       }}
                       className="fa fa-twitch"
                     />
+                    <img
+                      style={{ width: "38px", marginTop: "-18px" }}
+                      src="https://about.plays.tv/wp-content/uploads/2018/03/logo-mark-300x300.png"
+                    />
                   </div>
 
                   <Mutation

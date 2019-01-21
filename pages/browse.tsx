@@ -632,6 +632,7 @@ class Browse extends React.Component<Props, State> {
                                           </div>
                                           <div className="embed-responsive embed-responsive-16by9">
                                             <iframe
+                                              allowFullScreen
                                               className="embed-responsive-item"
                                               frameBorder="false"
                                               src={clip.url}
