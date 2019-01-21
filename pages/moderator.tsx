@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Link } from "../server/routes";
 import { getNotPublishedClips } from "../graphql/queries/clips/getUnverifiedClips";
 import { UPDATE_CLIP_MUTATION } from "../graphql/mutations/clips/updateClipById";
+import { DENY_CLIP } from "../graphql/mutations/clips/denyClip";
 
 type Props = {
   isLoggedIn: boolean;
@@ -121,7 +122,45 @@ class Moderator extends React.Component<Props, State> {
         this.setState({ submitDisable: false });
         this.onCloseModal();
       } else {
-        console.log("Already rated");
+        console.log("Something went wrong");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  };
+
+  denyClip = async clipId => {
+    const notifySuccess = () => toast.success("🎬 Clip Denied!");
+    this.setState({ submitDisable: true });
+    try {
+      const data = await this.props.client.mutate({
+        mutation: DENY_CLIP,
+        variables: {
+          id: clipId
+        },
+        update: (cache, { data: {} }) => {
+          const data = cache.readQuery({ query: getNotPublishedClips });
+          console.log(data);
+          data.clip = data.clip.filter(t => {
+            return t.id !== clipId;
+          });
+          cache.writeQuery({
+            query: getNotPublishedClips,
+            data
+          });
+        }
+      });
+      console.log(data);
+
+      if (data.data.delete_clip) {
+        notifySuccess();
+        this.setState({ submitDisable: false });
+        this.onCloseModal();
+      } else {
+        console.log("Something went wrong");
+        return;
       }
     } catch (error) {
       console.log(error);
@@ -320,7 +359,13 @@ class Moderator extends React.Component<Props, State> {
                                         </span>
                                       </a>
                                     </Link>
-                                    <button className="denyButton">Deny</button>
+                                    <button
+                                      disabled={this.state.submitDisable}
+                                      onClick={() => this.denyClip(clip.id)}
+                                      className="denyButton"
+                                    >
+                                      Deny
+                                    </button>
                                     <button
                                       disabled={this.state.submitDisable}
                                       onClick={() => this.approveClip(clip.id)}
