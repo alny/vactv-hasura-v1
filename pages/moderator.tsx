@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import { Query } from "react-apollo";
 import { mapOptions, weaponOptions, categoryOptions } from "../utils/Options";
 import Select from "react-select";
-import privatePage from "../components/hocs/privatePage";
+import adminPage from "../components/hocs/adminPage";
 import { Modal } from "react-overlays";
 import { modalStyle, backdropStyle, emojiRating } from "../utils/Styles";
 import { ToastContainer, toast } from "react-toastify";
@@ -380,4 +380,4 @@ class Moderator extends React.Component<Props, State> {
   }
 }
 
-export default privatePage(Moderator);
+export default adminPage(Moderator);

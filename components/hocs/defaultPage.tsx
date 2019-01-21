@@ -10,18 +10,21 @@ export default Page =>
         ? await getTokenForBrowser()
         : await getTokenForServer(req);
 
+      const role = loggedInUser
+        ? loggedInUser["https://vac.tv/roles"]["x-hasura-role"]
+        : "";
+
       const pageProperties =
         (await Page.getInitialProps) && (await Page.getInitialProps(req));
       return {
         ...pageProperties,
         loggedInUser,
+        role,
         isLoggedIn: !!loggedInUser
       };
     }
 
-    componentDidMount() {
-      console.log(this.props);
-    }
+    componentDidMount() {}
 
     render() {
       return <Page {...this.props} />;

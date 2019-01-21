@@ -44,7 +44,7 @@ export const categoryOptions = [
   { value: "1 Tap", label: "1 Tap" },
   { value: "2K", label: "2K" },
   { value: "3K", label: "3K" },
-  { value: "4K", label: "4K" },
+  { value: "Quad Kill", label: "Quad Kill" },
   { value: "Ace", label: "Ace" },
   {
     value: "1 Shot 2 Kills",

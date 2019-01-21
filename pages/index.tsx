@@ -23,6 +23,7 @@ import Links from "next/link";
 type Props = {
   isLoggedIn: boolean;
   loggedInUser: any;
+  role: any;
 };
 
 interface State {
@@ -88,11 +89,17 @@ class Home extends React.Component<Props, State> {
   }
 
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, role, loggedInUser } = this.props;
     const { rating } = this.state;
 
     return (
-      <Layout title="Vac.Tv | Watch & Rate CS:GO Clips" isLoggedIn={isLoggedIn}>
+      //@ts-ignore
+      <Layout
+        title="Vac.Tv | Watch & Rate CS:GO Clips"
+        role={role}
+        isLoggedIn={isLoggedIn}
+        loggedInUser={loggedInUser}
+      >
         <main>
           <div style={{ paddingTop: "35px" }} className="freelancers sidebar">
             <Query query={GET_FRONTPAGE_EVENTS}>

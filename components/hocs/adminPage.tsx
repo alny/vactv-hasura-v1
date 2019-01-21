@@ -27,19 +27,26 @@ export default Page =>
       };
     }
     componentDidMount() {
-      const { isLoggedIn } = this.props;
-
+      const { isLoggedIn, role } = this.props;
+      console.log(role);
       if (!isLoggedIn) {
+        Router.push("/");
+        return;
+      }
+      if (role === "user") {
         Router.push("/");
         return;
       }
     }
 
     render() {
-      const { isLoggedIn } = this.props;
+      const { isLoggedIn, role } = this.props;
       if (!isLoggedIn) {
         return null;
       }
-      return <Page {...this.props} />;
+      if (role === "moderator" || role === "admin") {
+        return <Page {...this.props} />;
+      }
+      return null;
     }
   };

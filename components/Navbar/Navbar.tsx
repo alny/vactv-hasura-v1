@@ -3,11 +3,12 @@ import Link from "next/link";
 import Router from "next/router";
 import { login, logout } from "../Auth/auth0";
 import { deleteToken } from "../Auth/auth";
-import withUser from "../../lib/withUser";
+import defaultPage from "../../components/hocs/defaultPage";
 
 type Props = {
   isLoggedIn: boolean;
   loggedInUser: any;
+  role: any;
 };
 
 interface State {
@@ -51,7 +52,7 @@ class Navbar extends React.Component<Props, State> {
   };
 
   render() {
-    const { isLoggedIn, loggedInUser } = this.props;
+    const { isLoggedIn, loggedInUser, role } = this.props;
     return (
       <header>
         <nav className="navbar navbar-expand-md navbar-light fixed-top bg-white">
@@ -138,7 +139,7 @@ class Navbar extends React.Component<Props, State> {
                             <img src={this.state.image} alt={this.state.name} />
                           </a> */}
                           <h3>
-                            <a href="#"> Level 1 | Credits: 0</a>
+                            <a href="#"> Level 1 | Credits: 0 </a>
                           </h3>
                         </div>
                         <div className="middle">
@@ -146,12 +147,15 @@ class Navbar extends React.Component<Props, State> {
                             <i className="fa fa-user-circle" />
                             Your Profile
                           </a>
-                          <Link href="/moderator">
-                            <a className="dropdown-item">
-                              <i className="fa fa-user-secret" />
-                              Moderator
-                            </a>
-                          </Link>
+                          {role === "moderator" || role === "admin" ? (
+                            <Link href="/moderator">
+                              <a className="dropdown-item">
+                                <i className="fa fa-user-secret" />
+                                Moderator
+                              </a>
+                            </Link>
+                          ) : null}
+
                           <Link href="/add">
                             <a className="dropdown-item">
                               <i className="fa fa-youtube" />
@@ -255,4 +259,4 @@ class Navbar extends React.Component<Props, State> {
   }
 }
 
-export default withUser(Navbar);
+export default defaultPage(Navbar);

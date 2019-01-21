@@ -5,6 +5,7 @@ import { ApolloProvider } from "react-apollo";
 import NProgress from "nprogress";
 import withApolloClient from "../lib/with-apollo-client";
 import ContextProvider from "../lib/context";
+import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 
 Router.onRouteChangeStart = () => {
   NProgress.start();
@@ -17,11 +18,9 @@ Router.onRouteChangeError = () => NProgress.done();
 class NextApp extends App {
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
-
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
-
     return { pageProps };
   }
 

@@ -51,7 +51,7 @@ export const GET_FRONTPAGE_EVENTS = gql`
         name
         image
       }
-      clips_aggregate {
+      clips_aggregate(where: { isPublic: { _eq: true } }) {
         aggregate {
           count
         }
