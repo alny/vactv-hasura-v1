@@ -2475,6 +2475,7 @@ aside {
   height: 120px;
   position: relative;
   animation: spin 2s linear infinite;
-  left: 30%;
+  left: 40%;
   top: 200px;
+  margin-bottom: 400px;
 }
