@@ -43,7 +43,7 @@ class About extends React.Component<Props, State> {
                             </div>
                             <div className="middle">
                               <h2>Vac.Tv Community</h2>
-                              <p>The site is run by the community</p>
+                              <p>Kewl</p>
                             </div>
                           </div>
                         </a>
@@ -70,7 +70,7 @@ class About extends React.Component<Props, State> {
                           <h2>and Answers</h2>
                         </div>
                       </div>
-                      <h4>Why we build this site</h4>
+                      {/* <h4>Why we build this site</h4>
                       <p>
                         Due to the rapid growth and expansion of company
                         operations, currently we are looking for a Security
@@ -97,7 +97,7 @@ class About extends React.Component<Props, State> {
                           <i className="fa fa-circle-o" />
                           Bring bold new ideas to our affiliate marketing
                         </li>
-                      </ul>
+                      </ul> */}
                     </div>
                   </div>
                 </section>

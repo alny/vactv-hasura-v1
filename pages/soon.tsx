@@ -24,7 +24,7 @@ class Soon extends React.Component<Props, State> {
             <div className="error">
               <div className="container">
                 <h1>Coming Soon!</h1>
-                <h2>This page is being build as you read this.</h2>
+                <h2>This page is being built as you read this.</h2>
                 <Link href="/">
                   <a className="btn btn-primary">Go Back</a>
                 </Link>
