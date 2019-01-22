@@ -45,7 +45,7 @@ class Uploads extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: null,
-      orderBy: { createdAt: "desc_nulls_last" },
+      orderBy: { createdAt: "desc_nulls_last", id: "desc" },
       filters: {},
       count: 0,
       open: false,
@@ -72,7 +72,6 @@ class Uploads extends React.Component<Props, State> {
 
   getMoreClips = async () => {
     console.log(this.state.clipLength);
-
     const data = await this.props.client.query({
       query: getUserUploads,
       variables: {
@@ -86,23 +85,28 @@ class Uploads extends React.Component<Props, State> {
         limit: 12
       }
     });
+    console.log(data.data);
     this.setState({
       clips: [...this.state.clips, ...data.data.clip],
-      clipLength: this.state.clipLength + data.data.clip[0].length
+      clipLength: this.state.clipLength + data.data.clip.length
     });
   };
 
   setFilters = async () => {
     let orderByOption;
     if (this.state.sort === "Newest") {
-      orderByOption = { createdAt: "desc_nulls_last" };
+      orderByOption = { createdAt: "desc_nulls_last", id: "desc" };
     }
     if (this.state.sort === "Most Votes") {
-      orderByOption = { ratings_aggregate: { count: "desc_nulls_last" } };
+      orderByOption = {
+        ratings_aggregate: { count: "desc_nulls_last" },
+        id: "desc"
+      };
     }
     if (this.state.sort === "Highest Rated") {
       orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } }
+        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        id: "desc"
       };
     }
     const data = await this.props.client.query({
@@ -120,7 +124,8 @@ class Uploads extends React.Component<Props, State> {
     });
     this.setState({
       orderBy: orderByOption,
-      clips: [...data.data.clip]
+      clips: [...data.data.clip],
+      clipLength: data.data.clip.length
     });
   };
 
@@ -152,7 +157,8 @@ class Uploads extends React.Component<Props, State> {
     console.log(data.data.clip);
     this.setState({
       clips: data.data.clip,
-      clipLength: data.data.clip_aggregate.aggregate.count
+      clipLength: data.data.clip.length,
+      count: data.data.clip_aggregate.aggregate.count
     });
   }
 
@@ -190,7 +196,7 @@ class Uploads extends React.Component<Props, State> {
           <div className="freelancers sidebar">
             <div className="container">
               <div className="above">
-                <h1>Uploads by you:</h1>
+                <h1>Uploaded by you:</h1>
                 <div className="buttons">
                   <Select
                     menuPlacement="auto"
@@ -218,9 +224,7 @@ class Uploads extends React.Component<Props, State> {
                         >
                           Total Clips:
                         </span>
-                        <span className="totalRating">
-                          {this.state.clipLength}
-                        </span>
+                        <span className="totalRating">{this.state.count}</span>
                       </div>
                     </div>
                   </div>
@@ -231,7 +235,7 @@ class Uploads extends React.Component<Props, State> {
                       dataLength={this.state.clipLength}
                       next={() => this.getMoreClips()}
                       style={{ overflow: "visible" }}
-                      hasMore={false}
+                      hasMore={this.state.count !== this.state.clipLength}
                       loading={<div>Loading</div>}
                     >
                       <div className="row">

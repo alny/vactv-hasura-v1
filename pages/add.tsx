@@ -277,16 +277,6 @@ class Add extends React.Component<Props, State> {
                         <div className="form-row">
                           <div className="col">
                             <div className="form-label-group">
-                              <Select
-                                className="addSelect"
-                                onChange={this.handleSelectChange("clipType")}
-                                //@ts-ignore
-                                value={clipType.value}
-                                placeholder={"Select Clip Type..."}
-                                options={clipTypeOption}
-                              />
-                            </div>
-                            <div className="form-label-group">
                               <input
                                 style={{ height: "calc(4.25rem + 2px)" }}
                                 type="text"
@@ -296,6 +286,16 @@ class Add extends React.Component<Props, State> {
                                 onChange={this.handleChange}
                                 value={url}
                                 placeholder="Copy/Paste Link"
+                              />
+                            </div>
+                            <div className="form-label-group">
+                              <Select
+                                className="addSelect"
+                                onChange={this.handleSelectChange("clipType")}
+                                //@ts-ignore
+                                value={clipType.value}
+                                placeholder={"Select Clip Type..."}
+                                options={clipTypeOption}
                               />
                             </div>
                           </div>
