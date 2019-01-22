@@ -14,7 +14,14 @@ export const GET_FRONTPAGE_EVENTS = gql`
           count
         }
       }
-      clips(where: { isPublic: { _eq: true } }, limit: 4) {
+      clips(
+        where: { isPublic: { _eq: true } }
+        order_by: {
+          ratings_aggregate: { avg: { rating: desc_nulls_last } }
+          id: desc
+        }
+        limit: 4
+      ) {
         id
         title
         thumbNail
