@@ -56,7 +56,7 @@ class Team extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: "today",
-      orderBy: {},
+      orderBy: { createdAt: "desc_nulls_last", id: "desc" },
       filters: {},
       count: 0,
       open: false,
@@ -148,19 +148,23 @@ class Team extends React.Component<Props, State> {
   }
 
   render() {
-    const { sort, count, rating } = this.state;
+    const { filters, count, rating, orderBy } = this.state;
     const {
       router: { query }
     } = this.props;
     return (
-      <Layout title="Vac.Tv | Pro Player" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | Pro Team" isLoggedIn={isLoggedIn}>
         <main>
           <div className="freelancers sidebar">
             <div className="container">
               <Query
                 query={getTeamWithPlayers}
                 variables={{
-                  teamId: !teamId ? query.id : teamId
+                  filters: filters,
+                  teamId: !teamId ? query.id : teamId,
+                  orderBy: orderBy,
+                  offset: 0,
+                  limit: 12
                 }}
               >
                 {({ fetchMore, loading, error, data }) => {
@@ -183,14 +187,14 @@ class Team extends React.Component<Props, State> {
                         <div className="above">
                           <h1>Pro Team</h1>
                           <div className="buttons">
-                            <Select
+                            {/* <Select
                               menuPlacement="auto"
                               minMenuHeight={200}
                               className="sortBySelect"
                               isSearchable={false}
                               placeholder="Sort By"
                               options={sortOptions}
-                            />
+                            /> */}
                           </div>
                         </div>
                         <div className="row">
@@ -527,7 +531,7 @@ class Team extends React.Component<Props, State> {
                                   className="btn btn-primary"
                                   rel="next"
                                 >
-                                  Load More{count}
+                                  Load More
                                 </a>
                               </div>
                             </section>

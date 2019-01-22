@@ -1,13 +1,18 @@
 import { gql } from "apollo-boost";
 
 export const getTeamWithPlayers = gql`
-  query getTeamWithPlayers($teamId: uuid!) {
+  query getTeamWithPlayers(
+    $filters: clip_bool_exp
+    $teamId: uuid!
+    $orderBy: [clip_order_by!]
+    $offset: Int!
+    $limit: Int!
+  ) {
     clip(
-      where: {
-        isPublic: { _eq: true }
-        player: { team: { id: { _eq: $teamId } } }
-      }
-      limit: 12
+      order_by: $orderBy
+      offset: $offset
+      limit: $limit
+      where: { _and: [$filters] }
     ) {
       id
       title

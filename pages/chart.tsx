@@ -222,7 +222,7 @@ class Chart extends React.Component<Props, State> {
                             textTransform: "capitalize"
                           }}
                         >
-                          Top Rated - This Month
+                          Top Rated Clips
                         </h1>
                         <div className="buttons">
                           <button
