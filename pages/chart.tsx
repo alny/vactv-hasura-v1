@@ -62,7 +62,8 @@ class Chart extends React.Component<Props, State> {
       orderBy: {
         ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
         //@ts-ignore
-        ratings_aggregate: { sum: { rating: "desc_nulls_last" } }
+        ratings_aggregate: { sum: { rating: "desc_nulls_last" } },
+        id: "desc"
       }
     };
   }
@@ -80,44 +81,49 @@ class Chart extends React.Component<Props, State> {
     });
   }
 
-  setFilters = fetchMore => {
-    this.setState(
-      {
-        filters: {
-          map: { _eq: this.state.map },
-          category: { _eq: this.state.category },
-          weapon: { _eq: this.state.weapon }
-        },
-        orderBy: this.state.orderBy
+  setFilters = () => {
+    this.setState({
+      filters: {
+        map: { _eq: this.state.map },
+        category: { _eq: this.state.category },
+        weapon: { _eq: this.state.weapon }
       },
-      () => this.getMoreClips(fetchMore)
-    );
+      orderBy: this.state.orderBy
+    });
   };
 
   getMoreClips = fetchMore => {
     event.preventDefault();
-    fetchMore({
-      variables: {
-        offset: 0,
-        orderBy: this.state.orderBy,
-        filters: this.state.filters
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult.clip) return prev;
-        return Object.assign({}, prev, {
-          clip: [...fetchMoreResult.clip]
-        });
-      }
-    });
+    if (this.state.category || this.state.map || this.state.weapon) {
+      fetchMore({
+        variables: {
+          offset: 0,
+          orderBy: this.state.orderBy,
+          filters: this.state.filters
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult.clip) return prev;
+          this.setState({
+            showFilterModal: false,
+            weapon: null,
+            category: null,
+            map: null
+          });
+          return Object.assign({}, prev, {
+            clip: [...fetchMoreResult.clip]
+          });
+        }
+      });
+    }
   };
 
-  handleChange = (name, fetchMore) => value => {
+  handleChange = name => value => {
     this.setState(
       //@ts-ignore
       {
         [name]: value.value
       },
-      () => this.setFilters(fetchMore)
+      () => this.setFilters()
     );
   };
 
@@ -257,10 +263,7 @@ class Chart extends React.Component<Props, State> {
                                 menuPlacement="auto"
                                 minMenuHeight={200}
                                 className="chartSelect"
-                                onChange={this.handleChange(
-                                  "category",
-                                  fetchMore
-                                )}
+                                onChange={this.handleChange("category")}
                                 value={category ? category.value : ""}
                                 isSearchable={true}
                                 placeholder="Category"
@@ -270,8 +273,8 @@ class Chart extends React.Component<Props, State> {
                                 menuPlacement="auto"
                                 minMenuHeight={200}
                                 className="chartSelect"
-                                onChange={this.handleChange("map", fetchMore)}
-                                value={sort}
+                                onChange={this.handleChange("map")}
+                                value={map ? map.value : ""}
                                 isSearchable={false}
                                 placeholder="Map"
                                 options={mapOptions}
@@ -280,10 +283,7 @@ class Chart extends React.Component<Props, State> {
                                 menuPlacement="auto"
                                 minMenuHeight={200}
                                 className="chartSelect"
-                                onChange={this.handleChange(
-                                  "weapon",
-                                  fetchMore
-                                )}
+                                onChange={this.handleChange("weapon")}
                                 value={sort}
                                 isSearchable={true}
                                 placeholder="Weapon"
@@ -298,7 +298,10 @@ class Chart extends React.Component<Props, State> {
                                 placeholder="Sort By"
                                 options={sortChartOptions}
                               />
-                              <button className="filterSearchButton">
+                              <button
+                                onClick={() => this.getMoreClips(fetchMore)}
+                                className="filterSearchButton"
+                              >
                                 Search
                               </button>
                             </div>
