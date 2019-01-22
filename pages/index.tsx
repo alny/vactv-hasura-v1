@@ -128,10 +128,15 @@ class Home extends React.Component<Props, State> {
                           </a>
                         </Link>
                         <div className="buttons">
-                          <a href="#">
-                            🎬 Event Clips:{" "}
-                            {data.eventClips[0].clips_aggregate.aggregate.count}{" "}
-                          </a>
+                          <Link route="events" id={data.eventClips[0].id}>
+                            <a>
+                              🎬 Event Clips:{" "}
+                              {
+                                data.eventClips[0].clips_aggregate.aggregate
+                                  .count
+                              }{" "}
+                            </a>
+                          </Link>
                         </div>
                       </div>
                       <section>
