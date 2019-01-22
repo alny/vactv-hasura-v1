@@ -155,14 +155,18 @@ class Browse extends React.Component<Props, State> {
   setFilters = () => {
     let orderByOption;
     if (this.state.sort === "Newest") {
-      orderByOption = { createdAt: "desc_nulls_last" };
+      orderByOption = { createdAt: "desc_nulls_last", id: "desc" };
     }
     if (this.state.sort === "Most Votes") {
-      orderByOption = { ratings_aggregate: { count: "desc_nulls_last" } };
+      orderByOption = {
+        ratings_aggregate: { count: "desc_nulls_last" },
+        id: "desc"
+      };
     }
     if (this.state.sort === "Highest Rated") {
       orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } }
+        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        id: "desc"
       };
     }
     this.setState({
@@ -301,7 +305,8 @@ class Browse extends React.Component<Props, State> {
       map,
       weapon,
       player,
-      event
+      event,
+      orderBy
     } = this.state;
     const { isLoggedIn } = this.props;
     return (
@@ -319,6 +324,9 @@ class Browse extends React.Component<Props, State> {
                 query={getClipsWithFilter}
                 variables={{
                   filters: { isPublic: { _eq: true } },
+                  orderBy: {
+                    id: "desc"
+                  },
                   offset: 0,
                   limit: 12
                 }}
@@ -740,7 +748,7 @@ class Browse extends React.Component<Props, State> {
                                   className="btn btn-primary"
                                   rel="next"
                                 >
-                                  {data.clip.length}Load More{count}
+                                  Load More
                                 </a>
                               </div>
                             )}

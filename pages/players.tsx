@@ -1,14 +1,13 @@
 import * as React from "react";
 import Layout from "../components/Layout";
-import Select from "react-select";
-import { sortMoreOptions } from "../utils/Options";
 import { ToastContainer, toast } from "react-toastify";
-import { toFixed, circleStyle, backdropStyle } from "../utils/Styles";
+import { toFixed, circleStyle } from "../utils/Styles";
 import CircularProgressbar from "react-circular-progressbar";
 //@ts-ignore
 import { Link } from "../server/routes";
 import { fetchTopPlayers } from "../graphql/queries/player/topPlayers";
 import defaultPage from "../components/hocs/defaultPage";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 type Props = {
   isLoggedIn: boolean;
@@ -25,6 +24,7 @@ interface State {
   searchDisabled: boolean;
   players: any;
   playerLength: any;
+  loading: boolean;
 }
 
 class Players extends React.Component<Props, State> {
@@ -32,31 +32,35 @@ class Players extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: null,
-      orderBy: { rating_aggregate: { avg: { rating: "desc_nulls_last" } } },
+      orderBy: {
+        id: "desc",
+        rating_aggregate: { avg: { rating: "desc_nulls_last" } }
+      },
       filters: {},
       withFilter: false,
       searchDisabled: false,
       players: [],
-      playerLength: 0
+      playerLength: 0,
+      loading: true
     };
   }
 
   getMoreClips = async () => {
-    console.log(this.state.playerLength);
+    console.log("MORE", this.state.playerLength);
 
     const data = await this.props.client.query({
       query: fetchTopPlayers,
       variables: {
-        filters: this.state.filters,
-        offset: this.state.playerLength,
         orderBy: this.state.orderBy,
+        offset: this.state.playerLength,
         limit: 12
       }
     });
-    this.setState({
-      players: [...this.state.players, ...data.data.player],
-      playerLength: this.state.playerLength + data.data.player.length
-    });
+
+    this.setState(prev => ({
+      players: [...prev.players, ...data.data.player],
+      playerLength: prev.playerLength + data.data.player.length
+    }));
   };
 
   async componentDidMount() {
@@ -64,7 +68,6 @@ class Players extends React.Component<Props, State> {
     const data = await this.props.client.query({
       query: fetchTopPlayers,
       variables: {
-        filters: {},
         orderBy: this.state.orderBy,
         offset: 0,
         limit: 12
@@ -72,99 +75,108 @@ class Players extends React.Component<Props, State> {
     });
     console.log(data.data.player);
     this.setState({
+      loading: false,
       players: data.data.player,
       playerLength: data.data.player.length
     });
   }
 
   render() {
-    const { players } = this.state;
+    const { players, loading } = this.state;
     const { isLoggedIn } = this.props;
 
     return (
-      <Layout title="Vac.Tv | Pro Player" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | Top Pro Players" isLoggedIn={isLoggedIn}>
         <main>
           <div className="freelancers sidebar">
             <div className="container">
               <div className="above">
-                <h1>Top Pro Players</h1>
+                <h1>Top Pro Players </h1>
               </div>
-              <div className="row">
-                {players ? (
-                  players.map((player, i) => (
-                    <div key={player.id} className="col-md-3">
-                      <span className="totalPlayerClips"># {i + 1}</span>
-                      <div className="inside">
-                        <Link route="player" id={player.id}>
-                          <a>
-                            <img
-                              className="card-img-top"
-                              src={player.image}
-                              alt={player.image}
-                            />
-                          </a>
-                        </Link>
-
-                        <div className="middle">
-                          <div>
-                            <h3
-                              style={{
-                                textTransform: "capitalize"
-                              }}
-                            >
-                              <Link route="player" id={player.id}>
-                                <a>{player.nickName}</a>
-                              </Link>
-                            </h3>
-                            <h6
-                              style={{
-                                textTransform: "capitalize",
-                                fontSize: "12px"
-                              }}
-                            >
-                              {player.name}
-                            </h6>
-                          </div>
-                        </div>
-                        <div className="bottom">
-                          <Link route="team" id={player.team.id}>
+              <InfiniteScroll
+                dataLength={players.length}
+                next={() => this.getMoreClips()}
+                style={{ overflow: "visible" }}
+                hasMore={true}
+                loading={<div>Loading</div>}
+              >
+                <div className="row">
+                  {loading ? (
+                    <div className="clipLoader" />
+                  ) : (
+                    players.map((player, i) => (
+                      <div key={player.id} className="col-md-3">
+                        <span className="totalPlayerClips"># {i + 1}</span>
+                        <div className="inside">
+                          <Link route="player" id={player.id}>
                             <a>
                               <img
-                                src={player.team.image}
-                                alt={player.team.name}
+                                className="card-img-top"
+                                src={player.image}
+                                alt={player.image}
                               />
-                              <span>{player.team.name}</span>
                             </a>
                           </Link>
-                          <div
-                            style={{
-                              width: "32px",
-                              display: "inline-block",
-                              float: "right"
-                            }}
-                          >
-                            <CircularProgressbar
-                              percentage={
-                                toFixed(
+
+                          <div className="middle">
+                            <div>
+                              <h3
+                                style={{
+                                  textTransform: "capitalize"
+                                }}
+                              >
+                                <Link route="player" id={player.id}>
+                                  <a>{player.nickName}</a>
+                                </Link>
+                              </h3>
+                              <h6
+                                style={{
+                                  textTransform: "capitalize",
+                                  fontSize: "12px"
+                                }}
+                              >
+                                {player.name}
+                              </h6>
+                            </div>
+                          </div>
+                          <div className="bottom">
+                            <Link route="team" id={player.team.id}>
+                              <a>
+                                <img
+                                  src={player.team.image}
+                                  alt={player.team.name}
+                                />
+                                <span>{player.team.name}</span>
+                              </a>
+                            </Link>
+                            <div
+                              style={{
+                                width: "32px",
+                                display: "inline-block",
+                                float: "right"
+                              }}
+                            >
+                              <CircularProgressbar
+                                percentage={
+                                  toFixed(
+                                    player.rating_aggregate.aggregate.avg.rating
+                                  ) * 10
+                                }
+                                text={toFixed(
                                   player.rating_aggregate.aggregate.avg.rating
-                                ) * 10
-                              }
-                              text={toFixed(
-                                player.rating_aggregate.aggregate.avg.rating
-                              )}
-                              styles={circleStyle(
-                                player.rating_aggregate.aggregate.avg.rating
-                              )}
-                            />
+                                )}
+                                styles={circleStyle(
+                                  player.rating_aggregate.aggregate.avg.rating
+                                )}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <h2>Loading</h2>
-                )}
-              </div>
+                    ))
+                  )}
+                </div>
+              </InfiniteScroll>
             </div>
           </div>
         </main>

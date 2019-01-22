@@ -100,7 +100,8 @@ class Discover extends React.Component<Props, State> {
       this.setState(
         {
           orderBy: {
-            ratings_aggregate: { avg: { rating: "desc_nulls_last" } }
+            ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+            id: "desc"
           },
           filters: {
             _and: [
@@ -123,7 +124,8 @@ class Discover extends React.Component<Props, State> {
       this.setState(
         {
           orderBy: {
-            ratings_aggregate: { avg: { rating: "desc_nulls_last" } }
+            ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+            id: "desc"
           },
           filters: {
             _and: [
@@ -143,7 +145,8 @@ class Discover extends React.Component<Props, State> {
       this.setState(
         {
           orderBy: {
-            ratings_aggregate: { avg: { rating: "desc_nulls_last" } }
+            ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+            id: "desc"
           },
           filters: {
             _and: [

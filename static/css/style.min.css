@@ -2466,3 +2466,15 @@ aside {
   padding: 9px;
   cursor: pointer;
 }
+
+.clipLoader {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #24314b;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  position: relative;
+  animation: spin 2s linear infinite;
+  left: 30%;
+  top: 200px;
+}
