@@ -230,7 +230,7 @@ class Chart extends React.Component<Props, State> {
                             className="chartFilter"
                           >
                             <i
-                              className="fa fa-sort"
+                              className="fa fa-sort-amount-desc"
                               style={{ marginRight: "5px" }}
                             />
                             Filter & Sort

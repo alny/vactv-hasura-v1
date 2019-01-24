@@ -47,7 +47,12 @@ export const GET_FRONTPAGE_EVENTS = gql`
     }
     topPlayers: player(
       limit: 4
-      order_by: { rating_aggregate: { avg: { rating: desc_nulls_last } } }
+      order_by: {
+        rating_aggregate: {
+          avg: { rating: desc_nulls_last }
+          count: desc_nulls_last
+        }
+      }
     ) {
       id
       name

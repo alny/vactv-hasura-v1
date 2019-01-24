@@ -34,7 +34,10 @@ class Players extends React.Component<Props, State> {
       sort: null,
       orderBy: {
         id: "desc",
-        rating_aggregate: { avg: { rating: "desc_nulls_last" } }
+        rating_aggregate: {
+          avg: { rating: "desc_nulls_last" },
+          count: "desc_nulls_last"
+        }
       },
       filters: {},
       withFilter: false,

@@ -204,7 +204,7 @@ class Navbar extends React.Component<Props, State> {
                 <li className={this.isActive("/charts")}>
                   <Link href="/chart">
                     <a className="nav-link">
-                      Charts <i className="fa fa-trophy" />
+                      Charts <i className="fa fa-line-chart" />
                     </a>
                   </Link>
                 </li>
@@ -215,8 +215,6 @@ class Navbar extends React.Component<Props, State> {
                       className="nav-link"
                       role="button"
                       data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
                     >
                       <span className="d-none d-lg-inline-flex">
                         More{" "}
