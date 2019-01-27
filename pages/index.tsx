@@ -19,16 +19,17 @@ import { GET_FRONTPAGE_EVENTS } from "../graphql/queries/event/getEventOptions";
 //@ts-ignore
 import { Link } from "../server/routes";
 import Links from "next/link";
+import { submitRate } from "../utils/SharedFunctions/submitRating";
 
 type Props = {
   isLoggedIn: boolean;
   loggedInUser: any;
-  role: any;
+  role: String;
 };
 
 interface State {
   open: any;
-  rating: any;
+  rating: Number;
 }
 
 class Home extends React.Component<Props, State> {
@@ -64,26 +65,6 @@ class Home extends React.Component<Props, State> {
     return <div {...props} style={backdropStyle} />;
   }
 
-  submitRate = async rateClip => {
-    const notifySuccess = () => toast.success("😄 Rating submitted!");
-
-    if (this.state.rating) {
-      try {
-        const { data } = await rateClip();
-        console.log(data);
-
-        if (data.insert_rating) {
-          notifySuccess();
-          this.onCloseModal();
-        } else {
-          console.log("Already rated");
-        }
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
-  };
   componentDidMount() {
     console.log(this.props);
   }
@@ -361,7 +342,11 @@ class Home extends React.Component<Props, State> {
                                               "rating"
                                             )}
                                             onMenuClose={() =>
-                                              this.submitRate(rateClip)
+                                              submitRate(
+                                                rateClip,
+                                                rating,
+                                                this.onCloseModal
+                                              )
                                             }
                                             className="rateSelector"
                                             placeholder="Rate 😆"
@@ -377,13 +362,13 @@ class Home extends React.Component<Props, State> {
                           ))}
                         </div>
                         <div className="above">
-                          <Links href="players">
+                          <Link route="events" id={data.eventClips[0].id}>
                             <a>
                               <h1 style={{ marginBottom: "24px" }}>
-                                Top Players 🏅
+                                Top Event Players 🏅
                               </h1>
                             </a>
-                          </Links>
+                          </Link>
                         </div>
                         <section>
                           <div className="row">

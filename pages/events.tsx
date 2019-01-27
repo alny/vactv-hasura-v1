@@ -20,6 +20,7 @@ import { withRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { getSingleEventClips } from "../graphql/queries/event/getSingleEvent";
+import { submitRate } from "../utils/SharedFunctions/submitRating";
 
 type Props = {
   isLoggedIn: boolean;
@@ -177,27 +178,6 @@ class Events extends React.Component<Props, State> {
     });
     console.log(this.state.eventProfile.clipCount);
   }
-
-  submitRate = async rateClip => {
-    const notifySuccess = () => toast.success("😄 Rating submitted!");
-
-    if (this.state.rating) {
-      try {
-        const { data } = await rateClip();
-        console.log(data);
-
-        if (data.insert_rating) {
-          notifySuccess();
-          this.onCloseModal();
-        } else {
-          console.log("Already rated");
-        }
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
-  };
 
   renderBackdrop(props) {
     return <div {...props} style={backdropStyle} />;
@@ -493,7 +473,11 @@ class Events extends React.Component<Props, State> {
                                               "rating"
                                             )}
                                             onMenuClose={() =>
-                                              this.submitRate(rateClip)
+                                              submitRate(
+                                                rateClip,
+                                                rating,
+                                                this.onCloseModal
+                                              )
                                             }
                                             className="rateSelector"
                                             placeholder="Rate 😆"

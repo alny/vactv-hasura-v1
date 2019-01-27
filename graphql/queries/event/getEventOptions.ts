@@ -46,6 +46,7 @@ export const GET_FRONTPAGE_EVENTS = gql`
       }
     }
     topPlayers: player(
+      where: { clips: { event: { isActive: { _eq: true } } } }
       limit: 4
       order_by: {
         rating_aggregate: {
@@ -58,6 +59,11 @@ export const GET_FRONTPAGE_EVENTS = gql`
       name
       image
       nickName
+      clips {
+        event {
+          isActive
+        }
+      }
       team {
         id
         name

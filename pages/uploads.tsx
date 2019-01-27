@@ -19,6 +19,7 @@ import { Link } from "../server/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getUserUploads } from "../graphql/queries/user/getUserUploadClips";
 import privatePage from "../components/hocs/privatePage";
+import { submitRate } from "../utils/SharedFunctions/submitRating";
 
 type Props = {
   isLoggedIn: boolean;
@@ -58,7 +59,7 @@ class Uploads extends React.Component<Props, State> {
   }
 
   onCloseModal = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, rating: 0 });
   };
 
   onOpenModal(id, event) {
@@ -161,27 +162,6 @@ class Uploads extends React.Component<Props, State> {
       count: data.data.clip_aggregate.aggregate.count
     });
   }
-
-  submitRate = async rateClip => {
-    const notifySuccess = () => toast.success("😄 Rating submitted!");
-
-    if (this.state.rating) {
-      try {
-        const { data } = await rateClip();
-        console.log(data);
-
-        if (data.insert_rating) {
-          notifySuccess();
-          this.onCloseModal();
-        } else {
-          console.log("Already rated");
-        }
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
-  };
 
   renderBackdrop(props) {
     return <div {...props} style={backdropStyle} />;
@@ -455,7 +435,11 @@ class Uploads extends React.Component<Props, State> {
                                           //@ts-ignore
                                           onChange={this.handleChange("rating")}
                                           onMenuClose={() =>
-                                            this.submitRate(rateClip)
+                                            submitRate(
+                                              rateClip,
+                                              rating,
+                                              this.onCloseModal
+                                            )
                                           }
                                           className="rateSelector"
                                           placeholder="Rate 😆"

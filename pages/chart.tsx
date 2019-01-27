@@ -28,6 +28,7 @@ import {
 //@ts-ignore
 import { Link } from "../server/routes";
 import Links from "next/link";
+import { submitRate } from "../utils/SharedFunctions/submitRating";
 
 type Props = {
   isLoggedIn: boolean;
@@ -69,7 +70,7 @@ class Chart extends React.Component<Props, State> {
   }
 
   onCloseModal = () => {
-    this.setState({ open: false, showFilterModal: false });
+    this.setState({ open: false, showFilterModal: false, rating: 0 });
   };
 
   onOpenModal(id, event) {
@@ -134,27 +135,6 @@ class Chart extends React.Component<Props, State> {
         [name]: value.value
       }
     );
-  };
-
-  submitRate = async rateClip => {
-    const notifySuccess = () => toast.success("😄 Rating submitted!");
-
-    if (this.state.rating) {
-      try {
-        const { data } = await rateClip();
-        console.log(data);
-
-        if (data.insert_rating) {
-          notifySuccess();
-          this.onCloseModal();
-        } else {
-          console.log("Already rated");
-        }
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
   };
 
   renderBackdrop(props) {
@@ -539,7 +519,11 @@ class Chart extends React.Component<Props, State> {
                                             "rating"
                                           )}
                                           onMenuClose={() =>
-                                            this.submitRate(rateClip)
+                                            submitRate(
+                                              rateClip,
+                                              rating,
+                                              this.onCloseModal
+                                            )
                                           }
                                           className="rateSelector"
                                           placeholder="Rate 😆"

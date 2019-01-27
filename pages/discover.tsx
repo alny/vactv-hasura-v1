@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Link } from "../server/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
 import moment from "moment";
+import { submitRate } from "../utils/SharedFunctions/submitRating";
 
 type Props = {
   isLoggedIn: boolean;
@@ -54,7 +55,7 @@ class Discover extends React.Component<Props, State> {
   componentDidMount() {}
 
   onCloseModal = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, rating: 0 });
   };
 
   onOpenModal(id, event) {
@@ -183,27 +184,6 @@ class Discover extends React.Component<Props, State> {
   renderBackdrop(props) {
     return <div {...props} style={backdropStyle} />;
   }
-
-  submitRate = async rateClip => {
-    const notifySuccess = () => toast.success("😄 Rating submitted!");
-
-    if (this.state.rating) {
-      try {
-        const { data } = await rateClip();
-        console.log(data);
-
-        if (data.insert_rating) {
-          notifySuccess();
-          this.onCloseModal();
-        } else {
-          console.log("Already rated");
-        }
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
-  };
 
   render() {
     const { sort, orderBy, rating } = this.state;
@@ -511,7 +491,11 @@ class Discover extends React.Component<Props, State> {
                                                 "rating"
                                               )}
                                               onMenuClose={() =>
-                                                this.submitRate(rateClip)
+                                                submitRate(
+                                                  rateClip,
+                                                  rating,
+                                                  this.onCloseModal
+                                                )
                                               }
                                               className="rateSelector"
                                               placeholder="Rate 😆"

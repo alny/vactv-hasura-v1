@@ -26,6 +26,7 @@ import { Modal } from "react-overlays";
 import { Link } from "../server/routes";
 import { searchPlayer } from "../graphql/queries/player/searchPlayer";
 import { searchEvent } from "../graphql/queries/event/searchEvent";
+import { submitRate } from "../utils/SharedFunctions/submitRating";
 
 type Props = {
   isLoggedIn: boolean;
@@ -82,7 +83,7 @@ class Browse extends React.Component<Props, State> {
   }
 
   onCloseModal = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, rating: 0 });
   };
 
   onOpenModal(id, event) {
@@ -193,27 +194,6 @@ class Browse extends React.Component<Props, State> {
       },
       () => this.setFilters()
     );
-  };
-
-  submitRate = async rateClip => {
-    const notifySuccess = () => toast.success("😄 Rating submitted!");
-
-    if (this.state.rating) {
-      try {
-        const { data } = await rateClip();
-        console.log(data);
-
-        if (data.insert_rating) {
-          notifySuccess();
-          this.onCloseModal();
-        } else {
-          console.log("Already rated");
-        }
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
   };
 
   renderBackdrop(props) {
@@ -718,7 +698,11 @@ class Browse extends React.Component<Props, State> {
                                                   "rating"
                                                 )}
                                                 onMenuClose={() =>
-                                                  this.submitRate(rateClip)
+                                                  submitRate(
+                                                    rateClip,
+                                                    rating,
+                                                    this.onCloseModal
+                                                  )
                                                 }
                                                 className="rateSelector"
                                                 placeholder="Rate 😆"
