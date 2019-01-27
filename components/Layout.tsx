@@ -6,6 +6,8 @@ import Footer from "./Footer/Footer";
 type Props = {
   title?: string;
   isLoggedIn: boolean;
+  role?: String;
+  loggedInUser?: any;
 };
 
 class Layout extends React.Component<Props> {

@@ -33,7 +33,7 @@ class About extends React.Component<Props, State> {
                         <a href="#">
                           <div className="inner active mt-5">
                             <div className="company">
-                              <img src="/static/img/vac.png" alt="" />
+                              <img src="/static/img/t_v2.png" alt="" />
                               <div className="info">
                                 <h2>Vac.Tv</h2>
                                 <span>
@@ -70,7 +70,7 @@ class About extends React.Component<Props, State> {
                           <h2>and Answers</h2>
                         </div>
                       </div>
-                      {/* <h4>Why we build this site</h4>
+                      <h4>Why we build this site</h4>
                       <p>
                         Due to the rapid growth and expansion of company
                         operations, currently we are looking for a Security
@@ -97,7 +97,7 @@ class About extends React.Component<Props, State> {
                           <i className="fa fa-circle-o" />
                           Bring bold new ideas to our affiliate marketing
                         </li>
-                      </ul> */}
+                      </ul>
                     </div>
                   </div>
                 </section>

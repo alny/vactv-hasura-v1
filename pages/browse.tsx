@@ -63,7 +63,7 @@ class Browse extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: null,
-      orderBy: {},
+      orderBy: { id: "desc" },
       filters: {},
       count: 0,
       open: false,

@@ -14,7 +14,7 @@ import {
   clipTypeOption
 } from "../utils/Options";
 import { Mutation } from "react-apollo";
-import { CREATE_CLIP_MUTATION } from "../graphql/mutations/clips/createClipMutation";
+import { CREATE_PRO_CLIP_MUTATION } from "../graphql/mutations/clips/createClipMutation";
 import Router from "next/router";
 import { searchPlayer } from "../graphql/queries/player/searchPlayer";
 import { searchEvent } from "../graphql/queries/event/searchEvent";
@@ -222,7 +222,7 @@ class Add extends React.Component<Props, State> {
               <div className="container">
                 <form className="form-sign">
                   <div style={{ marginBottom: "25px" }} className="text-left">
-                    <h1 className="h3">Add Clip</h1>
+                    <h1 className="h3">Add Pro Clip</h1>
                     <h6 style={{ marginBottom: "15px" }}>
                       Providers Supported:
                     </h6>
@@ -256,7 +256,7 @@ class Add extends React.Component<Props, State> {
                     />
                   </div>
                   <Mutation
-                    mutation={CREATE_CLIP_MUTATION}
+                    mutation={CREATE_PRO_CLIP_MUTATION}
                     variables={{
                       objects: [
                         {
@@ -326,7 +326,7 @@ class Add extends React.Component<Props, State> {
                             options={categoryOptions}
                           />
                         </div>
-                        {clipType === "Pro Clip" ? (
+                        {clipType === "Pro Clip" || clipType === "User Clip" ? (
                           <div className="form-label-group">
                             <Select
                               className="addSelect-Left"
@@ -364,7 +364,10 @@ class Add extends React.Component<Props, State> {
                         <button
                           style={{
                             marginTop:
-                              clipType === "Pro Clip" ? "80px" : "40px",
+                              clipType === "Pro Clip" ||
+                              clipType === "User Clip"
+                                ? "80px"
+                                : "40px",
                             width: "100%",
                             maxWidth: "100%"
                           }}

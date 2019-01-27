@@ -22,7 +22,7 @@ class Error extends React.Component<Props, State> {
   render() {
     const { isLoggedIn } = this.props;
     return (
-      <Layout title="Vac.Tv | Discover" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | Error" isLoggedIn={isLoggedIn}>
         <main>
           <section>
             <div className="error">

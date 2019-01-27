@@ -195,11 +195,35 @@ class Navbar extends React.Component<Props, State> {
                   </Link>
                 </li>
                 <li className={this.isActive("/browse")}>
-                  <Link href="/browse">
-                    <a className="nav-link">
+                  <div className="dropdown">
+                    <a
+                      href="#"
+                      className="nav-link"
+                      role="button"
+                      data-toggle="dropdown"
+                    >
                       Browse <i className="fa fa-crosshairs" />
                     </a>
-                  </Link>
+                    <div
+                      style={{ left: "10%" }}
+                      className="dropdown-menu dropdown-menu-right"
+                    >
+                      <div className="middle">
+                        <Link href="/browse">
+                          <a className="dropdown-item">Clips</a>
+                        </Link>
+                        <Link href="/soon">
+                          <a className="dropdown-item">Highlights</a>
+                        </Link>
+                        <Link href="/soon">
+                          <a className="dropdown-item">Tutorials</a>
+                        </Link>
+                        <Link href="/soon">
+                          <a className="dropdown-item">Fragmovies</a>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </li>
                 <li className={this.isActive("/charts")}>
                   <Link href="/chart">
@@ -233,14 +257,14 @@ class Navbar extends React.Component<Props, State> {
                       className="dropdown-menu dropdown-menu-right"
                     >
                       <div className="middle">
+                        <Link href="/soon">
+                          <a className="dropdown-item">Top Contributors</a>
+                        </Link>
                         <Link href="/about">
                           <a className="dropdown-item">About</a>
                         </Link>
                         <Link href="/soon">
-                          <a className="dropdown-item">Top Contributors</a>
-                        </Link>
-                        <Link href="/soon">
-                          <a className="dropdown-item">Rules</a>
+                          <a className="dropdown-item">FAQ</a>
                         </Link>
                         <Link href="/soon">
                           <a className="dropdown-item">Support</a>

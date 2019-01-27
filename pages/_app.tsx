@@ -4,7 +4,6 @@ import Router from "next/router";
 import { ApolloProvider } from "react-apollo";
 import NProgress from "nprogress";
 import withApolloClient from "../lib/with-apollo-client";
-import ContextProvider from "../lib/context";
 
 Router.onRouteChangeStart = () => {
   NProgress.start();
@@ -31,11 +30,9 @@ class NextApp extends App {
     };
     return (
       <Container>
-        <ContextProvider>
-          <ApolloProvider client={apolloClient}>
-            <Component {...propsWithClient} />
-          </ApolloProvider>
-        </ContextProvider>
+        <ApolloProvider client={apolloClient}>
+          <Component {...propsWithClient} />
+        </ApolloProvider>
       </Container>
     );
   }

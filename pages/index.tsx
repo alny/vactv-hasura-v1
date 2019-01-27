@@ -14,7 +14,7 @@ import {
   toFixed
 } from "../utils/Styles";
 import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { GET_FRONTPAGE_EVENTS } from "../graphql/queries/event/getEventOptions";
 //@ts-ignore
 import { Link } from "../server/routes";
@@ -74,7 +74,6 @@ class Home extends React.Component<Props, State> {
     const { rating } = this.state;
 
     return (
-      //@ts-ignore
       <Layout
         title="Vac.Tv | Watch & Rate CS:GO Clips"
         role={role}
@@ -84,7 +83,8 @@ class Home extends React.Component<Props, State> {
         <main
           style={{
             backgroundImage:
-              "url(https://s3.eu-central-1.amazonaws.com/vactv/dd2.jpg)"
+              "url(https://s3.eu-central-1.amazonaws.com/vactv/dd2.jpg)",
+            backgroundRepeat: "no-repeat"
           }}
         >
           <div style={{ paddingTop: "25px" }} className="freelancers sidebar">
@@ -454,6 +454,30 @@ class Home extends React.Component<Props, State> {
                 }
               }}
             </Query>
+            <div className="career-single">
+              <div className="container">
+                <div className="col-md-12">
+                  <section>
+                    <div className="inside">
+                      <div className="top">
+                        <h2 style={{ marginBottom: "0px", marginLeft: "44%" }}>
+                          How To
+                        </h2>
+                      </div>
+                      <div style={{ textAlign: "center" }} className="job">
+                        <img src="/static/img/logo_dark.png" />
+                        <h4>1. Join the community</h4>
+                        <p>Due to the rapid growth and expansion of company</p>
+                        <h4>2. Watch and Rate Clips</h4>
+                        <p>Due to the rapid growth and expansion of company</p>
+                        <h4>3. Add and Share Clips</h4>
+                        <p>Due to the rapid growth and expansion of company</p>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
         <ToastContainer />

@@ -61,9 +61,10 @@ class Chart extends React.Component<Props, State> {
       showFilterModal: false,
       map: null,
       orderBy: {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
-        //@ts-ignore
-        ratings_aggregate: { sum: { rating: "desc_nulls_last" } },
+        ratings_aggregate: {
+          avg: { rating: "desc_nulls_last" },
+          sum: { rating: "desc_nulls_last" }
+        },
         id: "desc"
       }
     };
@@ -83,12 +84,18 @@ class Chart extends React.Component<Props, State> {
   }
 
   setFilters = () => {
+    let withFilters = {};
+    if (this.state.map) {
+      withFilters = { map: { _eq: this.state.map }, ...withFilters };
+    }
+    if (this.state.category) {
+      withFilters = { category: { _eq: this.state.category }, ...withFilters };
+    }
+    if (this.state.weapon) {
+      withFilters = { weapon: { _eq: this.state.weapon }, ...withFilters };
+    }
     this.setState({
-      filters: {
-        map: { _eq: this.state.map },
-        category: { _eq: this.state.category },
-        weapon: { _eq: this.state.weapon }
-      },
+      filters: withFilters,
       orderBy: this.state.orderBy
     });
   };

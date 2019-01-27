@@ -245,7 +245,7 @@ aside {
   border-left: 0.3em solid transparent;
 }
 .profile img {
-  width: 38px;
+  width: 32px;
   margin-right: 10px;
   border-radius: 50%;
 }
@@ -2478,4 +2478,44 @@ aside {
   left: 40%;
   top: 200px;
   margin-bottom: 400px;
+}
+
+.white-bg others-block {
+  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.03);
+}
+
+.white-bg {
+  background: #ffffff;
+}
+
+.how-it-work {
+  padding: 60px 30px;
+}
+
+.working-process {
+  position: relative;
+  overflow: hidden;
+}
+
+.working-process h3 {
+  font-size: 1.4rem;
+  padding-bottom: 15px;
+}
+
+.working-process h3 span {
+  color: #246df8;
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.working-process p {
+  padding-left: 47px;
+  color: #6f7484;
+}
+
+.working-process:before {
+  position: absolute;
+  content: url(http://themerail.com/html/oficiona/images/dot.png);
+  top: 35px;
+  left: 13px;
 }
