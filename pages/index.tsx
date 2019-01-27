@@ -454,7 +454,7 @@ class Home extends React.Component<Props, State> {
                 }
               }}
             </Query>
-            <div className="career-single">
+            {/* <div className="career-single">
               <div className="container">
                 <div className="col-md-12">
                   <section>
@@ -477,7 +477,7 @@ class Home extends React.Component<Props, State> {
                   </section>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </main>
         <ToastContainer />

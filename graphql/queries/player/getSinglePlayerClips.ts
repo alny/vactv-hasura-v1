@@ -46,7 +46,9 @@ export const getSinglePlayerClips = gql`
         category
         weapon
         event {
+          id
           name
+          image
         }
         ratings_aggregate {
           aggregate {

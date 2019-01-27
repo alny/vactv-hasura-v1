@@ -164,7 +164,7 @@ class Player extends React.Component<Props, State> {
         limit: 12
       }
     });
-    console.log(data.data.player[0]);
+    console.log(data.data.player[0].clips);
     this.setState({
       loading: false,
       clips: data.data.player[0].clips,
@@ -386,12 +386,7 @@ class Player extends React.Component<Props, State> {
                                   href="#"
                                   className="play"
                                 />
-                                <div
-                                  style={{
-                                    borderBottom: "1px solid #fbfcfd"
-                                  }}
-                                  className="middle"
-                                >
+                                <div className="middle">
                                   <div>
                                     <h3
                                       style={{
@@ -423,33 +418,58 @@ class Player extends React.Component<Props, State> {
                                         {clip.weapon}
                                       </span>
                                     </h6>
-                                    <div
-                                      style={{
-                                        width: "32px",
-                                        display: "inline-block",
-                                        float: "right"
-                                      }}
-                                    >
-                                      <CircularProgressbar
-                                        percentage={
-                                          toFixed(
-                                            clip.ratings_aggregate.aggregate.avg
-                                              .rating
-                                          ) * 10
-                                        }
-                                        text={toFixed(
-                                          clip.ratings_aggregate.aggregate.avg
-                                            .rating
-                                        )}
-                                        styles={circleStyle(
-                                          clip.ratings_aggregate.aggregate.avg
-                                            .rating
-                                        )}
-                                      />
-                                    </div>
                                   </div>
                                 </div>
-                                <div className="bottom" />
+
+                                <div className="bottom">
+                                  <Link route="events" id={clip.event.id}>
+                                    <a>
+                                      <img
+                                        src={
+                                          clip.event === null
+                                            ? ""
+                                            : clip.event.image
+                                        }
+                                        alt={
+                                          clip.event === null
+                                            ? ""
+                                            : clip.event.name
+                                        }
+                                      />
+                                      <div className="cut-text">
+                                        <span>
+                                          {clip.event === null
+                                            ? ""
+                                            : clip.event.name}
+                                        </span>
+                                      </div>
+                                    </a>
+                                  </Link>
+                                  <div
+                                    style={{
+                                      width: "32px",
+                                      display: "inline-block",
+                                      float: "right"
+                                    }}
+                                  >
+                                    <CircularProgressbar
+                                      percentage={
+                                        toFixed(
+                                          clip.ratings_aggregate.aggregate.avg
+                                            .rating
+                                        ) * 10
+                                      }
+                                      text={toFixed(
+                                        clip.ratings_aggregate.aggregate.avg
+                                          .rating
+                                      )}
+                                      styles={circleStyle(
+                                        clip.ratings_aggregate.aggregate.avg
+                                          .rating
+                                      )}
+                                    />
+                                  </div>
+                                </div>
                               </div>
                               <Mutation
                                 mutation={RATE_CLIP_MUTATION}
