@@ -216,6 +216,8 @@ class Discover extends React.Component<Props, State> {
                       />
                     );
                   if (error) return `Error!: ${error}`;
+                  if (!data.clip) return `No Clips!`;
+
                   return (
                     <>
                       <div className="above">
