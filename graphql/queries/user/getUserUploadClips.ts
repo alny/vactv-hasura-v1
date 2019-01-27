@@ -28,6 +28,8 @@ export const getUserUploads = gql`
         image
       }
       event {
+        id
+        image
         name
       }
       ratings_aggregate {

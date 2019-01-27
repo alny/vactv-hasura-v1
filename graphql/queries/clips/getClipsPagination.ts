@@ -27,6 +27,8 @@ export const getClipsWithPagination = gql`
         image
       }
       event {
+        id
+        image
         name
       }
       ratings_aggregate {

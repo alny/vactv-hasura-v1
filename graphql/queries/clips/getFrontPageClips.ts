@@ -17,6 +17,8 @@ export const getClips = gql`
         image
       }
       event {
+        id
+        image
         name
       }
       ratings_aggregate {

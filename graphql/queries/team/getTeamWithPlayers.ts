@@ -30,6 +30,8 @@ export const getTeamWithPlayers = gql`
         nickName
       }
       event {
+        id
+        image
         name
       }
       ratings_aggregate {
