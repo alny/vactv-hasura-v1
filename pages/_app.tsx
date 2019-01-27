@@ -5,7 +5,6 @@ import { ApolloProvider } from "react-apollo";
 import NProgress from "nprogress";
 import withApolloClient from "../lib/with-apollo-client";
 import ContextProvider from "../lib/context";
-import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 
 Router.onRouteChangeStart = () => {
   NProgress.start();

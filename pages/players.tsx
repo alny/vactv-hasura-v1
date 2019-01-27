@@ -49,8 +49,6 @@ class Players extends React.Component<Props, State> {
   }
 
   getMoreClips = async () => {
-    console.log("MORE", this.state.playerLength);
-
     const data = await this.props.client.query({
       query: fetchTopPlayers,
       variables: {
@@ -123,11 +121,7 @@ class Players extends React.Component<Props, State> {
 
                           <div className="middle">
                             <div>
-                              <h3
-                                style={{
-                                  textTransform: "capitalize"
-                                }}
-                              >
+                              <h3>
                                 <Link route="player" id={player.id}>
                                   <a>{player.nickName}</a>
                                 </Link>

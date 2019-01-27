@@ -365,7 +365,7 @@ class Home extends React.Component<Props, State> {
                           <Link route="events" id={data.eventClips[0].id}>
                             <a>
                               <h1 style={{ marginBottom: "24px" }}>
-                                Top Event Players 🏅
+                                Top Players 🏅
                               </h1>
                             </a>
                           </Link>
@@ -391,11 +391,7 @@ class Home extends React.Component<Props, State> {
 
                                   <div className="middle">
                                     <div>
-                                      <h3
-                                        style={{
-                                          textTransform: "capitalize"
-                                        }}
-                                      >
+                                      <h3>
                                         <Link route="player" id={player.id}>
                                           <a>{player.nickName}</a>
                                         </Link>
