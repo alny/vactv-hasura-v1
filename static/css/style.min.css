@@ -8,7 +8,7 @@ a:hover {
   -webkit-backface-visibility: hidden;
 }
 body {
-  padding-top: 78px;
+  padding-top: 55px;
   font-family: Montserrat, sans-serif;
   font-size: 15px;
   background: #fbfcfd;
@@ -155,8 +155,7 @@ aside {
   border-radius: 10px;
 }
 .navbar {
-  padding: 20px 16px;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0 0 30px rgba(37, 45, 51, 0.1) !important;
 }
 .navbar-chart {
@@ -166,9 +165,10 @@ aside {
   box-shadow: none !important;
 }
 .logo {
-  width: 28px;
+  width: 35px;
   position: absolute;
   top: 10px;
+  border-radius: 4px;
 }
 .logo-small {
   height: 28px;
@@ -185,7 +185,7 @@ aside {
 }
 .navbar-light .navbar-nav .nav-link {
   color: #bdbac2;
-  font-weight: 600;
+  font-weight: 500;
 }
 .navbar-light .navbar-nav .nav-link:focus {
   color: #bdbac2;
@@ -2082,7 +2082,7 @@ aside {
 }
 
 .chartSelect {
-  width: 210px;
+  width: 88%;
   margin-left: 15px;
   margin-bottom: 20px;
 }

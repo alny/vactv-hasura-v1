@@ -106,7 +106,7 @@ class Home extends React.Component<Props, State> {
               "url(https://s3.eu-central-1.amazonaws.com/vactv/dd2.jpg)"
           }}
         >
-          <div style={{ paddingTop: "35px" }} className="freelancers sidebar">
+          <div style={{ paddingTop: "25px" }} className="freelancers sidebar">
             <Query query={GET_FRONTPAGE_EVENTS}>
               {({ loading, error, data }) => {
                 if (loading) return <div className="loader" />;

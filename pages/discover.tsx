@@ -216,7 +216,7 @@ class Discover extends React.Component<Props, State> {
               "url(https://s3.eu-central-1.amazonaws.com/vactv/train2.jpg)"
           }}
         >
-          <div style={{ paddingTop: "30px" }} className="freelancers sidebar">
+          <div style={{ paddingTop: "25px" }} className="freelancers sidebar">
             <div className="container">
               <Query
                 query={getClipsWithFilter}

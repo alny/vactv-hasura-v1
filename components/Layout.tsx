@@ -49,7 +49,7 @@ class Layout extends React.Component<Props> {
             content="Vac.Tv - Watch & Rate CS:GO Clips! Clips, Videos, Frags, Pro Players, Pro Teams, Events, Weapons, Categories and more!"
           />
 
-          <link rel="icon" href="/static/img/favicon.png" />
+          <link rel="icon" href="/static/img/favicon_v1.png" />
           <link href="/static/css/ReactToastify.min.css" rel="stylesheet" />
           <link
             href="https://fonts.googleapis.com/css?family=Montserrat:500,600,700"

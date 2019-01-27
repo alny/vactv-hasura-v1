@@ -61,7 +61,7 @@ class Navbar extends React.Component<Props, State> {
               <a className="mr-1" rel="home">
                 <img
                   className="logo hidden-xs"
-                  src="/static/img/vac.png"
+                  src="/static/img/t_v2.png"
                   alt="logo"
                 />
                 <img
@@ -93,7 +93,7 @@ class Navbar extends React.Component<Props, State> {
                   <a onClick={() => login()} href="#">
                     <button
                       style={{
-                        padding: "8px 25px",
+                        padding: "5px 5px",
                         borderRadius: "100px",
                         color: "#32364f",
                         background: "white",
