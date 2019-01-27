@@ -18,7 +18,7 @@ class About extends React.Component<Props, State> {
   render() {
     const { isLoggedIn } = this.props;
     return (
-      <Layout title="Vac.Tv | About this Community" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | About the Community" isLoggedIn={isLoggedIn}>
         <div className="career-single">
           <div className="container">
             <div style={{ marginBottom: "-35px" }} className="above">

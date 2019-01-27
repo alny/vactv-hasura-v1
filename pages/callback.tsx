@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { parseHash } from "../components/Auth/auth0";
 import { verifyToken, saveToken } from "../components/Auth/auth";
-import withUser from "../lib/withUser";
 import { gql } from "apollo-boost";
 import Layout from "../components/Layout";
 
@@ -83,4 +82,4 @@ class Callback extends Component<Props> {
   }
 }
 
-export default withUser(Callback);
+export default Callback;
