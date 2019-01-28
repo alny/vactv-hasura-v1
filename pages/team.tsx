@@ -19,6 +19,7 @@ import { Link } from "../server/routes";
 import { withRouter } from "next/router";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { getTeamWithPlayers } from "../graphql/queries/team/getTeamWithPlayers";
+import { submitRate } from "../utils/SharedFunctions/submitRating";
 
 type Props = {
   isLoggedIn: boolean;
@@ -57,7 +58,11 @@ class Team extends React.Component<Props, State> {
     this.state = {
       sort: "today",
       orderBy: { createdAt: "desc_nulls_last", id: "desc" },
-      filters: {},
+      filters: {
+        player: {
+          teamId: { _eq: !teamId ? this.props.router.query.id : teamId }
+        }
+      },
       count: 0,
       open: false,
       rating: 0,
@@ -120,27 +125,6 @@ class Team extends React.Component<Props, State> {
       },
       () => this.setFilters()
     );
-  };
-
-  submitRate = async rateClip => {
-    const notifySuccess = () => toast.success("😄 Rating submitted!");
-
-    if (this.state.rating) {
-      try {
-        const { data } = await rateClip();
-        console.log(data);
-
-        if (data.insert_rating) {
-          notifySuccess();
-          this.onCloseModal();
-        } else {
-          console.log("Already rated");
-        }
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    }
   };
 
   renderBackdrop(props) {
@@ -509,7 +493,11 @@ class Team extends React.Component<Props, State> {
                                                     "rating"
                                                   )}
                                                   onMenuClose={() =>
-                                                    this.submitRate(rateClip)
+                                                    submitRate(
+                                                      rateClip,
+                                                      rating,
+                                                      this.onCloseModal
+                                                    )
                                                   }
                                                   className="rateSelector"
                                                   placeholder="Rate 😆"

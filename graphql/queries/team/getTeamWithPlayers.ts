@@ -28,6 +28,7 @@ export const getTeamWithPlayers = gql`
         image
         name
         nickName
+        teamId
       }
       event {
         id
