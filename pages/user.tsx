@@ -55,7 +55,7 @@ class User extends React.Component<Props, State> {
       : await getTokenForServer(req);
 
     isLoggedIn = !!loggedInUser;
-    userId = isLoggedIn ? loggedInUser.sub : "";
+    userId = isLoggedIn ? loggedInUser.sub : query.id;
   }
   constructor(props: Props) {
     super(props);
@@ -75,13 +75,6 @@ class User extends React.Component<Props, State> {
       userProfile: {}
     };
   }
-
-  isUUID = id => {
-    let isUUID = /^\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}‌​\}?$/.test(
-      id
-    );
-    return isUUID;
-  };
 
   onCloseModal = () => {
     this.setState({ open: false });
@@ -159,33 +152,20 @@ class User extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
+    console.log(this.props.router.query.id);
     const data = await this.props.client.query({
       query: getUserClips,
       variables: {
-        userId: this.isUUID(userId)
-          ? {
-              id: { _eq: this.props.router.query.id }
-            }
-          : {
-              userId: { _eq: userId }
-            },
-        filters: this.isUUID(userId)
-          ? {
-              id: { _eq: this.props.router.query.id }
-            }
-          : {
-              userId: { _eq: userId }
-            },
-        orderBy: this.state.orderBy,
+        filters: { id: { _eq: this.props.router.query.id } },
         offset: 0,
         limit: 12
       }
     });
-    console.log(data.data.userClip);
+    console.log(data.data);
     this.setState({
       loading: false,
-      clips: data.data.userClip,
-      clipLength: data.data.userClip.length,
+      clips: data.data.user[0].userclipsByuserid,
+      clipLength: data.data.user[0].userclipsByuserid.length,
       userProfile: {
         id: data.data.user[0].id,
         image: data.data.user[0].image,

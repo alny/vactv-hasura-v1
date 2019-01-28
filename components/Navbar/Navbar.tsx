@@ -148,12 +148,12 @@ class Navbar extends React.Component<Props, State> {
                           </h3>
                         </div>
                         <div className="middle">
-                          <Routes route="user" id={id}>
+                          <Link href="/soon">
                             <a className="dropdown-item">
                               <i className="fa fa-user-circle" />
                               Your Profile
                             </a>
-                          </Routes>
+                          </Link>
                           {role === "moderator" || role === "admin" ? (
                             <Link href="/moderator">
                               <a className="dropdown-item">
