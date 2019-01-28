@@ -763,6 +763,10 @@
     "@types/uglify-js" "*"
     source-map "^0.6.0"
 
+"@types/yup@^0.26.6":
+  version "0.26.6"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.26.6.tgz#3197372455af255c48732f2e3b336b415e025701"
+
 "@types/zen-observable@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.0.tgz#8b63ab7f1aa5321248aad5ac890a485656dcea4d"

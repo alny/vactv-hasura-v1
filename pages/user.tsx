@@ -17,7 +17,7 @@ import { Modal } from "react-overlays";
 //@ts-ignore
 import { Link } from "../server/routes";
 import { withRouter } from "next/router";
-import { getSinglePlayerClips } from "../graphql/queries/player/getSinglePlayerClips";
+import { getUserClips } from "../graphql/queries/user/getUserClips";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
@@ -42,13 +42,13 @@ interface State {
   playerProfile: any;
   clipLength: any;
   loading: boolean;
+  userProfile: any;
 }
 
 let isLoggedIn;
 let userId;
-let playerId;
 
-class Player extends React.Component<Props, State> {
+class User extends React.Component<Props, State> {
   static async getInitialProps({ req, query }) {
     const loggedInUser = (process as any).browser
       ? await getTokenForBrowser()
@@ -56,7 +56,6 @@ class Player extends React.Component<Props, State> {
 
     isLoggedIn = !!loggedInUser;
     userId = isLoggedIn ? loggedInUser.sub : "";
-    playerId = query.id;
   }
   constructor(props: Props) {
     super(props);
@@ -72,9 +71,17 @@ class Player extends React.Component<Props, State> {
       clips: [],
       clipLength: 0,
       playerProfile: {},
-      loading: true
+      loading: true,
+      userProfile: {}
     };
   }
+
+  isUUID = id => {
+    let isUUID = /^\{?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}‌​\}?$/.test(
+      id
+    );
+    return isUUID;
+  };
 
   onCloseModal = () => {
     this.setState({ open: false });
@@ -93,7 +100,7 @@ class Player extends React.Component<Props, State> {
     console.log(this.state.clipLength);
 
     const data = await this.props.client.query({
-      query: getSinglePlayerClips,
+      query: getUserClips,
       variables: {
         filters: this.state.filters,
         offset: this.state.clipLength,
@@ -102,8 +109,8 @@ class Player extends React.Component<Props, State> {
       }
     });
     this.setState({
-      clips: [...this.state.clips, ...data.data.player[0].clips],
-      clipLength: this.state.clipLength + data.data.player[0].clips.length
+      clips: [...this.state.clips, ...data.data.userClip],
+      clipLength: this.state.clipLength + data.data.userClip.length
     });
   };
 
@@ -125,7 +132,7 @@ class Player extends React.Component<Props, State> {
       };
     }
     const data = await this.props.client.query({
-      query: getSinglePlayerClips,
+      query: getUserClips,
       variables: {
         filters: this.state.filters,
         offset: this.state.clipLength,
@@ -135,8 +142,8 @@ class Player extends React.Component<Props, State> {
     });
     this.setState({
       orderBy: orderByOption,
-      clips: [...data.data.player[0].clips],
-      clipLength: data.data.player[0].clips.length
+      clips: [...data.data.userClip],
+      clipLength: data.data.userClip.length
     });
   };
 
@@ -153,32 +160,44 @@ class Player extends React.Component<Props, State> {
 
   async componentDidMount() {
     const data = await this.props.client.query({
-      query: getSinglePlayerClips,
+      query: getUserClips,
       variables: {
-        filters: {
-          id: { _eq: !playerId ? this.props.router.query.id : playerId }
-        },
+        userId: this.isUUID(userId)
+          ? {
+              id: { _eq: this.props.router.query.id }
+            }
+          : {
+              userId: { _eq: userId }
+            },
+        filters: this.isUUID(userId)
+          ? {
+              id: { _eq: this.props.router.query.id }
+            }
+          : {
+              userId: { _eq: userId }
+            },
         orderBy: this.state.orderBy,
         offset: 0,
         limit: 12
       }
     });
-    console.log(data.data.player[0].clips);
+    console.log(data.data.userClip);
     this.setState({
       loading: false,
-      clips: data.data.player[0].clips,
-      clipLength: data.data.player[0].clips.length,
-      playerProfile: {
-        id: data.data.player[0].id,
-        name: data.data.player[0].name,
-        nickName: data.data.player[0].nickName,
-        image: data.data.player[0].image,
-        rating: data.data.player[0].rating_aggregate,
-        clipCount: data.data.player[0].clips_aggregate.aggregate.count,
-        team: data.data.player[0].team
+      clips: data.data.userClip,
+      clipLength: data.data.userClip.length,
+      userProfile: {
+        id: data.data.user[0].id,
+        image: data.data.user[0].image,
+        username: data.data.user[0].username,
+        rating:
+          data.data.user[0].userratingsByuserid_aggregate.aggregate.avg.rating,
+        ratingCount:
+          data.data.user[0].userratingsByuserid_aggregate.aggregate.count,
+        clipsCount:
+          data.data.user[0].userclipsByuserid_aggregate.aggregate.count
       }
     });
-    console.log(this.state.playerProfile.clipCount);
   }
 
   renderBackdrop(props) {
@@ -186,14 +205,14 @@ class Player extends React.Component<Props, State> {
   }
 
   render() {
-    const { playerProfile, rating, loading } = this.state;
+    const { playerProfile, rating, loading, userProfile } = this.state;
     return (
-      <Layout title="Vac.Tv | Pro Player" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | User Profile" isLoggedIn={isLoggedIn}>
         <main>
           <div className="freelancers sidebar">
             <div className="container">
               <div className="above">
-                <h1>Pro Player</h1>
+                <h1>User Profile</h1>
                 <div className="buttons">
                   <Select
                     menuPlacement="auto"
@@ -213,10 +232,7 @@ class Player extends React.Component<Props, State> {
                     <div className="card">
                       <div className="singlePlayer">
                         <a href="#">
-                          <img
-                            src={playerProfile ? playerProfile.image : null}
-                            alt=""
-                          />
+                          <img src={userProfile.image} alt="" />
                         </a>
                         <div className="item mr-auto">
                           <span
@@ -225,58 +241,12 @@ class Player extends React.Component<Props, State> {
                               fontWeight: 600
                             }}
                           >
-                            <a href="#">
-                              {playerProfile ? playerProfile.nickName : null}
-                            </a>
+                            <a href="#">{userProfile.username}</a>
                           </span>
-                          <div className="star-rating">
-                            {playerProfile ? playerProfile.name : null}
-                          </div>
+                          <div className="star-rating" />
                         </div>
                       </div>
-                      <div className="singlePlayer">
-                        <Link
-                          route="team"
-                          id={playerProfile.team ? playerProfile.team.id : null}
-                        >
-                          <a>
-                            <img
-                              src={
-                                playerProfile.team
-                                  ? playerProfile.team.image
-                                  : null
-                              }
-                              alt=""
-                            />
-                          </a>
-                        </Link>
-                        <div className="item mr-auto">
-                          <span
-                            style={{
-                              fontSize: "20px",
-                              fontWeight: 600
-                            }}
-                          >
-                            <a href="#">Team </a>
-                          </span>
-                          <div className="star-rating">
-                            <Link
-                              route="team"
-                              id={
-                                playerProfile.team
-                                  ? playerProfile.team.id
-                                  : null
-                              }
-                            >
-                              <a>
-                                {playerProfile.team
-                                  ? playerProfile.team.name
-                                  : null}
-                              </a>
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
+
                       <div className="singlePlayer">
                         <span
                           style={{
@@ -297,20 +267,14 @@ class Player extends React.Component<Props, State> {
                           <CircularProgressbar
                             percentage={
                               toFixed(
-                                playerProfile.rating
-                                  ? playerProfile.rating.aggregate.avg.rating
-                                  : 0
+                                userProfile.rating ? userProfile.rating : 0
                               ) * 10
                             }
                             text={toFixed(
-                              playerProfile.rating
-                                ? playerProfile.rating.aggregate.avg.rating
-                                : 0
+                              userProfile.rating ? userProfile.rating : 0
                             )}
                             styles={circleStyle(
-                              playerProfile.rating
-                                ? playerProfile.rating.aggregate.avg.rating
-                                : 0
+                              userProfile.rating ? userProfile.rating : 0
                             )}
                           />
                         </div>
@@ -327,10 +291,9 @@ class Player extends React.Component<Props, State> {
                         </span>
 
                         <span className="totalRating">
-                          {" "}
-                          {playerProfile.rating
-                            ? playerProfile.rating.aggregate.count
-                            : null}
+                          {userProfile.ratingCount
+                            ? userProfile.ratingCount
+                            : 0}
                         </span>
                       </div>
                       <div className="singlePlayer">
@@ -345,8 +308,7 @@ class Player extends React.Component<Props, State> {
                         </span>
 
                         <span className="totalRating">
-                          {" "}
-                          {playerProfile ? playerProfile.clipCount : null}
+                          {userProfile.clipsCount ? userProfile.clipsCount : 0}
                         </span>
                       </div>
                     </div>
@@ -421,29 +383,15 @@ class Player extends React.Component<Props, State> {
                                 </div>
 
                                 <div className="bottom">
-                                  <Link route="events" id={clip.event.id}>
-                                    <a>
-                                      <img
-                                        src={
-                                          clip.event === null
-                                            ? ""
-                                            : clip.event.image
-                                        }
-                                        alt={
-                                          clip.event === null
-                                            ? ""
-                                            : clip.event.name
-                                        }
-                                      />
-                                      <div className="cut-text">
-                                        <span>
-                                          {clip.event === null
-                                            ? ""
-                                            : clip.event.name}
-                                        </span>
-                                      </div>
-                                    </a>
-                                  </Link>
+                                  <img
+                                    src="https://s3.eu-central-1.amazonaws.com/vactv/placeholder.jpg"
+                                    alt="#"
+                                  />
+                                  <div className="cut-text">
+                                    <span>
+                                      {clip.type === null ? "" : clip.type}
+                                    </span>
+                                  </div>
                                   <div
                                     style={{
                                       width: "32px",
@@ -477,10 +425,7 @@ class Player extends React.Component<Props, State> {
                                     {
                                       rating,
                                       userId: !isLoggedIn ? null : userId,
-                                      clipId: clip.id,
-                                      playerId: !playerId
-                                        ? this.props.router.query.id
-                                        : playerId
+                                      clipId: clip.id
                                     }
                                   ]
                                 }}
@@ -617,4 +562,4 @@ class Player extends React.Component<Props, State> {
   }
 }
 
-export default withRouter(Player);
+export default withRouter(User);

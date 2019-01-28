@@ -3,21 +3,19 @@ import Select from "react-select";
 import Layout from "../components/Layout";
 import privatePage from "../components/hocs/privatePage";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  createUserClipSchema,
-  createProClipSchema
-} from "../utils/Yup/Schemas";
+
 import {
   mapOptions,
   weaponOptions,
   categoryOptions,
-  clipTypeOption
+  clipTypeOption,
+  clipPlatform
 } from "../utils/Options";
-import { Mutation } from "react-apollo";
-import { CREATE_PRO_CLIP_MUTATION } from "../graphql/mutations/clips/createClipMutation";
+
 import Router from "next/router";
 import { searchPlayer } from "../graphql/queries/player/searchPlayer";
 import { searchEvent } from "../graphql/queries/event/searchEvent";
+import { clipTypeGen } from "../utils/SharedFunctions/clipType";
 
 type Props = {
   statusCode: any;
@@ -35,12 +33,13 @@ interface State {
   map: string;
   url: string;
   title: string;
-  players: [];
+  players: any;
   playersLoading: boolean;
   events: [];
   eventsLoading: boolean;
   submitDisable: boolean;
   clipType: any;
+  platform: String;
 }
 
 let playerOptions = [];
@@ -63,7 +62,8 @@ class Add extends React.Component<Props, State> {
       playersLoading: false,
       events: [],
       eventsLoading: false,
-      submitDisable: false
+      submitDisable: false,
+      platform: ""
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -83,47 +83,52 @@ class Add extends React.Component<Props, State> {
     });
   };
 
-  handleSubmit = async (e, createClip) => {
+  componentDidMount() {
+    console.log(this.props);
+  }
+
+  handleSubmit = async e => {
     e.preventDefault();
+    if (!this.state.clipType) {
+      return;
+    }
 
     const notifySuccess = () =>
       toast.success("😄 Clip successfully submitted!");
     const notifyError = error => toast.warn(error);
 
-    const { url, player, event, weapon, category, map } = this.state;
-
-    this.state.clipType === "Pro Clip"
-      ? await createProClipSchema
-          .validate({
-            url,
-            player,
-            event,
-            weapon,
-            category,
-            map
-          })
-          .then(async () => {
-            this.setState({ submitDisable: true });
-            try {
-              const { data } = await createClip();
-              console.log(data);
-              if (data.insert_clip) {
-                // this.setState({ submitDisable: true });
-                notifySuccess();
-                // setTimeout(() => Router.replace("/"), 3000);
-                return;
-              }
-            } catch (error) {
-              console.log(error);
-              return;
+    let options = clipTypeGen(this.state, this.props);
+    if (!options.validator) {
+      return;
+    }
+    await options.validator
+      .validate(options.validateData)
+      .then(async () => {
+        this.setState({ submitDisable: true });
+        try {
+          const data = await this.props.client.mutate({
+            mutation: options.mutation,
+            variables: {
+              objects: [options.variables]
             }
-          })
-          .catch(function(err) {
-            console.log(err);
-            notifyError(err.message);
+          });
+          console.log(data);
+          if (data.data.insert_clip) {
+            // this.setState({ submitDisable: true });
+            notifySuccess();
+            // setTimeout(() => Router.replace("/"), 3000);
             return;
-          })
-      : "User";
+          }
+        } catch (error) {
+          console.log(error);
+          return;
+        }
+      })
+      .catch(function(err) {
+        console.log(err);
+        notifyError(err.message);
+        return;
+      });
   };
 
   doPlayerSearch(evt) {
@@ -153,14 +158,12 @@ class Add extends React.Component<Props, State> {
       });
       console.log(data.data.player);
       if (data.data.player.length > 0) {
-        //@ts-ignore
         this.setState({
           players: [...playerOptions],
           playersLoading: false,
           player: data.data.player[0].id
         });
       } else {
-        //@ts-ignore
         this.setState({
           players: [],
           playersLoading: false
@@ -212,6 +215,7 @@ class Add extends React.Component<Props, State> {
       event,
       title,
       url,
+      platform,
       clipType
     } = this.state;
     return (
@@ -222,7 +226,7 @@ class Add extends React.Component<Props, State> {
               <div className="container">
                 <form className="form-sign">
                   <div style={{ marginBottom: "25px" }} className="text-left">
-                    <h1 className="h3">Add Pro Clip</h1>
+                    <h1 className="h3">Add Clip</h1>
                     <h6 style={{ marginBottom: "15px" }}>
                       Providers Supported:
                     </h6>
@@ -232,7 +236,7 @@ class Add extends React.Component<Props, State> {
                         color: "red",
                         marginRight: "15px"
                       }}
-                      className="fa fa-youtube"
+                      className="fab fa-youtube"
                     />
                     <i
                       style={{
@@ -240,7 +244,7 @@ class Add extends React.Component<Props, State> {
                         color: "#1da1f2",
                         marginRight: "15px"
                       }}
-                      className="fa fa-twitter"
+                      className="fab fa-twitter"
                     />
                     <i
                       style={{
@@ -248,139 +252,125 @@ class Add extends React.Component<Props, State> {
                         color: "#6441a4",
                         marginRight: "15px"
                       }}
-                      className="fa fa-twitch"
+                      className="fab fa-twitch"
                     />
                     <img
                       style={{ width: "38px", marginTop: "-18px" }}
                       src="https://about.plays.tv/wp-content/uploads/2018/03/logo-mark-300x300.png"
                     />
                   </div>
-                  <Mutation
-                    mutation={CREATE_PRO_CLIP_MUTATION}
-                    variables={{
-                      objects: [
-                        {
-                          url,
-                          title,
-                          playerId: player,
-                          eventId: event,
-                          userId: loggedInUser.sub,
-                          weapon,
-                          category,
-                          map
-                        }
-                      ]
-                    }}
-                  >
-                    {(createClip, {}) => (
-                      <>
-                        <div className="form-row">
-                          <div className="col">
-                            <div className="form-label-group">
-                              <input
-                                style={{ height: "calc(4.25rem + 2px)" }}
-                                type="text"
-                                id="inputFirst"
-                                className="form-control"
-                                name="url"
-                                onChange={this.handleChange}
-                                value={url}
-                                placeholder="Copy/Paste Link"
-                              />
-                            </div>
-                            <div className="form-label-group">
-                              <Select
-                                className="addSelect"
-                                onChange={this.handleSelectChange("clipType")}
-                                //@ts-ignore
-                                value={clipType.value}
-                                placeholder={"Select Clip Type..."}
-                                options={clipTypeOption}
-                              />
-                            </div>
-                          </div>
+                  <>
+                    <div className="form-row">
+                      <div className="col">
+                        <div className="form-label-group">
+                          <input
+                            style={{ height: "calc(4.25rem + 2px)" }}
+                            type="text"
+                            id="inputFirst"
+                            className="form-control"
+                            name="url"
+                            onChange={this.handleChange}
+                            value={url}
+                            placeholder="Copy/Paste Link"
+                          />
                         </div>
                         <div className="form-label-group">
                           <Select
-                            className="addSelect-Left"
-                            onChange={this.handleSelectChange("map")}
-                            //@ts-ignore
-                            value={map.value}
-                            placeholder="Select A Map..."
-                            options={mapOptions}
-                          />
-                          <Select
-                            className="addSelect-Right"
-                            onChange={this.handleSelectChange("weapon")}
-                            //@ts-ignore
-                            value={weapon.value}
-                            placeholder="Select A Weapon..."
-                            options={weaponOptions}
-                          />
-                          <Select
                             className="addSelect"
-                            onChange={this.handleSelectChange("category")}
+                            onChange={this.handleSelectChange("clipType")}
                             //@ts-ignore
-                            value={category.value}
-                            placeholder={"Select A Category..."}
-                            options={categoryOptions}
+                            value={clipType.value}
+                            placeholder={"Select Clip Type..."}
+                            options={clipTypeOption}
                           />
                         </div>
-                        {clipType === "Pro Clip" || clipType === "User Clip" ? (
-                          <div className="form-label-group">
-                            <Select
-                              className="addSelect-Left"
-                              onInputChange={evt => this.doPlayerSearch(evt)}
-                              onChange={this.handleSelectChange("player")}
-                              //@ts-ignore
-                              value={player.value}
-                              isClearable={true}
-                              isLoading={this.state.playersLoading}
-                              placeholder="Search for Player e.g. 'device'"
-                              options={
-                                this.state.players.length > 0
-                                  ? playerOptions
-                                  : this.state.players
-                              }
-                            />
-                            <Select
-                              className="addSelect-Right"
-                              onInputChange={evt => this.doEventSearch(evt)}
-                              onChange={this.handleSelectChange("event")}
-                              //@ts-ignore
-                              value={event.value}
-                              isClearable={true}
-                              isLoading={this.state.eventsLoading}
-                              placeholder="Search for Event e.g. 'Blast Pro'"
-                              options={
-                                this.state.events.length > 0
-                                  ? eventOptions
-                                  : this.state.events
-                              }
-                            />
-                          </div>
-                        ) : null}
+                      </div>
+                    </div>
+                    <div className="form-label-group">
+                      <Select
+                        className="addSelect-Left"
+                        onChange={this.handleSelectChange("map")}
+                        //@ts-ignore
+                        value={map.value}
+                        placeholder="Select A Map..."
+                        options={mapOptions}
+                      />
+                      <Select
+                        className="addSelect-Right"
+                        onChange={this.handleSelectChange("weapon")}
+                        //@ts-ignore
+                        value={weapon.value}
+                        placeholder="Select A Weapon..."
+                        options={weaponOptions}
+                      />
+                      <Select
+                        className="addSelect"
+                        onChange={this.handleSelectChange("category")}
+                        //@ts-ignore
+                        value={category.value}
+                        placeholder={"Select A Category..."}
+                        options={categoryOptions}
+                      />
+                      {clipType === "User Clip" ? (
+                        <Select
+                          className="addSelect"
+                          onChange={this.handleSelectChange("platform")}
+                          //@ts-ignore
+                          value={platform.value}
+                          placeholder={"Select A Platform..."}
+                          options={clipPlatform}
+                        />
+                      ) : null}
+                    </div>
+                    {clipType === "Pro Clip" ? (
+                      <div className="form-label-group">
+                        <Select
+                          className="addSelect-Left"
+                          onInputChange={evt => this.doPlayerSearch(evt)}
+                          onChange={this.handleSelectChange("player")}
+                          //@ts-ignore
+                          value={player.value}
+                          isClearable={true}
+                          isLoading={this.state.playersLoading}
+                          placeholder="Search for Player e.g. 'device'"
+                          options={
+                            this.state.players.length > 0
+                              ? playerOptions
+                              : this.state.players
+                          }
+                        />
+                        <Select
+                          className="addSelect-Right"
+                          onInputChange={evt => this.doEventSearch(evt)}
+                          onChange={this.handleSelectChange("event")}
+                          //@ts-ignore
+                          value={event.value}
+                          isClearable={true}
+                          isLoading={this.state.eventsLoading}
+                          placeholder="Search for Event e.g. 'Blast Pro'"
+                          options={
+                            this.state.events.length > 0
+                              ? eventOptions
+                              : this.state.events
+                          }
+                        />
+                      </div>
+                    ) : null}
 
-                        <button
-                          style={{
-                            marginTop:
-                              clipType === "Pro Clip" ||
-                              clipType === "User Clip"
-                                ? "80px"
-                                : "40px",
-                            width: "100%",
-                            maxWidth: "100%"
-                          }}
-                          className="btn btn-lg btn-primary btn-block"
-                          type="submit"
-                          onClick={e => this.handleSubmit(e, createClip)}
-                          // disabled={this.state.submitDisable}
-                        >
-                          Submit Clip
-                        </button>
-                      </>
-                    )}
-                  </Mutation>
+                    <button
+                      style={{
+                        marginTop: clipType === "Pro Clip" ? "80px" : "40px",
+                        width: "100%",
+                        maxWidth: "100%"
+                      }}
+                      className="btn btn-lg btn-primary btn-block"
+                      type="submit"
+                      onClick={e => this.handleSubmit(e)}
+                      // disabled={this.state.submitDisable}
+                    >
+                      Submit Clip
+                    </button>
+                  </>
                 </form>
               </div>
             </div>

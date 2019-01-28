@@ -4,6 +4,8 @@ import Router from "next/router";
 import { login, logout } from "../Auth/auth0";
 import { deleteToken } from "../Auth/auth";
 import defaultPage from "../../components/hocs/defaultPage";
+//@ts-ignore
+import { Link as Routes } from "../../server/routes";
 
 type Props = {
   isLoggedIn: boolean;
@@ -14,12 +16,14 @@ type Props = {
 interface State {
   name: string;
   image: string;
+  id: string;
 }
 
 class Navbar extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      id: "",
       name: "Loading",
       image: ""
     };
@@ -30,6 +34,7 @@ class Navbar extends React.Component<Props, State> {
     var user: any = JSON.parse(localStorage.getItem("user"));
     if (user) {
       this.setState({
+        id: user.id,
         name: user.name,
         image: user.image
       });
@@ -53,6 +58,8 @@ class Navbar extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn, loggedInUser, role } = this.props;
+    const { id, image, name } = this.state;
+
     return (
       <header>
         <nav className="navbar navbar-expand-md navbar-light fixed-top bg-white">
@@ -128,10 +135,8 @@ class Navbar extends React.Component<Props, State> {
                         aria-haspopup="true"
                         aria-expanded="false"
                       >
-                        <img src={this.state.image} alt={this.state.name} />
-                        <span className="d-none d-lg-inline-flex">
-                          {this.state.name}
-                        </span>
+                        <img src={image} alt={name} />
+                        <span className="d-none d-lg-inline-flex">{name}</span>
                       </a>
                       <div className="dropdown-menu dropdown-menu-right">
                         <div className="account">
@@ -143,12 +148,12 @@ class Navbar extends React.Component<Props, State> {
                           </h3>
                         </div>
                         <div className="middle">
-                          <Link href="/soon">
+                          <Routes route="user" id={id}>
                             <a className="dropdown-item">
                               <i className="fa fa-user-circle" />
                               Your Profile
                             </a>
-                          </Link>
+                          </Routes>
                           {role === "moderator" || role === "admin" ? (
                             <Link href="/moderator">
                               <a className="dropdown-item">
@@ -188,15 +193,63 @@ class Navbar extends React.Component<Props, State> {
             <div className="collapse navbar-collapse" id="navbarsExample07">
               <ul className="navbar-nav mr-auto ad-rg">
                 <li className={this.isActive("/discover")}>
-                  <Link href="/discover">
-                    <a className="nav-link">
+                  <div className="dropdown">
+                    <a
+                      href="#"
+                      className="nav-link"
+                      role="button"
+                      data-toggle="dropdown"
+                    >
                       Discover{" "}
                       <i
                         style={{ fontWeight: 500 }}
                         className="fa fa-compass"
                       />
                     </a>
-                  </Link>
+                    <div
+                      style={{ left: "10%" }}
+                      className="dropdown-menu dropdown-menu-right"
+                    >
+                      <div className="middle">
+                        <Link href="/discover">
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-play-circle"
+                            />
+                            Latest Clips
+                          </a>
+                        </Link>
+                        <Link href="/soon">
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-globe-europe"
+                            />
+                            Events
+                          </a>
+                        </Link>
+                        <Link href="/soon">
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-users"
+                            />
+                            Teams
+                          </a>
+                        </Link>
+                        <Link href="/soon">
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-user-ninja"
+                            />
+                            Players
+                          </a>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </li>
                 <li className={this.isActive("/browse")}>
                   <div className="dropdown">

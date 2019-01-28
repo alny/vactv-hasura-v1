@@ -42,6 +42,13 @@ export const clipTypeOption = [
   { value: "Fragmovie", label: "Fragmovie" }
 ];
 
+export const clipPlatform = [
+  { value: "Matchmaking", label: "Matchmaking" },
+  { value: "FACEIT", label: "FACEIT" },
+  { value: "ESEA", label: "ESEA" },
+  { value: "Other", label: "Other" }
+];
+
 export const sortMoreOptions = [
   { value: "Newest", label: "Newest" },
   { value: "Most Votes", label: "Most Votes" },

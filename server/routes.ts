@@ -6,5 +6,6 @@ router.add({ name: "clip", pattern: "/clip/:id" });
 router.add({ name: "player", pattern: "/player/:id" });
 router.add({ name: "team", pattern: "/team/:id" });
 router.add({ name: "events", pattern: "/events/:id" });
+router.add({ name: "user", pattern: "/user/:id" });
 
 module.exports = router;
