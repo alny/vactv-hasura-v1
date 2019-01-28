@@ -160,7 +160,7 @@ class Navbar extends React.Component<Props, State> {
 
                           <Link href="/add">
                             <a className="dropdown-item">
-                              <i className="fa fa-youtube" />
+                              <i className="fa fa-plus" />
                               Add Clip
                             </a>
                           </Link>
@@ -190,7 +190,11 @@ class Navbar extends React.Component<Props, State> {
                 <li className={this.isActive("/discover")}>
                   <Link href="/discover">
                     <a className="nav-link">
-                      Discover <i className="fa fa-compass" />
+                      Discover{" "}
+                      <i
+                        style={{ fontWeight: 500 }}
+                        className="fa fa-compass"
+                      />
                     </a>
                   </Link>
                 </li>
@@ -202,7 +206,11 @@ class Navbar extends React.Component<Props, State> {
                       role="button"
                       data-toggle="dropdown"
                     >
-                      Browse <i className="fa fa-crosshairs" />
+                      Browse{" "}
+                      <i
+                        style={{ fontWeight: 600, fontSize: "14px" }}
+                        className="fa fa-crosshairs"
+                      />
                     </a>
                     <div
                       style={{ left: "10%" }}
@@ -210,16 +218,40 @@ class Navbar extends React.Component<Props, State> {
                     >
                       <div className="middle">
                         <Link href="/browse">
-                          <a className="dropdown-item">Clips</a>
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-play"
+                            />
+                            Clips
+                          </a>
                         </Link>
                         <Link href="/soon">
-                          <a className="dropdown-item">Highlights</a>
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-magic"
+                            />
+                            Highlights
+                          </a>
                         </Link>
                         <Link href="/soon">
-                          <a className="dropdown-item">Tutorials</a>
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-graduation-cap"
+                            />
+                            Tutorials
+                          </a>
                         </Link>
                         <Link href="/soon">
-                          <a className="dropdown-item">Fragmovies</a>
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px" }}
+                              className="fas fa-video"
+                            />
+                            Fragmovies
+                          </a>
                         </Link>
                       </div>
                     </div>
@@ -228,7 +260,7 @@ class Navbar extends React.Component<Props, State> {
                 <li className={this.isActive("/charts")}>
                   <Link href="/chart">
                     <a className="nav-link">
-                      Charts <i className="fa fa-line-chart" />
+                      Charts <i className="fas fa-chart-line" />
                     </a>
                   </Link>
                 </li>
@@ -258,16 +290,41 @@ class Navbar extends React.Component<Props, State> {
                     >
                       <div className="middle">
                         <Link href="/soon">
-                          <a className="dropdown-item">Top Contributors</a>
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px", fontSize: "16px" }}
+                              className="fas fa-award"
+                            />
+                            Top Contributors
+                          </a>
                         </Link>
                         <Link href="/about">
-                          <a className="dropdown-item">About</a>
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px", fontSize: "16px" }}
+                              className="fas fa-info-circle"
+                            />
+                            About
+                          </a>
                         </Link>
                         <Link href="/soon">
-                          <a className="dropdown-item">FAQ</a>
+                          <a className="dropdown-item">
+                            {" "}
+                            <i
+                              style={{ marginRight: "8px", fontSize: "16px" }}
+                              className="fas fa-question-circle"
+                            />
+                            FAQ
+                          </a>
                         </Link>
                         <Link href="/soon">
-                          <a className="dropdown-item">Support</a>
+                          <a className="dropdown-item">
+                            <i
+                              style={{ marginRight: "8px", fontSize: "16px" }}
+                              className="fas fa-life-ring"
+                            />
+                            Support
+                          </a>
                         </Link>
                       </div>
                     </div>

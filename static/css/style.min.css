@@ -213,6 +213,7 @@ aside {
   border: none;
 }
 .dropdown-item {
+  color: #4a5871;
   padding: 10px 20px;
 }
 .dropdown-item:hover {
