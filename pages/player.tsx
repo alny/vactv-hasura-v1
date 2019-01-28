@@ -109,7 +109,6 @@ class Player extends React.Component<Props, State> {
 
   setFilters = async () => {
     let orderByOption;
-    this.setState({ clipLength: 0 });
     if (this.state.sort === "Newest") {
       orderByOption = { createdAt: "desc_nulls_last", id: "desc" };
     }
