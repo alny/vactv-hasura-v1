@@ -44,7 +44,7 @@ class Layout extends React.Component<Props> {
           />
           <meta property="og:type" content="website" />
           <meta property="og:url" content="vac.tv" />
-          <meta property="og:image" content="/static/img/vac.png" />
+          <meta property="og:image" content="/static/img/t_v2.png" />
           <meta property="og:site_name" content="Vac.Tv" />
           <meta
             property="og:description"
