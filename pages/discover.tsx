@@ -261,6 +261,7 @@ class Discover extends React.Component<Props, State> {
                           <div className="row">
                             {data.clip.map(clip => (
                               <ClipCard
+                                specificStyle={"col-md-3"}
                                 props={this.props}
                                 clip={clip}
                                 rating={rating}

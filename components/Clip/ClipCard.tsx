@@ -16,6 +16,7 @@ import { rateOptions } from "../../utils/Options";
 import { submitRate } from "../../utils/SharedFunctions/submitRating";
 
 const ClipCard: React.SFC<any> = ({
+  specificStyle,
   props,
   clip,
   rating,
@@ -27,7 +28,7 @@ const ClipCard: React.SFC<any> = ({
   renderBackdrop
 }) => {
   return (
-    <div key={key} className="col-md-3">
+    <div key={key} className={specificStyle}>
       <div className="inside">
         <a onClick={onClick} href="#">
           <img className="card-img-top" src={clip.thumbNail} alt={clip.url} />

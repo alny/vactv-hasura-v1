@@ -113,6 +113,7 @@ class Home extends React.Component<Props, State> {
                         <div className="row">
                           {data.eventClips[0].clips.map(clip => (
                             <ClipCard
+                              specificStyle={"col-md-3"}
                               props={this.props}
                               clip={clip}
                               rating={rating}
