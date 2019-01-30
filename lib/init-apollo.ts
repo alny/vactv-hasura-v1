@@ -1,11 +1,12 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "apollo-boost";
 import { setContext } from "apollo-link-context";
 import fetch from "isomorphic-unfetch";
+import { isBrowser } from "./isBrowser";
 
 let apolloClient = null;
 
 // Polyfill fetch() on the server (used by apollo-client)
-if (!(process as any).browser) {
+if (isBrowser) {
   (global as any).fetch = fetch;
 }
 //const dev = process.env.NODE_ENV !== "production";
@@ -36,8 +37,8 @@ function create(initialState, { getToken }) {
   const httpLinkWithAuthToken = authLink.concat(httpLink);
 
   return new ApolloClient({
-    connectToDevTools: (process as any).browser,
-    ssrMode: !(process as any).browser, // Disables forceFetch on the server (so queries are only run once)
+    connectToDevTools: isBrowser,
+    ssrMode: !isBrowser, // Disables forceFetch on the server (so queries are only run once)
     link: httpLinkWithAuthToken,
     cache: new InMemoryCache().restore(initialState || {})
   });
@@ -46,7 +47,7 @@ function create(initialState, { getToken }) {
 export default function initApollo(initialState, options) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
-  if (!(process as any).browser) {
+  if (!isBrowser) {
     return create(initialState, options);
   }
 

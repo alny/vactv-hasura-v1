@@ -57,8 +57,8 @@ class Navbar extends React.Component<Props, State> {
   };
 
   render() {
-    const { isLoggedIn, loggedInUser, role } = this.props;
-    const { id, image, name } = this.state;
+    const { isLoggedIn, role } = this.props;
+    const { image, name } = this.state;
 
     return (
       <header>
