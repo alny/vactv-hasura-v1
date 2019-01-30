@@ -1,26 +1,15 @@
 import * as React from "react";
 import Layout from "../components/Layout";
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import { getClipsWithFilter } from "../graphql/queries/clips/getClipsWithFilter";
-import { sortOptions, rateOptions } from "../utils/Options";
+import { sortOptions } from "../utils/Options";
 import Select from "react-select";
 import defaultPage from "../components/hocs/defaultPage";
-import CircularProgressbar from "react-circular-progressbar";
-import { Modal } from "react-overlays";
-import {
-  modalStyle,
-  backdropStyle,
-  circleStyle,
-  emojiRating,
-  toFixed
-} from "../utils/Styles";
-import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
-import { ToastContainer, toast } from "react-toastify";
-//@ts-ignore
-import { Link } from "../server/routes";
+import { backdropStyle } from "../utils/Styles";
+import { ToastContainer } from "react-toastify";
 import InfiniteScroll from "react-infinite-scroll-component";
 import moment from "moment";
-import { submitRate } from "../utils/SharedFunctions/submitRating";
+import ClipCard from "../components/Clip/ClipCard";
 
 type Props = {
   isLoggedIn: boolean;
@@ -271,245 +260,17 @@ class Discover extends React.Component<Props, State> {
                         >
                           <div className="row">
                             {data.clip.map(clip => (
-                              <div key={clip.id} className="col-md-3">
-                                <div className="inside">
-                                  <a
-                                    onClick={this.onOpenModal.bind(
-                                      this,
-                                      clip.id
-                                    )}
-                                    href="#"
-                                  >
-                                    <img
-                                      className="card-img-top"
-                                      src={clip.thumbNail}
-                                      alt={clip.url}
-                                    />
-                                  </a>
-                                  <a
-                                    onClick={this.onOpenModal.bind(
-                                      this,
-                                      clip.id
-                                    )}
-                                    href="#"
-                                    className="play"
-                                  />
-                                  <div className="middle">
-                                    <div>
-                                      <h3
-                                        style={{ textTransform: "capitalize" }}
-                                      >
-                                        <Link route="clip" id={clip.id}>
-                                          <a>
-                                            {clip.category}{" "}
-                                            {emojiRating(
-                                              clip.ratings_aggregate.aggregate
-                                                .avg.rating
-                                            )}
-                                          </a>
-                                        </Link>
-                                      </h3>
-                                      <h6
-                                        style={{
-                                          textTransform: "capitalize",
-                                          fontSize: "12px"
-                                        }}
-                                      >
-                                        🌍 {clip.map} | 💢{" "}
-                                        <span
-                                          style={{ textTransform: "uppercase" }}
-                                        >
-                                          {clip.weapon}
-                                        </span>
-                                      </h6>
-                                    </div>
-                                  </div>
-                                  <div className="bottom">
-                                    <Link route="player" id={clip.player.id}>
-                                      <a>
-                                        <img
-                                          src={
-                                            clip.player === null
-                                              ? ""
-                                              : clip.player.image
-                                          }
-                                          alt={
-                                            clip.player === null
-                                              ? ""
-                                              : clip.player.nickName
-                                          }
-                                        />
-                                        <span>
-                                          {clip.player === null
-                                            ? ""
-                                            : clip.player.nickName}
-                                        </span>
-                                      </a>
-                                    </Link>
-                                    <div
-                                      style={{
-                                        width: "32px",
-                                        display: "inline-block",
-                                        float: "right"
-                                      }}
-                                    >
-                                      <CircularProgressbar
-                                        percentage={
-                                          toFixed(
-                                            clip.ratings_aggregate.aggregate.avg
-                                              .rating
-                                          ) * 10
-                                        }
-                                        text={toFixed(
-                                          clip.ratings_aggregate.aggregate.avg
-                                            .rating
-                                        )}
-                                        styles={circleStyle(
-                                          clip.ratings_aggregate.aggregate.avg
-                                            .rating
-                                        )}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <Mutation
-                                  mutation={RATE_CLIP_MUTATION}
-                                  variables={{
-                                    objects: [
-                                      {
-                                        rating,
-                                        userId: !this.props.loggedInUser
-                                          ? null
-                                          : this.props.loggedInUser.sub,
-                                        clipId: clip.id,
-                                        playerId: clip.player.id
-                                      }
-                                    ]
-                                  }}
-                                >
-                                  {(rateClip, {}) => (
-                                    <Modal
-                                      onHide={this.onCloseModal}
-                                      style={modalStyle()}
-                                      aria-labelledby="modal-label"
-                                      show={!!this.state.open[clip.id]}
-                                      renderBackdrop={this.renderBackdrop}
-                                    >
-                                      <div
-                                        style={{
-                                          paddingBottom: "20px",
-                                          paddingTop: "20px",
-                                          backgroundColor: "#fafafa",
-                                          borderRadius: "5px"
-                                        }}
-                                      >
-                                        <div>
-                                          <h4
-                                            style={{
-                                              marginLeft: "15px",
-                                              marginBottom: "18px",
-                                              textTransform: "capitalize",
-                                              fontSize: "16px"
-                                            }}
-                                          >
-                                            🎬{" "}
-                                            {clip.category +
-                                              " on " +
-                                              clip.map +
-                                              " with a " +
-                                              clip.weapon}
-                                          </h4>
-                                        </div>
-                                        <div className="embed-responsive embed-responsive-16by9">
-                                          <iframe
-                                            className="embed-responsive-item"
-                                            frameBorder="false"
-                                            src={clip.url}
-                                          />
-                                        </div>
-                                        <div
-                                          style={{
-                                            marginTop: "10px",
-                                            marginRight: "10px",
-                                            height: "28px"
-                                          }}
-                                        >
-                                          <Link
-                                            route="player"
-                                            id={clip.player.id}
-                                          >
-                                            <a>
-                                              <img
-                                                className="modalPlayerImg"
-                                                src={
-                                                  clip.player === null
-                                                    ? ""
-                                                    : clip.player.image
-                                                }
-                                                alt={
-                                                  clip.player === null
-                                                    ? ""
-                                                    : clip.player.nickName
-                                                }
-                                              />
-                                              <span className="modalPlayerImgText">
-                                                {clip.player === null
-                                                  ? ""
-                                                  : clip.player.nickName}
-                                              </span>
-                                            </a>
-                                          </Link>
-                                          {!isLoggedIn ? (
-                                            <div
-                                              style={{
-                                                width: "32px",
-                                                display: "inline-block",
-                                                float: "right"
-                                              }}
-                                            >
-                                              <CircularProgressbar
-                                                percentage={
-                                                  toFixed(
-                                                    clip.ratings_aggregate
-                                                      .aggregate.avg.rating
-                                                  ) * 10
-                                                }
-                                                text={toFixed(
-                                                  clip.ratings_aggregate
-                                                    .aggregate.avg.rating
-                                                )}
-                                                styles={circleStyle(
-                                                  clip.ratings_aggregate
-                                                    .aggregate.avg.rating
-                                                )}
-                                              />
-                                            </div>
-                                          ) : (
-                                            <Select
-                                              menuPlacement="top"
-                                              minMenuHeight={200}
-                                              //@ts-ignore
-                                              onChange={this.handleChange(
-                                                "rating"
-                                              )}
-                                              onMenuClose={() =>
-                                                submitRate(
-                                                  rateClip,
-                                                  rating,
-                                                  this.onCloseModal
-                                                )
-                                              }
-                                              className="rateSelector"
-                                              placeholder="Rate 😆"
-                                              options={rateOptions}
-                                            />
-                                          )}
-                                        </div>
-                                      </div>
-                                    </Modal>
-                                  )}
-                                </Mutation>
-                              </div>
+                              <ClipCard
+                                props={this.props}
+                                clip={clip}
+                                rating={rating}
+                                onClick={this.onOpenModal.bind(this, clip.id)}
+                                handleChange={this.handleChange("rating")}
+                                showModal={!!this.state.open[clip.id]}
+                                closeModal={this.onCloseModal}
+                                key={clip.id}
+                                renderBackdrop={this.renderBackdrop}
+                              />
                             ))}
                           </div>
                         </InfiniteScroll>

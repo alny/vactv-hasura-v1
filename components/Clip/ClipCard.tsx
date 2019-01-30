@@ -3,8 +3,7 @@ import {
   emojiRating,
   toFixed,
   circleStyle,
-  modalStyle,
-  backdropStyle
+  modalStyle
 } from "../../utils/Styles";
 import CircularProgressbar from "react-circular-progressbar";
 import { Modal } from "react-overlays";
@@ -27,7 +26,6 @@ const ClipCard: React.SFC<any> = ({
   key,
   renderBackdrop
 }) => {
-  console.log(clip);
   return (
     <div key={key} className="col-md-3">
       <div className="inside">
@@ -57,14 +55,14 @@ const ClipCard: React.SFC<any> = ({
           </div>
         </div>
         <div className="bottom">
-          {/* <Link route="player" id={clip.player.id}> */}
-          <a>
-            <img
-              src={clip.player === null ? "" : clip.player.image}
-              alt={clip.player === null ? "" : clip.player.nickName}
-            />
-          </a>
-          {/* </Link> */}
+          <Link route="player" id={clip.player.id}>
+            <a>
+              <img
+                src={clip.player === null ? "" : clip.player.image}
+                alt={clip.player === null ? "" : clip.player.nickName}
+              />
+            </a>
+          </Link>
           <Link route="player" id={clip.player.id}>
             <a>
               <span>{clip.player === null ? "" : clip.player.nickName}</span>

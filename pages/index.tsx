@@ -1,25 +1,13 @@
 import * as React from "react";
 import Layout from "../components/Layout";
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import defaultPage from "../components/hocs/defaultPage";
 import CircularProgressbar from "react-circular-progressbar";
-import Select from "react-select";
-import { rateOptions } from "../utils/Options";
-import { Modal } from "react-overlays";
-import {
-  modalStyle,
-  backdropStyle,
-  circleStyle,
-  emojiRating,
-  toFixed
-} from "../utils/Styles";
-import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
+import { backdropStyle, circleStyle, toFixed } from "../utils/Styles";
 import { ToastContainer } from "react-toastify";
 import { GET_FRONTPAGE_EVENTS } from "../graphql/queries/event/getEventOptions";
 //@ts-ignore
 import { Link } from "../server/routes";
-import Links from "next/link";
-import { submitRate } from "../utils/SharedFunctions/submitRating";
 import ClipCard from "../components/Clip/ClipCard";
 
 type Props = {
