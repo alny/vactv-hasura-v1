@@ -40,6 +40,7 @@ interface State {
   searchDisabled: boolean;
   clips: any;
   clipLength: any;
+  loading: boolean;
 }
 
 class Uploads extends React.Component<Props, State> {
@@ -55,7 +56,8 @@ class Uploads extends React.Component<Props, State> {
       withFilter: false,
       searchDisabled: false,
       clips: [],
-      clipLength: 0
+      clipLength: 0,
+      loading: true
     };
   }
 
@@ -160,7 +162,8 @@ class Uploads extends React.Component<Props, State> {
     this.setState({
       clips: data.data.clip,
       clipLength: data.data.clip.length,
-      count: data.data.clip_aggregate.aggregate.count
+      count: data.data.clip_aggregate.aggregate.count,
+      loading: false
     });
   }
 
@@ -170,7 +173,7 @@ class Uploads extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn } = this.props;
-    const { rating } = this.state;
+    const { rating, clips, loading } = this.state;
     return (
       <Layout title="Vac.Tv | Uploads by you" isLoggedIn={isLoggedIn}>
         <main>
@@ -220,21 +223,25 @@ class Uploads extends React.Component<Props, State> {
                       loading={<div>Loading</div>}
                     >
                       <div className="row">
-                        {this.state.clips.map(clip => (
-                          <ClipCard
-                            key={clip.id}
-                            specificStyle={"col-md-4"}
-                            props={this.props}
-                            isLoggedIn={isLoggedIn}
-                            clip={clip}
-                            rating={rating}
-                            onClick={this.onOpenModal.bind(this, clip.id)}
-                            handleChange={this.handleChange("rating")}
-                            showModal={!!this.state.open[clip.id]}
-                            closeModal={this.onCloseModal}
-                            renderBackdrop={this.renderBackdrop}
-                          />
-                        ))}
+                        {loading ? (
+                          <div className="clipLoader" />
+                        ) : (
+                          clips.map(clip => (
+                            <ClipCard
+                              key={clip.id}
+                              specificStyle={"col-md-4"}
+                              props={this.props}
+                              isLoggedIn={isLoggedIn}
+                              clip={clip}
+                              rating={rating}
+                              onClick={this.onOpenModal.bind(this, clip.id)}
+                              handleChange={this.handleChange("rating")}
+                              showModal={!!this.state.open[clip.id]}
+                              closeModal={this.onCloseModal}
+                              renderBackdrop={this.renderBackdrop}
+                            />
+                          ))
+                        )}
                       </div>
                     </InfiniteScroll>
                   </section>

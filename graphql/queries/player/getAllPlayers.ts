@@ -17,6 +17,11 @@ export const getAllPlayers = gql`
       image
       name
       nickName
+      team {
+        id
+        name
+        image
+      }
       rating_aggregate {
         aggregate {
           avg {

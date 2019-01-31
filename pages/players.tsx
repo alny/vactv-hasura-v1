@@ -140,8 +140,20 @@ class Players extends React.Component<Props, State> {
                                   fontWeight: 600
                                 }}
                               >
-                                {player.name}
-                                <span style={{ float: "right" }}>
+                                <img
+                                  style={{
+                                    width: "32px",
+                                    marginLeft: "-6px",
+                                    marginRight: "8px"
+                                  }}
+                                  src={player.team.image}
+                                  alt={player.team.name}
+                                />
+
+                                {player.team.name}
+                                <span
+                                  style={{ float: "right", marginTop: "10px" }}
+                                >
                                   {" "}
                                   Clips:{" "}
                                   {player.clips_aggregate.aggregate.count}
