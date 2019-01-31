@@ -169,7 +169,7 @@ class Chart extends React.Component<Props, State> {
                   <a href="#">Top User Clips 🏅</a>
                 </li>
                 <li>
-                  <Links href="players">
+                  <Links href="topplayers">
                     <a>Top Pro Players 🏆</a>
                   </Links>
                 </li>

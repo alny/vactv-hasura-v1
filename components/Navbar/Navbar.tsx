@@ -238,7 +238,7 @@ class Navbar extends React.Component<Props, State> {
                             Teams
                           </a>
                         </Link>
-                        <Link href="/soon">
+                        <Link href="/players">
                           <a className="dropdown-item">
                             <i
                               style={{ marginRight: "8px" }}

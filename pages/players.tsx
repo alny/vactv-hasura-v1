@@ -1,13 +1,12 @@
 import * as React from "react";
 import Layout from "../components/Layout";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { toFixed, circleStyle } from "../utils/Styles";
 import CircularProgressbar from "react-circular-progressbar";
 //@ts-ignore
 import { Link } from "../server/routes";
-import { fetchTopPlayers } from "../graphql/queries/player/topPlayers";
+import { getAllPlayers } from "../graphql/queries/player/getAllPlayers";
 import defaultPage from "../components/hocs/defaultPage";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 type Props = {
   isLoggedIn: boolean;
@@ -20,11 +19,11 @@ interface State {
   sort: any;
   orderBy: any;
   filters: any;
-  withFilter: boolean;
   searchDisabled: boolean;
   players: any;
   playerLength: any;
   loading: boolean;
+  isEmpty: boolean;
 }
 
 class Players extends React.Component<Props, State> {
@@ -33,48 +32,48 @@ class Players extends React.Component<Props, State> {
     this.state = {
       sort: null,
       orderBy: {
-        id: "desc",
-        rating_aggregate: {
-          avg: { rating: "desc_nulls_last" },
-          count: "desc_nulls_last"
-        }
+        nickName: "asc"
       },
       filters: {},
-      withFilter: false,
       searchDisabled: false,
       players: [],
       playerLength: 0,
-      loading: true
+      loading: true,
+      isEmpty: false
     };
   }
 
   getMoreClips = async () => {
     const data = await this.props.client.query({
-      query: fetchTopPlayers,
+      query: getAllPlayers,
       variables: {
         orderBy: this.state.orderBy,
         offset: this.state.playerLength,
         limit: 12
       }
     });
-
-    this.setState(prev => ({
-      players: [...prev.players, ...data.data.player],
-      playerLength: prev.playerLength + data.data.player.length
-    }));
+    if (data.data.player && data.data.player.length) {
+      this.setState(prev => ({
+        players: [...prev.players, ...data.data.player],
+        playerLength: prev.playerLength + data.data.player.length
+      }));
+    } else {
+      this.setState({
+        isEmpty: true
+      });
+    }
   };
 
   async componentDidMount() {
     console.log(this.props);
     const data = await this.props.client.query({
-      query: fetchTopPlayers,
+      query: getAllPlayers,
       variables: {
         orderBy: this.state.orderBy,
         offset: 0,
-        limit: 12
+        limit: 24
       }
     });
-    console.log(data.data.player);
     this.setState({
       loading: false,
       players: data.data.player,
@@ -83,97 +82,90 @@ class Players extends React.Component<Props, State> {
   }
 
   render() {
-    const { players, loading } = this.state;
+    const { players, loading, isEmpty } = this.state;
     const { isLoggedIn } = this.props;
 
     return (
-      <Layout title="Vac.Tv | Top Pro Players" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | CS:GO Pro Players" isLoggedIn={isLoggedIn}>
         <main>
           <div className="freelancers sidebar">
             <div className="container">
               <div className="above">
-                <h1>Top Pro Players </h1>
+                <h1>CS:GO Pro Players </h1>
               </div>
-              <InfiniteScroll
-                dataLength={players.length}
-                next={() => this.getMoreClips()}
-                style={{ overflow: "visible" }}
-                hasMore={true}
-                loading={<div>Loading</div>}
-              >
-                <div className="row">
-                  {loading ? (
-                    <div className="clipLoader" />
-                  ) : (
-                    players.map((player, i) => (
-                      <div key={player.id} className="col-md-3">
-                        <span className="totalPlayerClips"># {i + 1}</span>
-                        <div className="inside">
-                          <Link route="player" id={player.id}>
-                            <a>
-                              <img
-                                className="card-img-top"
-                                src={player.image}
-                                alt={player.image}
-                              />
-                            </a>
-                          </Link>
+              <div className="row">
+                {loading ? (
+                  <div className="clipLoader" />
+                ) : (
+                  players.map((player, i) => (
+                    <div key={player.id} className="col-md-3">
+                      <Link route="player" id={player.id}>
+                        <a>
+                          <div className="inside">
+                            <div
+                              style={{ borderBottom: "1px solid #f6f5f9" }}
+                              className="bottom"
+                            >
+                              <img src={player.image} alt={player.nickName} />
+                              <span>{player.nickName}</span>
 
-                          <div className="middle">
-                            <div>
-                              <h3>
-                                <Link route="player" id={player.id}>
-                                  <a>{player.nickName}</a>
-                                </Link>
-                              </h3>
+                              <div
+                                style={{
+                                  width: "32px",
+                                  display: "inline-block",
+                                  float: "right"
+                                }}
+                              >
+                                <CircularProgressbar
+                                  percentage={
+                                    toFixed(
+                                      player.rating_aggregate.aggregate.avg
+                                        .rating
+                                    ) * 10
+                                  }
+                                  text={toFixed(
+                                    player.rating_aggregate.aggregate.avg.rating
+                                  )}
+                                  styles={circleStyle(
+                                    player.rating_aggregate.aggregate.avg.rating
+                                  )}
+                                />
+                              </div>
+                            </div>
+                            <div className="middle">
                               <h6
                                 style={{
                                   textTransform: "capitalize",
-                                  fontSize: "12px"
+                                  fontSize: "12px",
+                                  fontWeight: 600
                                 }}
                               >
                                 {player.name}
+                                <span style={{ float: "right" }}>
+                                  {" "}
+                                  Clips:{" "}
+                                  {player.clips_aggregate.aggregate.count}
+                                </span>
                               </h6>
                             </div>
                           </div>
-                          <div className="bottom">
-                            <Link route="team" id={player.team.id}>
-                              <a>
-                                <img
-                                  src={player.team.image}
-                                  alt={player.team.name}
-                                />
-                                <span>{player.team.name}</span>
-                              </a>
-                            </Link>
-                            <div
-                              style={{
-                                width: "32px",
-                                display: "inline-block",
-                                float: "right"
-                              }}
-                            >
-                              <CircularProgressbar
-                                percentage={
-                                  toFixed(
-                                    player.rating_aggregate.aggregate.avg.rating
-                                  ) * 10
-                                }
-                                text={toFixed(
-                                  player.rating_aggregate.aggregate.avg.rating
-                                )}
-                                styles={circleStyle(
-                                  player.rating_aggregate.aggregate.avg.rating
-                                )}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  )}
+                        </a>
+                      </Link>
+                    </div>
+                  ))
+                )}
+              </div>
+              {isEmpty ? null : (
+                <div className="load-more">
+                  <a
+                    onClick={() => this.getMoreClips()}
+                    className="btn btn-primary"
+                    rel="next"
+                  >
+                    Load More
+                  </a>
                 </div>
-              </InfiniteScroll>
+              )}
             </div>
           </div>
         </main>
