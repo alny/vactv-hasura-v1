@@ -189,7 +189,7 @@ class Home extends React.Component<Props, State> {
                                         float: "right"
                                       }}
                                     >
-                                      <CircularProgressbar
+                                      {/* <CircularProgressbar
                                         percentage={
                                           toFixed(
                                             player.rating_aggregate.aggregate
@@ -204,7 +204,7 @@ class Home extends React.Component<Props, State> {
                                           player.rating_aggregate.aggregate.avg
                                             .rating
                                         )}
-                                      />
+                                      /> */}
                                     </div>
                                   </div>
                                 </div>

@@ -16,10 +16,7 @@ export const GET_FRONTPAGE_EVENTS = gql`
       }
       clips(
         where: { isPublic: { _eq: true } }
-        order_by: {
-          ratings_aggregate: { avg: { rating: desc_nulls_last } }
-          id: desc
-        }
+        order_by: { id: desc }
         limit: 4
       ) {
         id
@@ -37,25 +34,9 @@ export const GET_FRONTPAGE_EVENTS = gql`
           image
           teamId
         }
-        ratings_aggregate {
-          aggregate {
-            avg {
-              rating
-            }
-            count
-          }
-        }
       }
     }
-    topPlayers: player(
-      limit: 4
-      order_by: {
-        rating_aggregate: {
-          avg: { rating: desc_nulls_last }
-          count: desc_nulls_last
-        }
-      }
-    ) {
+    topPlayers: player(limit: 4) {
       id
       name
       image
@@ -73,14 +54,6 @@ export const GET_FRONTPAGE_EVENTS = gql`
       clips_aggregate(where: { isPublic: { _eq: true } }) {
         aggregate {
           count
-        }
-      }
-      rating_aggregate {
-        aggregate {
-          count
-          avg {
-            rating
-          }
         }
       }
     }
