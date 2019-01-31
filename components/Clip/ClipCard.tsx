@@ -39,7 +39,7 @@ const ClipCard: React.SFC<any> = ({
               <Link route="clip" id={clip.id}>
                 <a>
                   {clip.category}{" "}
-                  {/* {emojiRating(clip.ratings_aggregate.aggregate.avg.rating)} */}
+                  {emojiRating(clip.ratings_aggregate.aggregate.avg.rating)}
                 </a>
               </Link>
             </h3>
@@ -76,13 +76,13 @@ const ClipCard: React.SFC<any> = ({
               float: "right"
             }}
           >
-            {/* <CircularProgressbar
+            <CircularProgressbar
               percentage={
                 toFixed(clip.ratings_aggregate.aggregate.avg.rating) * 10
               }
               text={toFixed(clip.ratings_aggregate.aggregate.avg.rating)}
               styles={circleStyle(clip.ratings_aggregate.aggregate.avg.rating)}
-            /> */}
+            />
           </div>
         </div>
       </div>
@@ -164,7 +164,7 @@ const ClipCard: React.SFC<any> = ({
                       float: "right"
                     }}
                   >
-                    {/* <CircularProgressbar
+                    <CircularProgressbar
                       percentage={
                         toFixed(clip.ratings_aggregate.aggregate.avg.rating) *
                         10
@@ -175,7 +175,7 @@ const ClipCard: React.SFC<any> = ({
                       styles={circleStyle(
                         clip.ratings_aggregate.aggregate.avg.rating
                       )}
-                    /> */}
+                    />
                   </div>
                 ) : (
                   <Select
