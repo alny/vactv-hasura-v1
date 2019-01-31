@@ -73,7 +73,7 @@ class Navbar extends React.Component<Props, State> {
                 />
                 <img
                   className="logo-small visible-xs"
-                  src="/static/img/vac.png"
+                  src="/static/img/t_v2.png"
                   alt="small logo"
                 />
               </a>
@@ -100,26 +100,28 @@ class Navbar extends React.Component<Props, State> {
                   <a onClick={() => login()} href="#">
                     <button
                       style={{
-                        padding: "5px 5px",
-                        borderRadius: "100px",
-                        color: "#32364f",
+                        padding: "4px",
+                        borderRadius: "3px",
+                        color: "#262b2f",
                         background: "white",
-                        border: "2px solid #313245",
-                        boxShadow: "none"
+                        border: "2px solid rgba(49, 50, 69, 0.8)",
+                        boxShadow: "none",
+                        fontSize: "13px",
+                        minWidth: "135px"
                       }}
                       className="btn btn-lg btn-primary btn-block"
                       type="submit"
                     >
                       Join/Login{" "}
-                      <i
+                      {/* <i
                         style={{
                           position: "relative",
-                          top: "2px",
+                          top: "1px",
                           left: "5px",
-                          fontSize: "18px"
+                          fontSize: "14px"
                         }}
-                        className="fa fa-sign-in"
-                      />
+                        className="fas fa-sign-in-alt"
+                      /> */}
                     </button>
                   </a>
                 </div>
