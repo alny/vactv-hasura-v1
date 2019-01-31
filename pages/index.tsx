@@ -91,7 +91,7 @@ class Home extends React.Component<Props, State> {
                   return (
                     <div className="container">
                       <div className="above">
-                        <Link route="events" id={data.eventClips[0].id}>
+                        <Link route="event" id={data.eventClips[0].id}>
                           <a>
                             <h1 style={{ marginBottom: "24px" }}>
                               {data.eventClips[0].name} 🔥
@@ -99,7 +99,7 @@ class Home extends React.Component<Props, State> {
                           </a>
                         </Link>
                         <div className="buttons">
-                          <Link route="events" id={data.eventClips[0].id}>
+                          <Link route="event" id={data.eventClips[0].id}>
                             <a>
                               🎬 Event Clips:{" "}
                               {
@@ -117,6 +117,7 @@ class Home extends React.Component<Props, State> {
                               key={clip.id}
                               specificStyle={"col-md-3"}
                               props={this.props}
+                              isLoggedIn={isLoggedIn}
                               clip={clip}
                               rating={rating}
                               onClick={this.onOpenModal.bind(this, clip.id)}
@@ -128,7 +129,7 @@ class Home extends React.Component<Props, State> {
                           ))}
                         </div>
                         <div className="above">
-                          <Link route="events" id={data.eventClips[0].id}>
+                          <Link route="event" id={data.eventClips[0].id}>
                             <a>
                               <h1 style={{ marginBottom: "24px" }}>
                                 Top Players 🏅

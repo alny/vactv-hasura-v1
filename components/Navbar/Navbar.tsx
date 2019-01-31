@@ -220,7 +220,7 @@ class Navbar extends React.Component<Props, State> {
                             Latest Clips
                           </a>
                         </Link>
-                        <Link href="/soon">
+                        <Link href="/events">
                           <a className="dropdown-item">
                             <i
                               style={{ marginRight: "8px" }}
@@ -229,7 +229,7 @@ class Navbar extends React.Component<Props, State> {
                             Events
                           </a>
                         </Link>
-                        <Link href="/soon">
+                        <Link href="/teams">
                           <a className="dropdown-item">
                             <i
                               style={{ marginRight: "8px" }}

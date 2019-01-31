@@ -16,9 +16,10 @@ import CircularProgressbar from "react-circular-progressbar";
 import { Modal } from "react-overlays";
 //@ts-ignore
 import { Link } from "../server/routes";
+import { withRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { getUserUploads } from "../graphql/queries/user/getUserUploadClips";
-import privatePage from "../components/hocs/privatePage";
+import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
+import { getSingleEventClips } from "../graphql/queries/event/getSingleEvent";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
 import ClipCard from "../components/Clip/ClipCard";
 
@@ -39,28 +40,45 @@ interface State {
   withFilter: boolean;
   searchDisabled: boolean;
   clips: any;
+  eventProfile: any;
   clipLength: any;
+  loading: any;
 }
 
-class Uploads extends React.Component<Props, State> {
+let isLoggedIn;
+let userId;
+let eventId;
+
+class Event extends React.Component<Props, State> {
+  static async getInitialProps({ req, query }) {
+    const loggedInUser = (process as any).browser
+      ? await getTokenForBrowser()
+      : await getTokenForServer(req);
+
+    isLoggedIn = !!loggedInUser;
+    userId = isLoggedIn ? loggedInUser.sub : "";
+    eventId = query.id;
+  }
   constructor(props: Props) {
     super(props);
     this.state = {
       sort: null,
       orderBy: { createdAt: "desc_nulls_last", id: "desc" },
-      filters: {},
+      filters: { id: { _eq: this.props.router.query.id } },
       count: 0,
       open: false,
       rating: 0,
       withFilter: false,
       searchDisabled: false,
       clips: [],
-      clipLength: 0
+      clipLength: 0,
+      eventProfile: {},
+      loading: true
     };
   }
 
   onCloseModal = () => {
-    this.setState({ open: false, rating: 0 });
+    this.setState({ open: false });
   };
 
   onOpenModal(id, event) {
@@ -74,28 +92,25 @@ class Uploads extends React.Component<Props, State> {
 
   getMoreClips = async () => {
     console.log(this.state.clipLength);
+
     const data = await this.props.client.query({
-      query: getUserUploads,
+      query: getSingleEventClips,
       variables: {
-        filters: {
-          userId: {
-            _eq: !this.props.isLoggedIn ? null : this.props.loggedInUser.sub
-          }
-        },
+        filters: this.state.filters,
         offset: this.state.clipLength,
         orderBy: this.state.orderBy,
         limit: 12
       }
     });
-    console.log(data.data);
     this.setState({
-      clips: [...this.state.clips, ...data.data.clip],
-      clipLength: this.state.clipLength + data.data.clip.length
+      clips: [...this.state.clips, ...data.data.event[0].clips],
+      clipLength: this.state.clipLength + data.data.event[0].clips.length
     });
   };
 
   setFilters = async () => {
     let orderByOption;
+    this.setState({ clipLength: 0 });
     if (this.state.sort === "Newest") {
       orderByOption = { createdAt: "desc_nulls_last", id: "desc" };
     }
@@ -112,22 +127,18 @@ class Uploads extends React.Component<Props, State> {
       };
     }
     const data = await this.props.client.query({
-      query: getUserUploads,
+      query: getSingleEventClips,
       variables: {
-        filters: {
-          userId: {
-            _eq: !this.props.isLoggedIn ? null : this.props.loggedInUser.sub
-          }
-        },
-        offset: 0,
+        filters: this.state.filters,
+        offset: this.state.clipLength,
         orderBy: orderByOption,
         limit: 12
       }
     });
     this.setState({
       orderBy: orderByOption,
-      clips: [...data.data.clip],
-      clipLength: data.data.clip.length
+      clips: [...data.data.event[0].clips],
+      clipLength: data.data.event[0].clips.length
     });
   };
 
@@ -135,33 +146,38 @@ class Uploads extends React.Component<Props, State> {
     this.setState(
       //@ts-ignore
       {
-        [name]: value.value
+        [name]: value.value,
+        clipLength: 0
       },
       () => this.setFilters()
     );
   };
 
   async componentDidMount() {
-    console.log(this.props);
     const data = await this.props.client.query({
-      query: getUserUploads,
+      query: getSingleEventClips,
       variables: {
         filters: {
-          userId: {
-            _eq: !this.props.isLoggedIn ? null : this.props.loggedInUser.sub
-          }
+          id: { _eq: !eventId ? this.props.router.query.id : eventId }
         },
         orderBy: this.state.orderBy,
         offset: 0,
         limit: 12
       }
     });
-    console.log(data.data.clip);
+    console.log(data.data.event[0]);
     this.setState({
-      clips: data.data.clip,
-      clipLength: data.data.clip.length,
-      count: data.data.clip_aggregate.aggregate.count
+      loading: false,
+      clips: data.data.event[0].clips,
+      clipLength: data.data.event[0].clips.length,
+      eventProfile: {
+        id: data.data.event[0].id,
+        name: data.data.event[0].name,
+        image: data.data.event[0].image,
+        clipCount: data.data.event[0].clips_aggregate.aggregate.count
+      }
     });
+    console.log(isLoggedIn);
   }
 
   renderBackdrop(props) {
@@ -169,15 +185,14 @@ class Uploads extends React.Component<Props, State> {
   }
 
   render() {
-    const { isLoggedIn } = this.props;
-    const { rating } = this.state;
+    const { eventProfile, rating, loading } = this.state;
     return (
-      <Layout title="Vac.Tv | Uploads by you" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | Pro Player" isLoggedIn={isLoggedIn}>
         <main>
           <div className="freelancers sidebar">
             <div className="container">
               <div className="above">
-                <h1>Uploaded by you:</h1>
+                <h1>{eventProfile ? eventProfile.name : null} 🔥</h1>
                 <div className="buttons">
                   <Select
                     menuPlacement="auto"
@@ -196,6 +211,19 @@ class Uploads extends React.Component<Props, State> {
                   <div className="accordion">
                     <div className="card">
                       <div className="singlePlayer">
+                        <a href="#">
+                          <img
+                            src={eventProfile ? eventProfile.image : null}
+                            alt=""
+                          />
+                        </a>
+                        <div className="item mr-auto">
+                          <div className="star-rating">
+                            {eventProfile ? eventProfile.name : null}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="singlePlayer">
                         <span
                           style={{
                             fontSize: "16px",
@@ -205,7 +233,11 @@ class Uploads extends React.Component<Props, State> {
                         >
                           Total Clips:
                         </span>
-                        <span className="totalRating">{this.state.count}</span>
+
+                        <span className="totalRating">
+                          {" "}
+                          {eventProfile ? eventProfile.clipCount : null}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -216,25 +248,29 @@ class Uploads extends React.Component<Props, State> {
                       dataLength={this.state.clipLength}
                       next={() => this.getMoreClips()}
                       style={{ overflow: "visible" }}
-                      hasMore={this.state.count !== this.state.clipLength}
+                      hasMore={eventProfile.clipCount !== this.state.clipLength}
                       loading={<div>Loading</div>}
                     >
                       <div className="row">
-                        {this.state.clips.map(clip => (
-                          <ClipCard
-                            key={clip.id}
-                            specificStyle={"col-md-4"}
-                            props={this.props}
-                            isLoggedIn={isLoggedIn}
-                            clip={clip}
-                            rating={rating}
-                            onClick={this.onOpenModal.bind(this, clip.id)}
-                            handleChange={this.handleChange("rating")}
-                            showModal={!!this.state.open[clip.id]}
-                            closeModal={this.onCloseModal}
-                            renderBackdrop={this.renderBackdrop}
-                          />
-                        ))}
+                        {loading ? (
+                          <div className="clipLoader" />
+                        ) : (
+                          this.state.clips.map(clip => (
+                            <ClipCard
+                              key={clip.id}
+                              specificStyle={"col-md-4"}
+                              props={this.props}
+                              isLoggedIn={isLoggedIn}
+                              clip={clip}
+                              rating={rating}
+                              onClick={this.onOpenModal.bind(this, clip.id)}
+                              handleChange={this.handleChange("rating")}
+                              showModal={!!this.state.open[clip.id]}
+                              closeModal={this.onCloseModal}
+                              renderBackdrop={this.renderBackdrop}
+                            />
+                          ))
+                        )}
                       </div>
                     </InfiniteScroll>
                   </section>
@@ -249,4 +285,4 @@ class Uploads extends React.Component<Props, State> {
   }
 }
 
-export default privatePage(Uploads);
+export default withRouter(Event);

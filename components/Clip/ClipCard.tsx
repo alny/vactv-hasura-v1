@@ -18,6 +18,7 @@ import { submitRate } from "../../utils/SharedFunctions/submitRating";
 const ClipCard: React.SFC<any> = ({
   specificStyle,
   props,
+  isLoggedIn,
   clip,
   rating,
   onClick,
@@ -156,7 +157,7 @@ const ClipCard: React.SFC<any> = ({
                     </span>
                   </a>
                 </Link>
-                {!props.isLoggedIn ? (
+                {!isLoggedIn ? (
                   <div
                     style={{
                       width: "32px",

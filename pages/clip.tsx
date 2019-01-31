@@ -12,6 +12,7 @@ import Select from "react-select";
 import { ToastContainer, toast } from "react-toastify";
 //@ts-ignore
 import { Link } from "../server/routes";
+import { isValid } from "../utils/SharedFunctions/isUUIDValid";
 
 type Props = {
   statusCode: any;
@@ -46,7 +47,9 @@ class Clip extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log(this.props);
+    if (!isValid(this.props.router.query.id)) {
+      Router.push("/");
+    }
   }
 
   handleChange = name => value => {

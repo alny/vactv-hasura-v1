@@ -82,7 +82,7 @@ aside {
   background: #fff;
   color: #212529;
   max-width: 222px;
-  box-shadow: 1px 1px 22px rgba(157, 184, 209, 0.19);
+  box-shadow: 1px 1px 22px rgba(157, 184, 209, 0.39);
 }
 .load-more .btn-primary:hover,
 .load-more .btn-primary:not(:disabled):not(.disabled).active,
@@ -2525,6 +2525,15 @@ aside {
   text-overflow: ellipsis;
   overflow: hidden;
   width: 140px;
+  height: 1.2em;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.cut-text-2 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 230px;
   height: 1.2em;
   white-space: nowrap;
   display: inline-block;

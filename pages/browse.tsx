@@ -476,6 +476,7 @@ class Browse extends React.Component<Props, State> {
                                   key={clip.id}
                                   specificStyle={"col-md-4"}
                                   props={this.props}
+                                  isLoggedIn={isLoggedIn}
                                   clip={clip}
                                   rating={rating}
                                   onClick={this.onOpenModal.bind(this, clip.id)}

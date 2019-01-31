@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import Select from "react-select";
 import { rateOptions, sortMoreOptions } from "../utils/Options";
 import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { Mutation } from "react-apollo";
 import {
   emojiRating,
@@ -21,6 +21,7 @@ import { getSinglePlayerClips } from "../graphql/queries/player/getSinglePlayerC
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
+import { isValid } from "../utils/SharedFunctions/isUUIDValid";
 
 type Props = {
   isLoggedIn: boolean;
@@ -152,33 +153,35 @@ class Player extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    const data = await this.props.client.query({
-      query: getSinglePlayerClips,
-      variables: {
-        filters: {
-          id: { _eq: !playerId ? this.props.router.query.id : playerId }
-        },
-        orderBy: this.state.orderBy,
-        offset: 0,
-        limit: 12
+    if (isValid(playerId || this.props.router.query.id)) {
+      const data = await this.props.client.query({
+        query: getSinglePlayerClips,
+        variables: {
+          filters: {
+            id: { _eq: !playerId ? this.props.router.query.id : playerId }
+          },
+          orderBy: this.state.orderBy,
+          offset: 0,
+          limit: 12
+        }
+      });
+      if (data.data.player) {
+        this.setState({
+          loading: false,
+          clips: data.data.player[0].clips,
+          clipLength: data.data.player[0].clips.length,
+          playerProfile: {
+            id: data.data.player[0].id,
+            name: data.data.player[0].name,
+            nickName: data.data.player[0].nickName,
+            image: data.data.player[0].image,
+            rating: data.data.player[0].rating_aggregate,
+            clipCount: data.data.player[0].clips_aggregate.aggregate.count,
+            team: data.data.player[0].team
+          }
+        });
       }
-    });
-    console.log(data.data.player[0].clips);
-    this.setState({
-      loading: false,
-      clips: data.data.player[0].clips,
-      clipLength: data.data.player[0].clips.length,
-      playerProfile: {
-        id: data.data.player[0].id,
-        name: data.data.player[0].name,
-        nickName: data.data.player[0].nickName,
-        image: data.data.player[0].image,
-        rating: data.data.player[0].rating_aggregate,
-        clipCount: data.data.player[0].clips_aggregate.aggregate.count,
-        team: data.data.player[0].team
-      }
-    });
-    console.log(this.state.playerProfile.clipCount);
+    }
   }
 
   renderBackdrop(props) {
@@ -421,7 +424,7 @@ class Player extends React.Component<Props, State> {
                                 </div>
 
                                 <div className="bottom">
-                                  <Link route="events" id={clip.event.id}>
+                                  <Link route="event" id={clip.event.id}>
                                     <a>
                                       <img
                                         src={

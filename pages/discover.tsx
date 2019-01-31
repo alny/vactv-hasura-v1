@@ -32,7 +32,8 @@ class Discover extends React.Component<Props, State> {
     this.state = {
       sort: "latest",
       orderBy: {
-        createdAt: "desc_nulls_last"
+        createdAt: "desc_nulls_last",
+        id: "desc"
       },
       filters: {},
       open: false,
@@ -251,7 +252,12 @@ class Discover extends React.Component<Props, State> {
                                 data.clip_aggregate.aggregate.count
                               : false
                           }
-                          loading={<div>Loading</div>}
+                          loading={
+                            <i
+                              className="fa fa-circle-o-notch fa-spin"
+                              style={{ fontSize: "24px" }}
+                            />
+                          }
                           endMessage={
                             <p style={{ textAlign: "center" }}>
                               <b>Yay! You have seen it all</b>
@@ -264,6 +270,7 @@ class Discover extends React.Component<Props, State> {
                                 key={clip.id}
                                 specificStyle={"col-md-3"}
                                 props={this.props}
+                                isLoggedIn={isLoggedIn}
                                 clip={clip}
                                 rating={rating}
                                 onClick={this.onOpenModal.bind(this, clip.id)}
