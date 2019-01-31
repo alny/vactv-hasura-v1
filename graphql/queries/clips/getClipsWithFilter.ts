@@ -22,10 +22,12 @@ export const getClipsWithFilter = gql`
       userId
       category
       weapon
+      eventId
       player {
         id
         nickName
         image
+        teamId
       }
       event {
         id

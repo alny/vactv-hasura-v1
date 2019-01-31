@@ -480,7 +480,9 @@ class Player extends React.Component<Props, State> {
                                       clipId: clip.id,
                                       playerId: !playerId
                                         ? this.props.router.query.id
-                                        : playerId
+                                        : playerId,
+                                      teamId: playerProfile.team.id,
+                                      eventId: clip.event.id
                                     }
                                   ]
                                 }}

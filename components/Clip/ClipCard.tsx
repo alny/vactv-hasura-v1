@@ -24,11 +24,10 @@ const ClipCard: React.SFC<any> = ({
   handleChange,
   showModal,
   closeModal,
-  key,
   renderBackdrop
 }) => {
   return (
-    <div key={key} className={specificStyle}>
+    <div className={specificStyle}>
       <div className="inside">
         <a onClick={onClick} href="#">
           <img className="card-img-top" src={clip.thumbNail} alt={clip.url} />
@@ -95,7 +94,9 @@ const ClipCard: React.SFC<any> = ({
               rating,
               userId: !props.loggedInUser ? null : props.loggedInUser.sub,
               clipId: clip.id,
-              playerId: clip.player.id
+              playerId: clip.player.id,
+              teamId: clip.player.teamId,
+              eventId: clip.eventId
             }
           ]
         }}

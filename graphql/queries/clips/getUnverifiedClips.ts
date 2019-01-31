@@ -13,11 +13,13 @@ export const getNotPublishedClips = gql`
       userId
       category
       weapon
+      eventId
       player {
         id
         nickName
         name
         image
+        teamId
       }
       event {
         id

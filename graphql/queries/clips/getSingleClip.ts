@@ -12,11 +12,13 @@ export const getSingleClip = gql`
       userId
       category
       weapon
+      eventId
       player {
         id
         nickName
         name
         image
+        teamId
       }
       event {
         id

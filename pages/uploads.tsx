@@ -169,7 +169,7 @@ class Uploads extends React.Component<Props, State> {
   }
 
   render() {
-    const { isLoggedIn, loggedInUser } = this.props;
+    const { isLoggedIn } = this.props;
     const { rating } = this.state;
     return (
       <Layout title="Vac.Tv | Uploads by you" isLoggedIn={isLoggedIn}>
@@ -222,6 +222,7 @@ class Uploads extends React.Component<Props, State> {
                       <div className="row">
                         {this.state.clips.map(clip => (
                           <ClipCard
+                            key={clip.id}
                             specificStyle={"col-md-4"}
                             props={this.props}
                             clip={clip}
@@ -230,7 +231,6 @@ class Uploads extends React.Component<Props, State> {
                             handleChange={this.handleChange("rating")}
                             showModal={!!this.state.open[clip.id]}
                             closeModal={this.onCloseModal}
-                            key={clip.id}
                             renderBackdrop={this.renderBackdrop}
                           />
                         ))}

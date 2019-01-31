@@ -48,6 +48,7 @@ class Home extends React.Component<Props, State> {
     this.setState({
       [name]: value.value
     });
+    console.log(this.state);
   };
 
   componentDidMount() {
@@ -113,6 +114,7 @@ class Home extends React.Component<Props, State> {
                         <div className="row">
                           {data.eventClips[0].clips.map(clip => (
                             <ClipCard
+                              key={clip.id}
                               specificStyle={"col-md-3"}
                               props={this.props}
                               clip={clip}
@@ -121,7 +123,6 @@ class Home extends React.Component<Props, State> {
                               handleChange={this.handleChange("rating")}
                               showModal={!!this.state.open[clip.id]}
                               closeModal={this.onCloseModal}
-                              key={clip.id}
                               renderBackdrop={this.renderBackdrop}
                             />
                           ))}

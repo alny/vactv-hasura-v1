@@ -30,10 +30,12 @@ export const GET_FRONTPAGE_EVENTS = gql`
         category
         userId
         weapon
+        eventId
         player {
           id
           nickName
           image
+          teamId
         }
         ratings_aggregate {
           aggregate {
