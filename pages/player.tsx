@@ -163,7 +163,7 @@ class Player extends React.Component<Props, State> {
         limit: 12
       }
     });
-    console.log(data.data.player[0].clips);
+    console.log(data.data);
     this.setState({
       loading: false,
       clips: data.data.player[0].clips,
@@ -173,7 +173,7 @@ class Player extends React.Component<Props, State> {
         name: data.data.player[0].name,
         nickName: data.data.player[0].nickName,
         image: data.data.player[0].image,
-        rating: data.data.player[0].rating_aggregate,
+        // rating: data.data.player[0].rating_aggregate,
         clipCount: data.data.player[0].clips_aggregate.aggregate.count,
         team: data.data.player[0].team
       }
@@ -294,7 +294,7 @@ class Player extends React.Component<Props, State> {
                             float: "right"
                           }}
                         >
-                          <CircularProgressbar
+                          {/* <CircularProgressbar
                             percentage={
                               toFixed(
                                 playerProfile.rating
@@ -312,7 +312,7 @@ class Player extends React.Component<Props, State> {
                                 ? playerProfile.rating.aggregate.avg.rating
                                 : 0
                             )}
-                          />
+                          /> */}
                         </div>
                       </div>
                       <div className="singlePlayer">
@@ -395,10 +395,10 @@ class Player extends React.Component<Props, State> {
                                       <Link route="clip" id={clip.id}>
                                         <a>
                                           {clip.category}{" "}
-                                          {emojiRating(
+                                          {/* {emojiRating(
                                             clip.ratings_aggregate.aggregate.avg
                                               .rating
-                                          )}
+                                          )} */}
                                         </a>
                                       </Link>
                                     </h3>
@@ -451,7 +451,7 @@ class Player extends React.Component<Props, State> {
                                       float: "right"
                                     }}
                                   >
-                                    <CircularProgressbar
+                                    {/* <CircularProgressbar
                                       percentage={
                                         toFixed(
                                           clip.ratings_aggregate.aggregate.avg
@@ -466,7 +466,7 @@ class Player extends React.Component<Props, State> {
                                         clip.ratings_aggregate.aggregate.avg
                                           .rating
                                       )}
-                                    />
+                                    /> */}
                                   </div>
                                 </div>
                               </div>
@@ -560,7 +560,7 @@ class Player extends React.Component<Props, State> {
                                               float: "right"
                                             }}
                                           >
-                                            <CircularProgressbar
+                                            {/* <CircularProgressbar
                                               percentage={
                                                 toFixed(
                                                   clip.ratings_aggregate
@@ -575,7 +575,7 @@ class Player extends React.Component<Props, State> {
                                                 clip.ratings_aggregate.aggregate
                                                   .avg.rating
                                               )}
-                                            />
+                                            /> */}
                                           </div>
                                         ) : (
                                           <Select

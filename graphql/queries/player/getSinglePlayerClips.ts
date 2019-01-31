@@ -22,14 +22,7 @@ export const getSinglePlayerClips = gql`
           count
         }
       }
-      rating_aggregate {
-        aggregate {
-          count
-          avg {
-            rating
-          }
-        }
-      }
+
       clips(
         order_by: $orderBy
         offset: $offset
@@ -49,14 +42,6 @@ export const getSinglePlayerClips = gql`
           id
           name
           image
-        }
-        ratings_aggregate {
-          aggregate {
-            avg {
-              rating
-            }
-            count
-          }
         }
       }
     }
