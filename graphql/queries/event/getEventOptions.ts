@@ -16,10 +16,7 @@ export const GET_FRONTPAGE_EVENTS = gql`
       }
       clips(
         where: { isPublic: { _eq: true } }
-        order_by: {
-          ratings_aggregate: { avg: { rating: desc_nulls_last } }
-          id: desc
-        }
+        order_by: { id: desc }
         limit: 4
       ) {
         id
