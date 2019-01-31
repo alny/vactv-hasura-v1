@@ -58,6 +58,7 @@ class Clip extends React.Component<Props, State> {
 
   submitRate = async rateClip => {
     const notifySuccess = () => toast.success("😄 Rating submitted!");
+    const notifyError = () => toast.error("🤔 Already rated!");
 
     if (this.state.rating) {
       try {
@@ -67,9 +68,11 @@ class Clip extends React.Component<Props, State> {
         if (data.insert_rating) {
           notifySuccess();
         } else {
+          notifyError();
           console.log("Already rated");
         }
       } catch (error) {
+        notifyError();
         console.log(error);
         return;
       }
@@ -211,7 +214,9 @@ class Clip extends React.Component<Props, State> {
                                             rating,
                                             userId: !isLoggedIn ? null : userId,
                                             clipId: data.clip[0].id,
-                                            playerId: data.clip[0].player.id
+                                            playerId: data.clip[0].player.id,
+                                            teamId: data.clip[0].player.teamId,
+                                            eventId: data.clip[0].event.id
                                           }
                                         ]
                                       }}
