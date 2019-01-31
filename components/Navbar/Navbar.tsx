@@ -313,7 +313,16 @@ class Navbar extends React.Component<Props, State> {
                 <li className={this.isActive("/charts")}>
                   <Link href="/chart">
                     <a className="nav-link">
-                      Charts <i className="fas fa-chart-line" />
+                      Charts{" "}
+                      <i
+                        style={{
+                          position: "relative",
+                          top: "1px",
+                          left: "3px",
+                          fontWeight: 600
+                        }}
+                        className="fas fa-chart-line"
+                      />
                     </a>
                   </Link>
                 </li>
@@ -330,7 +339,7 @@ class Navbar extends React.Component<Props, State> {
                         <i
                           style={{
                             position: "absolute",
-                            right: "3px",
+                            right: "1px",
                             top: "13px"
                           }}
                           className="fa fa-ellipsis-h"
