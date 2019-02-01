@@ -321,9 +321,10 @@ class Navbar extends React.Component<Props, State> {
                           position: "relative",
                           top: "1px",
                           left: "3px",
-                          fontWeight: 600
+                          fontWeight: 600,
+                          fontSize: "14px"
                         }}
-                        className="fas fa-chart-line"
+                        className="fas fa-medal"
                       />
                     </a>
                   </Link>

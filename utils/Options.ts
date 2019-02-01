@@ -246,6 +246,10 @@ export const weaponOptions = [
     label: "HE Grenade"
   },
   {
+    value: "Smoke",
+    label: "Smoke"
+  },
+  {
     value: "Flashbang",
     label: "Flashbang"
   },

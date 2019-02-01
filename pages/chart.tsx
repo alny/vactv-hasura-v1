@@ -163,14 +163,16 @@ class Chart extends React.Component<Props, State> {
             <div className="container">
               <ul className="list-unstyled">
                 <li className="active">
-                  <a href="#">Top Pro Clips 🎖️</a>
-                </li>
-                <li>
-                  <a href="#">Top User Clips 🏅</a>
+                  <a>Top Clips 🎖️</a>
                 </li>
                 <li>
                   <Links href="topplayers">
-                    <a>Top Pro Players 🏆</a>
+                    <a>Top Pro Players 🏅</a>
+                  </Links>
+                </li>
+                <li>
+                  <Links href="topplayers">
+                    <a>Hall of Fame 🏆</a>
                   </Links>
                 </li>
               </ul>
@@ -188,7 +190,7 @@ class Chart extends React.Component<Props, State> {
                 variables={{
                   orderBy,
                   offset: 0,
-                  limit: 12
+                  limit: 8
                 }}
               >
                 {({ fetchMore, loading, error, data }) => {
@@ -205,11 +207,10 @@ class Chart extends React.Component<Props, State> {
                       <div className="above">
                         <h1
                           style={{
-                            marginBottom: "24px",
-                            textTransform: "capitalize"
+                            marginBottom: "24px"
                           }}
                         >
-                          Top Rated Clips
+                          This Month: Top 8
                         </h1>
                         <div className="buttons">
                           <button
@@ -290,6 +291,13 @@ class Chart extends React.Component<Props, State> {
                                 className="filterSearchButton"
                               >
                                 Search
+                              </button>
+                              <button
+                                style={{ marginTop: "10px" }}
+                                onClick={this.onCloseModal}
+                                className="filterSearchButton"
+                              >
+                                Close
                               </button>
                             </div>
                           </Modal>

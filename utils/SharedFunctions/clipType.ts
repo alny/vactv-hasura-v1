@@ -1,12 +1,14 @@
 import {
   createUserClipSchema,
-  createProClipSchema
+  createProClipSchema,
+  createOtherClipSchema
 } from "../../utils/Yup/Schemas";
 
 import {
   CREATE_PRO_CLIP_MUTATION,
   CREATE_USER_CLIP_MUTATION
 } from "../../graphql/mutations/clips/createClipMutation";
+import { CREATE_OTHER_CLIP_MUTATION } from "../../graphql/mutations/clips/createOtherClip";
 
 export const clipTypeGen = (state, props) => {
   const {
@@ -18,7 +20,8 @@ export const clipTypeGen = (state, props) => {
     map,
     platform,
     clipType,
-    title
+    title,
+    otherType
   } = state;
 
   let choose: any = {};
@@ -31,7 +34,8 @@ export const clipTypeGen = (state, props) => {
       event,
       weapon,
       category,
-      map
+      map,
+      clipType
     };
     choose.mutation = CREATE_PRO_CLIP_MUTATION;
     choose.variables = {
@@ -42,7 +46,8 @@ export const clipTypeGen = (state, props) => {
       userId: props.loggedInUser.sub,
       weapon,
       category,
-      map
+      map,
+      type: clipType
     };
   }
   if (clipType === "User Clip") {
@@ -63,6 +68,32 @@ export const clipTypeGen = (state, props) => {
       category,
       map,
       type: platform
+    };
+  }
+  if (
+    clipType === "Tutorial" ||
+    clipType === "Highlight" ||
+    clipType === "Fragmovie"
+  ) {
+    choose.validator = createOtherClipSchema;
+    choose.validateData = {
+      url,
+      weapon,
+      category,
+      player,
+      map,
+      clipType,
+      otherType
+    };
+    choose.mutation = CREATE_OTHER_CLIP_MUTATION;
+    choose.variables = {
+      url,
+      title,
+      userId: props.loggedInUser.sub,
+      weapon,
+      category: otherType,
+      map,
+      type: clipType
     };
   }
   return choose;

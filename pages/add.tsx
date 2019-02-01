@@ -9,7 +9,9 @@ import {
   weaponOptions,
   categoryOptions,
   clipTypeOption,
-  clipPlatform
+  clipPlatform,
+  tutorialType,
+  fragmovieType
 } from "../utils/Options";
 
 import Router from "next/router";
@@ -40,6 +42,7 @@ interface State {
   submitDisable: boolean;
   clipType: any;
   platform: String;
+  otherType: String;
 }
 
 let playerOptions = [];
@@ -63,7 +66,8 @@ class Add extends React.Component<Props, State> {
       events: [],
       eventsLoading: false,
       submitDisable: false,
-      platform: ""
+      platform: "",
+      otherType: ""
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -77,10 +81,26 @@ class Add extends React.Component<Props, State> {
     if (!value) {
       return;
     }
-    //@ts-ignore
-    this.setState({
-      [name]: value.value
-    });
+    if (name === "clipType") {
+      console.log(name);
+      //@ts-ignore
+      this.setState({
+        [name]: value.value,
+        platform: "",
+        otherType: "",
+        player: "",
+        event: "",
+        weapon: "",
+        category: "",
+        map: "",
+        title: ""
+      });
+    } else {
+      //@ts-ignore
+      this.setState({
+        [name]: value.value
+      });
+    }
   };
 
   componentDidMount() {
@@ -106,6 +126,7 @@ class Add extends React.Component<Props, State> {
       .then(async () => {
         this.setState({ submitDisable: true });
         try {
+          console.log(this.state);
           const data = await this.props.client.mutate({
             mutation: options.mutation,
             variables: {
@@ -113,13 +134,18 @@ class Add extends React.Component<Props, State> {
             }
           });
           console.log(data);
-          if (data.data.insert_clip) {
-            // this.setState({ submitDisable: true });
+          if (
+            data.data.insert_clip ||
+            data.data.insert_userClip ||
+            data.data.insert_otherClip
+          ) {
+            this.setState({ submitDisable: true });
             notifySuccess();
-            // setTimeout(() => Router.replace("/"), 3000);
+            setTimeout(() => Router.replace("/"), 3000);
             return;
           }
         } catch (error) {
+          notifyError(error.message);
           console.log(error);
           return;
         }
@@ -156,7 +182,6 @@ class Add extends React.Component<Props, State> {
         };
         playerOptions.push(newOption);
       });
-      console.log(data.data.player);
       if (data.data.player.length > 0) {
         this.setState({
           players: [...playerOptions],
@@ -216,7 +241,8 @@ class Add extends React.Component<Props, State> {
       title,
       url,
       platform,
-      clipType
+      clipType,
+      otherType
     } = this.state;
     return (
       <Layout title="Vac.Tv | Add Clip" isLoggedIn={isLoggedIn}>
@@ -287,49 +313,79 @@ class Add extends React.Component<Props, State> {
                       </div>
                     </div>
                     <div className="form-label-group">
-                      <Select
-                        className="addSelect-Left"
-                        onChange={this.handleSelectChange("map")}
-                        //@ts-ignore
-                        value={map.value}
-                        placeholder="Select A Map..."
-                        options={mapOptions}
-                      />
-                      <Select
-                        className="addSelect-Right"
-                        onChange={this.handleSelectChange("weapon")}
-                        //@ts-ignore
-                        value={weapon.value}
-                        placeholder="Select A Weapon..."
-                        options={weaponOptions}
-                      />
-                      <Select
-                        className="addSelect"
-                        onChange={this.handleSelectChange("category")}
-                        //@ts-ignore
-                        value={category.value}
-                        placeholder={"Select A Category..."}
-                        options={categoryOptions}
-                      />
+                      {clipType === "Fragmovie" ||
+                      clipType === "Highlight" ? null : (
+                        <>
+                          <Select
+                            className="addSelect-Left"
+                            onChange={this.handleSelectChange("map")}
+                            //@ts-ignore
+                            value={map ? map.value : ""}
+                            placeholder="Select A Map..."
+                            options={mapOptions}
+                          />
+                          <Select
+                            className="addSelect-Right"
+                            onChange={this.handleSelectChange("weapon")}
+                            //@ts-ignore
+                            value={weapon ? weapon.value : ""}
+                            placeholder="Select A Weapon..."
+                            options={weaponOptions}
+                          />
+                        </>
+                      )}
+
+                      {clipType === "User Clip" || clipType === "Pro Clip" ? (
+                        <Select
+                          className="addSelect"
+                          onChange={this.handleSelectChange("category")}
+                          //@ts-ignore
+                          value={category ? category.value : ""}
+                          placeholder={"Select A Category..."}
+                          options={categoryOptions}
+                        />
+                      ) : null}
+                      {clipType === "Fragmovie" || clipType === "Highlight" ? (
+                        <Select
+                          className="addSelect"
+                          onChange={this.handleSelectChange("otherType")}
+                          //@ts-ignore
+                          value={otherType ? otherType.value : ""}
+                          placeholder={"Select A Type..."}
+                          options={fragmovieType}
+                        />
+                      ) : null}
+                      {clipType === "Tutorial" ? (
+                        <Select
+                          className="addSelect"
+                          onChange={this.handleSelectChange("otherType")}
+                          //@ts-ignore
+                          value={otherType ? otherType.value : ""}
+                          placeholder={"Select Tutorial Type..."}
+                          options={tutorialType}
+                        />
+                      ) : null}
                       {clipType === "User Clip" ? (
                         <Select
                           className="addSelect"
                           onChange={this.handleSelectChange("platform")}
                           //@ts-ignore
-                          value={platform.value}
+                          value={platform ? platform.value : ""}
                           placeholder={"Select A Platform..."}
                           options={clipPlatform}
                         />
                       ) : null}
                     </div>
-                    {clipType === "Pro Clip" ? (
+                    {clipType === "Pro Clip" ||
+                    clipType === "Highlight" ||
+                    clipType === "Fragmovie" ? (
                       <div className="form-label-group">
                         <Select
                           className="addSelect-Left"
                           onInputChange={evt => this.doPlayerSearch(evt)}
                           onChange={this.handleSelectChange("player")}
                           //@ts-ignore
-                          value={player.value}
+                          value={player ? player.value : ""}
                           isClearable={true}
                           isLoading={this.state.playersLoading}
                           placeholder="Search for Player e.g. 'device'"
@@ -344,7 +400,7 @@ class Add extends React.Component<Props, State> {
                           onInputChange={evt => this.doEventSearch(evt)}
                           onChange={this.handleSelectChange("event")}
                           //@ts-ignore
-                          value={event.value}
+                          value={event ? event.value : ""}
                           isClearable={true}
                           isLoading={this.state.eventsLoading}
                           placeholder="Search for Event e.g. 'Blast Pro'"
@@ -359,14 +415,14 @@ class Add extends React.Component<Props, State> {
 
                     <button
                       style={{
-                        marginTop: clipType === "Pro Clip" ? "80px" : "40px",
+                        marginTop: "80px",
                         width: "100%",
                         maxWidth: "100%"
                       }}
                       className="btn btn-lg btn-primary btn-block"
                       type="submit"
                       onClick={e => this.handleSubmit(e)}
-                      // disabled={this.state.submitDisable}
+                      disabled={this.state.submitDisable}
                     >
                       Submit Clip
                     </button>

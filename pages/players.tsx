@@ -71,7 +71,7 @@ class Players extends React.Component<Props, State> {
       variables: {
         orderBy: this.state.orderBy,
         offset: 0,
-        limit: 24
+        limit: 16
       }
     });
     this.setState({
