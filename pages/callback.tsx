@@ -12,6 +12,7 @@ interface Props {
 const getOneUser = gql`
   query getOneUser($userId: String!) {
     user(where: { userId: { _eq: $userId } }) {
+      id
       userId
     }
   }
@@ -27,25 +28,21 @@ class Callback extends Component<Props> {
       if (result != null) {
         verifyToken(result.idToken).then(async valid => {
           if (valid) {
-            let user = {
-              id: result.idTokenPayload.sub,
-              name: result.idTokenPayload.name,
-              image: result.idTokenPayload.picture,
-              nickName: result.idTokenPayload.nickname
-            };
-            localStorage.setItem("user", JSON.stringify(user));
             let foundUser = await this.props.client.query({
               query: getOneUser,
               variables: { userId: result.idTokenPayload.sub }
             });
+            let response;
             if (foundUser.data.user.length === 0) {
-              await this.props.client.mutate({
+              response = await this.props.client.mutate({
                 mutation: gql`
                   mutation($userId: String!, $username: String) {
                     insert_user(
                       objects: [{ userId: $userId, username: $username }]
                     ) {
-                      affected_rows
+                      returning {
+                        id
+                      }
                     }
                   }
                 `,
@@ -55,6 +52,18 @@ class Callback extends Component<Props> {
                 }
               });
             }
+            console.log(response);
+            console.log(foundUser);
+
+            let user = {
+              id: foundUser
+                ? foundUser.data.user[0].id
+                : response.data.insert_user.returning[0].id,
+              name: result.idTokenPayload.name,
+              image: result.idTokenPayload.picture,
+              nickName: result.idTokenPayload.nickname
+            };
+            localStorage.setItem("user", JSON.stringify(user));
             saveToken(result.idToken, result.accessToken);
             window.location.replace("/");
           } else {
