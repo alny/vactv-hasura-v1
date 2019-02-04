@@ -5,7 +5,10 @@ import defaultPage from "../components/hocs/defaultPage";
 import CircularProgressbar from "react-circular-progressbar";
 import { backdropStyle, circleStyle, toFixed } from "../utils/Styles";
 import { ToastContainer } from "react-toastify";
-import { GET_FRONTPAGE_EVENTS } from "../graphql/queries/event/getEventOptions";
+import {
+  GET_FRONTPAGE_EVENTS,
+  FRONT_PAGE_TEST
+} from "../graphql/queries/event/getEventOptions";
 //@ts-ignore
 import { Link } from "../server/routes";
 import ClipCard from "../components/Clip/ClipCard";
@@ -78,32 +81,33 @@ class Home extends React.Component<Props, State> {
           }}
         >
           <div style={{ paddingTop: "25px" }} className="freelancers sidebar">
-            <Query query={GET_FRONTPAGE_EVENTS}>
+            <Query query={FRONT_PAGE_TEST}>
               {({ loading, error, data }) => {
+                console.log(data.event[0].eventClips[0].clip.players[0].player);
                 if (loading) return <div className="loader" />;
                 if (error) return `Error!: ${error}`;
                 if (
-                  typeof data.eventClips != "undefined" &&
-                  data.eventClips != null &&
-                  data.eventClips.length != null &&
-                  data.eventClips.length > 0
+                  typeof data.event != "undefined" &&
+                  data.event != null &&
+                  data.event.length != null &&
+                  data.event.length > 0
                 ) {
                   return (
                     <div className="container">
                       <div className="above">
-                        <Link route="event" id={data.eventClips[0].id}>
+                        <Link route="event" id={data.event[0].id}>
                           <a>
                             <h1 style={{ marginBottom: "24px" }}>
-                              {data.eventClips[0].name} 🔥
+                              {data.event[0].name} 🔥
                             </h1>
                           </a>
                         </Link>
                         <div className="buttons">
-                          <Link route="event" id={data.eventClips[0].id}>
+                          <Link route="event" id={data.event[0].id}>
                             <a>
                               🎬 Event Clips:{" "}
                               {
-                                data.eventClips[0].clips_aggregate.aggregate
+                                data.event[0].eventClips_aggregate.aggregate
                                   .count
                               }{" "}
                             </a>
@@ -112,24 +116,27 @@ class Home extends React.Component<Props, State> {
                       </div>
                       <section>
                         <div className="row">
-                          {data.eventClips[0].clips.map(clip => (
+                          {data.event[0].eventClips.map(clip => (
                             <ClipCard
-                              key={clip.id}
+                              key={clip.clip.id}
                               specificStyle={"col-md-3"}
                               props={this.props}
                               isLoggedIn={isLoggedIn}
-                              clip={clip}
+                              clip={clip.clip}
                               rating={rating}
-                              onClick={this.onOpenModal.bind(this, clip.id)}
+                              onClick={this.onOpenModal.bind(
+                                this,
+                                clip.clip.id
+                              )}
                               handleChange={this.handleChange("rating")}
-                              showModal={!!this.state.open[clip.id]}
+                              showModal={!!this.state.open[clip.clip.id]}
                               closeModal={this.onCloseModal}
                               renderBackdrop={this.renderBackdrop}
                             />
                           ))}
                         </div>
                         <div className="above">
-                          <Link route="event" id={data.eventClips[0].id}>
+                          <Link route="event" id={data.event[0].id}>
                             <a>
                               <h1 style={{ marginBottom: "24px" }}>
                                 Top Players 🏅
@@ -139,7 +146,7 @@ class Home extends React.Component<Props, State> {
                         </div>
                         <section>
                           <div className="row">
-                            {data.topPlayers.map(player => (
+                            {/* {data.topPlayers.map(player => (
                               <div key={player.id} className="col-md-3">
                                 <span className="totalPlayerClips">
                                   Clips:{" "}
@@ -210,7 +217,7 @@ class Home extends React.Component<Props, State> {
                                   </div>
                                 </div>
                               </div>
-                            ))}
+                            ))} */}
                           </div>
                         </section>
                       </section>
