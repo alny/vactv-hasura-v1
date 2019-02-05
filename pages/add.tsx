@@ -18,6 +18,10 @@ import Router from "next/router";
 import { searchPlayer } from "../graphql/queries/player/searchPlayer";
 import { searchEvent } from "../graphql/queries/event/searchEvent";
 import { clipTypeGen } from "../utils/SharedFunctions/clipType";
+import {
+  CREATE_PLAYER_ON_CLIP_MUTATION,
+  CREATE_EVENT_ON_CLIP_MUTATION
+} from "../graphql/mutations/clips/createClipMutation";
 
 type Props = {
   statusCode: any;
@@ -135,21 +139,48 @@ class Add extends React.Component<Props, State> {
         this.setState({ submitDisable: true });
         try {
           console.log(this.state);
-          const data = await this.props.client.mutate({
+          const clip = await this.props.client.mutate({
             mutation: options.mutation,
             variables: {
               objects: [options.variables]
             }
           });
-          console.log(data);
-          if (
-            data.data.insert_clip ||
-            data.data.insert_userClip ||
-            data.data.insert_otherClip
-          ) {
-            this.setState({ submitDisable: true });
+          console.log(clip);
+
+          if (this.state.player && clip.data.insert_clip) {
+            const player = await this.props.client.mutate({
+              mutation: CREATE_PLAYER_ON_CLIP_MUTATION,
+              variables: {
+                objects: [
+                  {
+                    clipId: clip.data.insert_clip.returning[0].id,
+                    playerId: this.state.player
+                  }
+                ]
+              }
+            });
+            console.log(player);
+          }
+
+          if (this.state.event && clip.data.insert_clip) {
+            const event = await this.props.client.mutate({
+              mutation: CREATE_EVENT_ON_CLIP_MUTATION,
+              variables: {
+                objects: [
+                  {
+                    clipId: clip.data.insert_clip.returning[0].id,
+                    eventId: this.state.event
+                  }
+                ]
+              }
+            });
+            console.log(event);
+          }
+
+          if (clip.data.insert_clip) {
+            // this.setState({ submitDisable: true });
             notifySuccess();
-            setTimeout(() => Router.replace("/"), 3000);
+            // setTimeout(() => Router.replace("/"), 3000);
             return;
           }
         } catch (error) {
@@ -344,7 +375,7 @@ class Add extends React.Component<Props, State> {
                         </>
                       )}
 
-                      {clipType === "User Clip" || clipType === "Pro Clip" ? (
+                      {clipType === "user" || clipType === "pro" ? (
                         <Select
                           className="addSelect"
                           onChange={this.handleSelectChange("category")}
@@ -354,7 +385,7 @@ class Add extends React.Component<Props, State> {
                           options={categoryOptions}
                         />
                       ) : null}
-                      {clipType === "Fragmovie" || clipType === "Highlight" ? (
+                      {clipType === "fragmovie" || clipType === "highlight" ? (
                         <Select
                           className="addSelect"
                           onChange={this.handleSelectChange("otherType")}
@@ -364,7 +395,7 @@ class Add extends React.Component<Props, State> {
                           options={fragmovieType}
                         />
                       ) : null}
-                      {clipType === "Tutorial" ? (
+                      {clipType === "tutorial" ? (
                         <Select
                           className="addSelect"
                           onChange={this.handleSelectChange("otherType")}
@@ -375,9 +406,9 @@ class Add extends React.Component<Props, State> {
                         />
                       ) : null}
                     </div>
-                    {clipType === "Pro Clip" ||
-                    clipType === "Highlight" ||
-                    clipType === "Fragmovie" ? (
+                    {clipType === "pro" ||
+                    clipType === "highlight" ||
+                    clipType === "fragmovie" ? (
                       <div className="form-label-group">
                         <Select
                           className="addSelect-Left"
@@ -429,7 +460,7 @@ class Add extends React.Component<Props, State> {
                         </div>
                       </div>
                     ) : null}
-                    {clipType === "User Clip" || isChecked ? (
+                    {clipType === "user" || isChecked ? (
                       <Select
                         className="addSelect"
                         onChange={this.handleSelectChange("platform")}
@@ -448,7 +479,7 @@ class Add extends React.Component<Props, State> {
                       className="btn btn-lg btn-primary btn-block"
                       type="submit"
                       onClick={e => this.handleSubmit(e)}
-                      disabled={this.state.submitDisable}
+                      // disabled={this.state.submitDisable}
                     >
                       Submit Clip
                     </button>

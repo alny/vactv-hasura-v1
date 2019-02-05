@@ -6,12 +6,10 @@ export const createProClipSchema = yup.object().shape({
     .matches(/(youtube|twitch|plays)/, { excludeEmptyString: true })
     .min(10)
     .required(),
-  event: yup.string().nullable(true),
   weapon: yup.string().required(),
   category: yup.string().required(),
   map: yup.string().required(),
-  clipType: yup.string().required(),
-  player: yup.string().required()
+  clipType: yup.string().required()
 });
 
 export const createUserClipSchema = yup.object().shape({

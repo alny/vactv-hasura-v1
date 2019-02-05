@@ -82,13 +82,13 @@ const ClipCard: React.SFC<any> = ({
               float: "right"
             }}
           >
-            {/* <CircularProgressbar
+            <CircularProgressbar
               percentage={
                 toFixed(clip.ratings_aggregate.aggregate.avg.rating) * 10
               }
               text={toFixed(clip.ratings_aggregate.aggregate.avg.rating)}
               styles={circleStyle(clip.ratings_aggregate.aggregate.avg.rating)}
-            /> */}
+            />
           </div>
         </div>
       </div>
@@ -100,8 +100,8 @@ const ClipCard: React.SFC<any> = ({
               rating,
               userId: !props.loggedInUser ? null : props.loggedInUser.sub,
               clipId: clip.id,
-              // playerId: clip.player.id,
-              // teamId: clip.player.teamId,
+              playerId: clip.players[0].player.id,
+              teamId: clip.players[0].player.teamId,
               eventId: clip.eventId
             }
           ]
@@ -150,18 +150,28 @@ const ClipCard: React.SFC<any> = ({
                   height: "28px"
                 }}
               >
-                {/* <Link route="player" id={clip.player.id}>
+                <Link route="player" id={clip.players[0].player.id}>
                   <a>
                     <img
                       className="modalPlayerImg"
-                      src={clip.player === null ? "" : clip.player.image}
-                      alt={clip.player === null ? "" : clip.player.nickName}
+                      src={
+                        clip.players[0] === null
+                          ? ""
+                          : clip.players[0].player.image
+                      }
+                      alt={
+                        clip.players[0] === null
+                          ? ""
+                          : clip.players[0].player.nickName
+                      }
                     />
                     <span className="modalPlayerImgText">
-                      {clip.player === null ? "" : clip.player.nickName}
+                      {clip.players[0] === null
+                        ? ""
+                        : clip.players[0].player.nickName}
                     </span>
                   </a>
-                </Link> */}
+                </Link>
                 {!isLoggedIn ? (
                   <div
                     style={{
@@ -170,7 +180,7 @@ const ClipCard: React.SFC<any> = ({
                       float: "right"
                     }}
                   >
-                    {/* <CircularProgressbar
+                    <CircularProgressbar
                       percentage={
                         toFixed(clip.ratings_aggregate.aggregate.avg.rating) *
                         10
@@ -181,7 +191,7 @@ const ClipCard: React.SFC<any> = ({
                       styles={circleStyle(
                         clip.ratings_aggregate.aggregate.avg.rating
                       )}
-                    /> */}
+                    />
                   </div>
                 ) : (
                   <Select

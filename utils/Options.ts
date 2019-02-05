@@ -35,11 +35,11 @@ export const sortChartOptions = [
 ];
 
 export const clipTypeOption = [
-  { value: "Pro Clip", label: "Pro Clip" },
-  { value: "User Clip", label: "User Clip" },
-  { value: "Tutorial", label: "Tutorial" },
-  { value: "Highlight", label: "Highlight" },
-  { value: "Fragmovie", label: "Fragmovie" }
+  { value: "pro", label: "Pro Clip" },
+  { value: "user", label: "User Clip" },
+  { value: "tutorial", label: "Tutorial" },
+  { value: "highlight", label: "Highlight" },
+  { value: "fragmovie", label: "Fragmovie" }
 ];
 
 export const fragmovieType = [

@@ -5,10 +5,7 @@ import defaultPage from "../components/hocs/defaultPage";
 import CircularProgressbar from "react-circular-progressbar";
 import { backdropStyle, circleStyle, toFixed } from "../utils/Styles";
 import { ToastContainer } from "react-toastify";
-import {
-  GET_FRONTPAGE_EVENTS,
-  FRONT_PAGE_TEST
-} from "../graphql/queries/event/getEventOptions";
+import { FRONT_PAGE } from "../graphql/queries/event/getEventOptions";
 //@ts-ignore
 import { Link } from "../server/routes";
 import ClipCard from "../components/Clip/ClipCard";
@@ -81,34 +78,34 @@ class Home extends React.Component<Props, State> {
           }}
         >
           <div style={{ paddingTop: "25px" }} className="freelancers sidebar">
-            <Query query={FRONT_PAGE_TEST}>
+            <Query query={FRONT_PAGE}>
               {({ loading, error, data }) => {
-                console.log(data.event[0].eventClips[0].clip.players[0].player);
+                console.log(data);
                 if (loading) return <div className="loader" />;
                 if (error) return `Error!: ${error}`;
                 if (
-                  typeof data.event != "undefined" &&
-                  data.event != null &&
-                  data.event.length != null &&
-                  data.event.length > 0
+                  typeof data.eventClips != "undefined" &&
+                  data.eventClips != null &&
+                  data.eventClips.length != null &&
+                  data.eventClips.length > 0
                 ) {
                   return (
                     <div className="container">
                       <div className="above">
-                        <Link route="event" id={data.event[0].id}>
+                        <Link route="event" id={data.eventClips[0].id}>
                           <a>
                             <h1 style={{ marginBottom: "24px" }}>
-                              {data.event[0].name} 🔥
+                              {data.eventClips[0].name} 🔥
                             </h1>
                           </a>
                         </Link>
                         <div className="buttons">
-                          <Link route="event" id={data.event[0].id}>
+                          <Link route="event" id={data.eventClips[0].id}>
                             <a>
                               🎬 Event Clips:{" "}
                               {
-                                data.event[0].eventClips_aggregate.aggregate
-                                  .count
+                                data.eventClips[0].eventClips_aggregate
+                                  .aggregate.count
                               }{" "}
                             </a>
                           </Link>
@@ -116,7 +113,7 @@ class Home extends React.Component<Props, State> {
                       </div>
                       <section>
                         <div className="row">
-                          {data.event[0].eventClips.map(clip => (
+                          {data.eventClips[0].eventClips.map(clip => (
                             <ClipCard
                               key={clip.clip.id}
                               specificStyle={"col-md-3"}
@@ -136,7 +133,7 @@ class Home extends React.Component<Props, State> {
                           ))}
                         </div>
                         <div className="above">
-                          <Link route="event" id={data.event[0].id}>
+                          <Link route="event" id={data.eventClips[0].id}>
                             <a>
                               <h1 style={{ marginBottom: "24px" }}>
                                 Top Players 🏅
@@ -146,19 +143,22 @@ class Home extends React.Component<Props, State> {
                         </div>
                         <section>
                           <div className="row">
-                            {/* {data.topPlayers.map(player => (
-                              <div key={player.id} className="col-md-3">
+                            {data.topPlayers.map(player => (
+                              <div key={player.player.id} className="col-md-3">
                                 <span className="totalPlayerClips">
                                   Clips:{" "}
-                                  {player.clips_aggregate.aggregate.count}
+                                  {
+                                    player.player.playerClips_aggregate
+                                      .aggregate.count
+                                  }
                                 </span>
                                 <div className="inside">
-                                  <Link route="player" id={player.id}>
+                                  <Link route="player" id={player.player.id}>
                                     <a>
                                       <img
                                         className="card-img-top"
-                                        src={player.image}
-                                        alt={player.image}
+                                        src={player.player.image}
+                                        alt={player.player.image}
                                       />
                                     </a>
                                   </Link>
@@ -166,8 +166,11 @@ class Home extends React.Component<Props, State> {
                                   <div className="middle">
                                     <div>
                                       <h3>
-                                        <Link route="player" id={player.id}>
-                                          <a>{player.nickName}</a>
+                                        <Link
+                                          route="player"
+                                          id={player.player.id}
+                                        >
+                                          <a>{player.player.nickName}</a>
                                         </Link>
                                       </h3>
                                       <h6
@@ -181,13 +184,16 @@ class Home extends React.Component<Props, State> {
                                     </div>
                                   </div>
                                   <div className="bottom">
-                                    <Link route="team" id={player.team.id}>
+                                    <Link
+                                      route="team"
+                                      id={player.player.team.id}
+                                    >
                                       <a>
                                         <img
-                                          src={player.team.image}
-                                          alt={player.team.name}
+                                          src={player.player.team.image}
+                                          alt={player.player.team.name}
                                         />
-                                        <span>{player.team.name}</span>
+                                        <span>{player.player.team.name}</span>
                                       </a>
                                     </Link>
                                     <div
@@ -200,24 +206,24 @@ class Home extends React.Component<Props, State> {
                                       <CircularProgressbar
                                         percentage={
                                           toFixed(
-                                            player.rating_aggregate.aggregate
-                                              .avg.rating
+                                            player.player.rating_aggregate
+                                              .aggregate.avg.rating
                                           ) * 10
                                         }
                                         text={toFixed(
-                                          player.rating_aggregate.aggregate.avg
-                                            .rating
+                                          player.player.rating_aggregate
+                                            .aggregate.avg.rating
                                         )}
                                         styles={circleStyle(
-                                          player.rating_aggregate.aggregate.avg
-                                            .rating
+                                          player.player.rating_aggregate
+                                            .aggregate.avg.rating
                                         )}
                                       />
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            ))} */}
+                            ))}
                           </div>
                         </section>
                       </section>

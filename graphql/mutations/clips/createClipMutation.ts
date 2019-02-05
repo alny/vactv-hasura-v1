@@ -11,13 +11,18 @@ export const CREATE_PRO_CLIP_MUTATION = gql`
   }
 `;
 
-export const CREATE_USER_CLIP_MUTATION = gql`
-  mutation insert_userClip($objects: [userClip_insert_input!]!) {
-    insert_userClip(objects: $objects) {
+export const CREATE_PLAYER_ON_CLIP_MUTATION = gql`
+  mutation insert_playerOnClip($objects: [playerOnClip_insert_input!]!) {
+    insert_playerOnClip(objects: $objects) {
       affected_rows
-      returning {
-        id
-      }
+    }
+  }
+`;
+
+export const CREATE_EVENT_ON_CLIP_MUTATION = gql`
+  mutation insert_eventOnClip($objects: [eventOnClip_insert_input!]!) {
+    insert_eventOnClip(objects: $objects) {
+      affected_rows
     }
   }
 `;
