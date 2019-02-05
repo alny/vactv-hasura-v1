@@ -8,6 +8,7 @@ export const createProClipSchema = yup.object().shape({
     .required(),
   weapon: yup.string().required(),
   category: yup.string().required(),
+  platform: yup.string().required(),
   map: yup.string().required(),
   clipType: yup.string().required()
 });

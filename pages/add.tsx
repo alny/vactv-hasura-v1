@@ -72,7 +72,7 @@ class Add extends React.Component<Props, State> {
       events: [],
       eventsLoading: false,
       submitDisable: false,
-      platform: "",
+      platform: "event",
       otherType: "",
       isChecked: props.isChecked || false
     };
@@ -98,7 +98,7 @@ class Add extends React.Component<Props, State> {
       //@ts-ignore
       this.setState({
         [name]: value.value,
-        platform: "",
+        platform: "event",
         otherType: "",
         player: "",
         event: "",

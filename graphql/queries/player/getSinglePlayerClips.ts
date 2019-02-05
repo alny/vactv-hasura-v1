@@ -2,12 +2,12 @@ import { gql } from "apollo-boost";
 
 export const getSinglePlayerClips = gql`
   query getSinglePlayerClips(
-    $filters: player_bool_exp
-    $orderBy: [clip_order_by!]
+    $playerId: uuid!
+    $orderBy: [playerOnClip_order_by!]
     $offset: Int!
     $limit: Int!
   ) {
-    player(where: { _and: [$filters] }) {
+    player(where: { playerClips: { playerId: { _eq: $playerId } } }) {
       id
       image
       name
@@ -17,7 +17,7 @@ export const getSinglePlayerClips = gql`
         image
         name
       }
-      clips_aggregate(where: { isPublic: { _eq: true } }) {
+      playerClips_aggregate {
         aggregate {
           count
         }
@@ -30,32 +30,30 @@ export const getSinglePlayerClips = gql`
           }
         }
       }
-      clips(
+      playerClips(
         order_by: $orderBy
         offset: $offset
         limit: $limit
-        where: { isPublic: { _eq: true } }
+        where: { clip: { isPublic: { _eq: true } } }
       ) {
-        id
-        title
-        thumbNail
-        createdAt
-        url
-        map
-        userId
-        category
-        weapon
-        event {
+        playerId
+        clip {
           id
-          name
-          image
-        }
-        ratings_aggregate {
-          aggregate {
-            avg {
-              rating
+          title
+          thumbNail
+          createdAt
+          url
+          map
+          userId
+          category
+          weapon
+          ratings_aggregate {
+            aggregate {
+              avg {
+                rating
+              }
+              count
             }
-            count
           }
         }
       }

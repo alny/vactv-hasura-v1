@@ -248,24 +248,31 @@ class Moderator extends React.Component<Props, State> {
                                   </div>
                                 </div>
                                 <div className="bottom">
-                                  <Link route="player" id={clip.player.id}>
+                                  <Link
+                                    route="player"
+                                    id={
+                                      clip.players[0] === undefined
+                                        ? ""
+                                        : clip.players[0].player.id
+                                    }
+                                  >
                                     <a>
                                       <img
                                         src={
-                                          clip.player === null
+                                          clip.players[0] === undefined
                                             ? ""
-                                            : clip.player.image
+                                            : clip.players[0].player.image
                                         }
                                         alt={
-                                          clip.player === null
+                                          clip.players[0] === undefined
                                             ? ""
-                                            : clip.player.nickName
+                                            : clip.players[0].player.nickName
                                         }
                                       />
                                       <span>
-                                        {clip.player === null
+                                        {clip.players[0] === undefined
                                           ? ""
-                                          : clip.player.nickName}
+                                          : clip.players[0].player.nickName}
                                       </span>
                                     </a>
                                   </Link>
@@ -337,25 +344,32 @@ class Moderator extends React.Component<Props, State> {
                                       height: "28px"
                                     }}
                                   >
-                                    <Link route="player" id={clip.player.id}>
+                                    <Link
+                                      route="player"
+                                      id={
+                                        clip.players[0] === undefined
+                                          ? ""
+                                          : clip.players[0].player.id
+                                      }
+                                    >
                                       <a>
                                         <img
                                           className="modalPlayerImg"
                                           src={
-                                            clip.player === null
+                                            clip.players[0] === undefined
                                               ? ""
-                                              : clip.player.image
+                                              : clip.players[0].player.image
                                           }
                                           alt={
-                                            clip.player === null
+                                            clip.players[0] === undefined
                                               ? ""
-                                              : clip.player.nickName
+                                              : clip.players[0].player.nickName
                                           }
                                         />
                                         <span className="modalPlayerImgText">
-                                          {clip.player === null
+                                          {clip.players
                                             ? ""
-                                            : clip.player.nickName}
+                                            : clip.players[0].player.nickName}
                                         </span>
                                       </a>
                                     </Link>

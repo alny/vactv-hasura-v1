@@ -62,10 +62,10 @@ export const tutorialType = [
 ];
 
 export const clipPlatform = [
-  { value: "Matchmaking", label: "Matchmaking" },
-  { value: "FACEIT", label: "FACEIT" },
-  { value: "ESEA", label: "ESEA" },
-  { value: "Other", label: "Other" }
+  { value: "matchmaking", label: "Matchmaking" },
+  { value: "faceit", label: "FACEIT" },
+  { value: "esea", label: "ESEA" },
+  { value: "other", label: "Other" }
 ];
 
 export const sortMoreOptions = [

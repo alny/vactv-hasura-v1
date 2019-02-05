@@ -29,7 +29,7 @@ export const getAllPlayers = gql`
           }
         }
       }
-      clips_aggregate(where: { isPublic: { _eq: true } }) {
+      playerClips_aggregate {
         aggregate {
           count
         }

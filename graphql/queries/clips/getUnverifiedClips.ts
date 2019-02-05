@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 export const getNotPublishedClips = gql`
   query getNotPublishedClips {
-    clip(where: { isPublic: { _eq: false } }) {
+    clip(where: { isPublic: { _eq: false }, type: { _eq: "pro" } }) {
       id
       title
       thumbNail
@@ -13,18 +13,22 @@ export const getNotPublishedClips = gql`
       userId
       category
       weapon
-      eventId
-      player {
-        id
-        nickName
-        name
-        image
-        teamId
+      type
+      platform
+      players {
+        player {
+          id
+          nickName
+          image
+          teamId
+        }
       }
-      event {
-        id
-        image
-        name
+      events {
+        event {
+          id
+          image
+          name
+        }
       }
       ratings_aggregate {
         aggregate {

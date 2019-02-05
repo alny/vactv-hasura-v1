@@ -156,7 +156,7 @@ class Players extends React.Component<Props, State> {
                                 >
                                   {" "}
                                   Clips:{" "}
-                                  {player.clips_aggregate.aggregate.count}
+                                  {player.playerClips_aggregate.aggregate.count}
                                 </span>
                               </h6>
                             </div>
