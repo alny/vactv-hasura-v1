@@ -2538,3 +2538,9 @@ aside {
   white-space: nowrap;
   display: inline-block;
 }
+
+.eventCheckBox {
+  display: inline-block;
+  float: right;
+  margin-bottom: 25px;
+}

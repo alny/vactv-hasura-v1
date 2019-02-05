@@ -47,7 +47,7 @@ export const clipTypeGen = (state, props) => {
       weapon,
       category,
       map,
-      type: clipType
+      type: platform
     };
   }
   if (clipType === "User Clip") {

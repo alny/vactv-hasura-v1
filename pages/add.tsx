@@ -25,6 +25,7 @@ type Props = {
   loggedInUser: any;
   client: any;
   timeout: any;
+  isChecked: boolean;
 };
 
 interface State {
@@ -43,6 +44,7 @@ interface State {
   clipType: any;
   platform: String;
   otherType: String;
+  isChecked: boolean;
 }
 
 let playerOptions = [];
@@ -67,14 +69,20 @@ class Add extends React.Component<Props, State> {
       eventsLoading: false,
       submitDisable: false,
       platform: "",
-      otherType: ""
+      otherType: "",
+      isChecked: props.isChecked || false
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this);
   }
 
   handleChange(e) {
     //@ts-ignore
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  handleCheckBoxChange() {
+    this.setState({ isChecked: !this.state.isChecked, event: null });
   }
 
   handleSelectChange = name => value => {
@@ -242,7 +250,8 @@ class Add extends React.Component<Props, State> {
       url,
       platform,
       clipType,
-      otherType
+      otherType,
+      isChecked
     } = this.state;
     return (
       <Layout title="Vac.Tv | Add Clip" isLoggedIn={isLoggedIn}>
@@ -365,16 +374,6 @@ class Add extends React.Component<Props, State> {
                           options={tutorialType}
                         />
                       ) : null}
-                      {clipType === "User Clip" ? (
-                        <Select
-                          className="addSelect"
-                          onChange={this.handleSelectChange("platform")}
-                          //@ts-ignore
-                          value={platform ? platform.value : ""}
-                          placeholder={"Select A Platform..."}
-                          options={clipPlatform}
-                        />
-                      ) : null}
                     </div>
                     {clipType === "Pro Clip" ||
                     clipType === "Highlight" ||
@@ -410,9 +409,36 @@ class Add extends React.Component<Props, State> {
                               : this.state.events
                           }
                         />
+                        <div className="eventCheckBox">
+                          <input
+                            name="noEvent"
+                            onChange={this.handleCheckBoxChange}
+                            //@ts-ignore
+                            value={this.state.isChecked}
+                            type="checkbox"
+                          />
+                          <span
+                            style={{
+                              display: "inline-block",
+                              marginTop: "15px",
+                              marginLeft: "5px"
+                            }}
+                          >
+                            No Event {this.state.isChecked}
+                          </span>
+                        </div>
                       </div>
                     ) : null}
-
+                    {clipType === "User Clip" || isChecked ? (
+                      <Select
+                        className="addSelect"
+                        onChange={this.handleSelectChange("platform")}
+                        //@ts-ignore
+                        value={platform ? platform.value : ""}
+                        placeholder={"Select A Platform..."}
+                        options={clipPlatform}
+                      />
+                    ) : null}
                     <button
                       style={{
                         marginTop: "80px",

@@ -6,7 +6,7 @@ export const createProClipSchema = yup.object().shape({
     .matches(/(youtube|twitch|plays)/, { excludeEmptyString: true })
     .min(10)
     .required(),
-  event: yup.string().required(),
+  event: yup.string().nullable(true),
   weapon: yup.string().required(),
   category: yup.string().required(),
   map: yup.string().required(),
@@ -28,7 +28,7 @@ export const createUserClipSchema = yup.object().shape({
 export const createOtherClipSchema = yup.object().shape({
   url: yup
     .string()
-    .matches(/(youtube|twitch)/, { excludeEmptyString: true })
+    .matches(/(youtube|twitch|plays)/, { excludeEmptyString: true })
     .min(10)
     .required(),
   event: yup.string(),

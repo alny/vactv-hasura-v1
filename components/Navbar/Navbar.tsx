@@ -290,7 +290,7 @@ class Navbar extends React.Component<Props, State> {
                             Highlights
                           </a>
                         </Link>
-                        <Link href="/soon">
+                        <Link href="/tutorials">
                           <a className="dropdown-item">
                             <i
                               style={{ marginRight: "8px" }}
@@ -315,7 +315,7 @@ class Navbar extends React.Component<Props, State> {
                 <li className={this.isActive("/charts")}>
                   <Link href="/chart">
                     <a className="nav-link">
-                      Charts{" "}
+                      Top Rated{" "}
                       <i
                         style={{
                           position: "relative",
