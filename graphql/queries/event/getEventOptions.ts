@@ -9,11 +9,11 @@ export const GET_FRONTPAGE_EVENTS = gql`
     ) {
       id
       name
-      clips_aggregate(where: { isPublic: { _eq: true } }) {
-        aggregate {
-          count
-        }
-      }
+      # clips_aggregate(where: { isPublic: { _eq: true } }) {
+      #   aggregate {
+      #     count
+      #   }
+      # }
       clips(
         where: { isPublic: { _eq: true } }
         order_by: {
@@ -30,13 +30,13 @@ export const GET_FRONTPAGE_EVENTS = gql`
         category
         userId
         weapon
-        eventId
-        player {
-          id
-          nickName
-          image
-          teamId
-        }
+        # eventId
+        # players {
+        # id
+        # nickName
+        # image
+        # teamId
+        # }
         ratings_aggregate {
           aggregate {
             avg {
@@ -60,11 +60,11 @@ export const GET_FRONTPAGE_EVENTS = gql`
       name
       image
       nickName
-      clips {
-        event {
-          isActive
-        }
-      }
+      # clips {
+      #   event {
+      #     isActive
+      #   }
+      # }
       team {
         id
         name
@@ -92,6 +92,48 @@ export const GET_EVENT_OPTIONS = gql`
     eventOptions: event(order_by: { createdAt: desc }, limit: 8) {
       id
       name
+    }
+  }
+`;
+
+export const FRONT_PAGE_TEST = gql`
+  query frontPageData {
+    event(limit: 1) {
+      id
+      name
+      eventClips_aggregate {
+        aggregate {
+          count
+        }
+      }
+      eventClips(limit: 4) {
+        clip {
+          id
+          title
+          thumbNail
+          url
+          map
+          category
+          userId
+          weapon
+          players {
+            player {
+              id
+              nickName
+              image
+              teamId
+            }
+          }
+          ratings_aggregate {
+            aggregate {
+              avg {
+                rating
+              }
+              count
+            }
+          }
+        }
+      }
     }
   }
 `;

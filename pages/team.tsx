@@ -140,6 +140,7 @@ class Team extends React.Component<Props, State> {
     });
   };
 
+
   async componentDidMount() {
     const data = await this.props.client.query({
       query: getTeamWithPlayers,
