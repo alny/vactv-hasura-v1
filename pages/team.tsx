@@ -140,14 +140,15 @@ class Team extends React.Component<Props, State> {
     });
   };
 
-
   async componentDidMount() {
     const data = await this.props.client.query({
       query: getTeamWithPlayers,
       variables: {
         filters: {
-          player: {
-            teamId: { _eq: !teamId ? this.props.router.query.id : teamId }
+          players: {
+            player: {
+              teamId: { _eq: !teamId ? this.props.router.query.id : teamId }
+            }
           }
         },
         teamId: !teamId ? this.props.router.query.id : teamId,
@@ -156,6 +157,7 @@ class Team extends React.Component<Props, State> {
         limit: 12
       }
     });
+    console.log(data.data.clip[0]);
     this.setState({
       loading: false,
       clips: data.data.clip,
@@ -349,24 +351,27 @@ class Team extends React.Component<Props, State> {
                                 </div>
 
                                 <div className="bottom">
-                                  <Link route="player" id={clip.player.id}>
+                                  <Link
+                                    route="player"
+                                    id={clip.players[0].player.id}
+                                  >
                                     <a>
                                       <img
                                         src={
-                                          clip.player === null
+                                          clip.players[0] === undefined
                                             ? ""
-                                            : clip.player.image
+                                            : clip.players[0].player.image
                                         }
                                         alt={
-                                          clip.player === null
+                                          clip.players[0] === undefined
                                             ? ""
-                                            : clip.player.nickName
+                                            : clip.players[0].player.nickName
                                         }
                                       />
                                       <span>
-                                        {clip.player === null
+                                        {clip.players[0] === undefined
                                           ? ""
-                                          : clip.player.nickName}
+                                          : clip.players[0].player.nickName}
                                       </span>
                                     </a>
                                   </Link>
@@ -404,9 +409,9 @@ class Team extends React.Component<Props, State> {
                                       rating,
                                       userId: !isLoggedIn ? null : userId,
                                       clipId: clip.id,
-                                      playerId: clip.player.id,
-                                      teamId: clip.player.teamId,
-                                      eventId: clip.event.id
+                                      playerId: clip.players[0].player.id,
+                                      teamId: clip.players[0].player.teamId,
+                                      eventId: clip.events[0].event.id
                                     }
                                   ]
                                 }}
@@ -460,26 +465,28 @@ class Team extends React.Component<Props, State> {
                                       >
                                         <Link
                                           route="player"
-                                          id={clip.player.id}
+                                          id={clip.players[0].player.id}
                                         >
                                           <a>
                                             <img
                                               className="modalPlayerImg"
                                               src={
-                                                clip.player === null
+                                                clip.players[0] === undefined
                                                   ? ""
-                                                  : clip.player.image
+                                                  : clip.players[0].player.image
                                               }
                                               alt={
-                                                clip.player === null
+                                                clip.players[0] === undefined
                                                   ? ""
-                                                  : clip.player.nickName
+                                                  : clip.players[0].player
+                                                      .nickName
                                               }
                                             />
                                             <span className="modalPlayerImgText">
-                                              {clip.player === null
+                                              {clip.players[0] === undefined
                                                 ? ""
-                                                : clip.player.nickName}
+                                                : clip.players[0].player
+                                                    .nickName}
                                             </span>
                                           </a>
                                         </Link>

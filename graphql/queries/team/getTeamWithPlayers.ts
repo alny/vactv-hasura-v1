@@ -23,17 +23,21 @@ export const getTeamWithPlayers = gql`
       userId
       category
       weapon
-      player {
-        id
-        image
-        name
-        nickName
-        teamId
+      players {
+        player {
+          id
+          image
+          name
+          nickName
+          teamId
+        }
       }
-      event {
-        id
-        image
-        name
+      events {
+        event {
+          id
+          image
+          name
+        }
       }
       ratings_aggregate {
         aggregate {

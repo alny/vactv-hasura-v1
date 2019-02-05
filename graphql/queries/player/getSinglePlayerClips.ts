@@ -7,7 +7,7 @@ export const getSinglePlayerClips = gql`
     $offset: Int!
     $limit: Int!
   ) {
-    player(where: { playerClips: { playerId: { _eq: $playerId } } }) {
+    player(where: { id: { _eq: $playerId } }) {
       id
       image
       name
@@ -36,7 +36,6 @@ export const getSinglePlayerClips = gql`
         limit: $limit
         where: { clip: { isPublic: { _eq: true } } }
       ) {
-        playerId
         clip {
           id
           title
@@ -47,6 +46,13 @@ export const getSinglePlayerClips = gql`
           userId
           category
           weapon
+          events {
+            event {
+              id
+              name
+              image
+            }
+          }
           ratings_aggregate {
             aggregate {
               avg {

@@ -34,7 +34,6 @@ interface State {
   sort: any;
   count: Number;
   orderBy: any;
-  filters: any;
   open: any;
   rating: any;
   withFilter: boolean;
@@ -63,8 +62,7 @@ class Player extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: null,
-      orderBy: { createdAt: "desc_nulls_last", id: "desc" },
-      filters: { id: { _eq: this.props.router.query.id } },
+      orderBy: { id: "desc" },
       count: 0,
       open: false,
       rating: 0,
@@ -96,15 +94,15 @@ class Player extends React.Component<Props, State> {
     const data = await this.props.client.query({
       query: getSinglePlayerClips,
       variables: {
-        filters: this.state.filters,
+        playerId: !playerId ? this.props.router.query.id : playerId,
         offset: this.state.clipLength,
         orderBy: this.state.orderBy,
         limit: 12
       }
     });
     this.setState({
-      clips: [...this.state.clips, ...data.data.player[0].clips],
-      clipLength: this.state.clipLength + data.data.player[0].clips.length
+      clips: [...this.state.clips, ...data.data.player[0].playerClips],
+      clipLength: this.state.clipLength + data.data.player[0].playerClips.length
     });
   };
 
@@ -128,7 +126,7 @@ class Player extends React.Component<Props, State> {
     const data = await this.props.client.query({
       query: getSinglePlayerClips,
       variables: {
-        filters: this.state.filters,
+        playerId: !playerId ? this.props.router.query.id : playerId,
         offset: this.state.clipLength,
         orderBy: orderByOption,
         limit: 12
@@ -136,8 +134,8 @@ class Player extends React.Component<Props, State> {
     });
     this.setState({
       orderBy: orderByOption,
-      clips: [...data.data.player[0].clips],
-      clipLength: data.data.player[0].clips.length
+      clips: [...data.data.player[0].playerClips],
+      clipLength: data.data.player[0].playerClips.length
     });
   };
 
@@ -157,9 +155,7 @@ class Player extends React.Component<Props, State> {
       const data = await this.props.client.query({
         query: getSinglePlayerClips,
         variables: {
-          filters: {
-            id: { _eq: !playerId ? this.props.router.query.id : playerId }
-          },
+          playerId: !playerId ? this.props.router.query.id : playerId,
           orderBy: this.state.orderBy,
           offset: 0,
           limit: 12
@@ -168,15 +164,16 @@ class Player extends React.Component<Props, State> {
       if (data.data.player) {
         this.setState({
           loading: false,
-          clips: data.data.player[0].clips,
-          clipLength: data.data.player[0].clips.length,
+          clips: data.data.player[0].playerClips,
+          clipLength: data.data.player[0].playerClips.length,
           playerProfile: {
             id: data.data.player[0].id,
             name: data.data.player[0].name,
             nickName: data.data.player[0].nickName,
             image: data.data.player[0].image,
             rating: data.data.player[0].rating_aggregate,
-            clipCount: data.data.player[0].clips_aggregate.aggregate.count,
+            clipCount:
+              data.data.player[0].playerClips_aggregate.aggregate.count,
             team: data.data.player[0].team
           }
         });
@@ -371,20 +368,26 @@ class Player extends React.Component<Props, State> {
                           <div className="clipLoader" />
                         ) : (
                           this.state.clips.map(clip => (
-                            <div key={clip.id} className="col-md-4">
+                            <div key={clip.clip.id} className="col-md-4">
                               <div className="inside">
                                 <a
-                                  onClick={this.onOpenModal.bind(this, clip.id)}
+                                  onClick={this.onOpenModal.bind(
+                                    this,
+                                    clip.clip.id
+                                  )}
                                   href="#"
                                 >
                                   <img
                                     className="card-img-top"
-                                    src={clip.thumbNail}
-                                    alt={clip.url}
+                                    src={clip.clip.thumbNail}
+                                    alt={clip.clip.url}
                                   />
                                 </a>
                                 <a
-                                  onClick={this.onOpenModal.bind(this, clip.id)}
+                                  onClick={this.onOpenModal.bind(
+                                    this,
+                                    clip.clip.id
+                                  )}
                                   href="#"
                                   className="play"
                                 />
@@ -395,12 +398,12 @@ class Player extends React.Component<Props, State> {
                                         textTransform: "capitalize"
                                       }}
                                     >
-                                      <Link route="clip" id={clip.id}>
+                                      <Link route="clip" id={clip.clip.id}>
                                         <a>
-                                          {clip.category}{" "}
+                                          {clip.clip.category}{" "}
                                           {emojiRating(
-                                            clip.ratings_aggregate.aggregate.avg
-                                              .rating
+                                            clip.clip.ratings_aggregate
+                                              .aggregate.avg.rating
                                           )}
                                         </a>
                                       </Link>
@@ -411,38 +414,45 @@ class Player extends React.Component<Props, State> {
                                         fontSize: "12px"
                                       }}
                                     >
-                                      🌍 {clip.map} | 💢{" "}
+                                      🌍 {clip.clip.map} | 💢{" "}
                                       <span
                                         style={{
                                           textTransform: "uppercase"
                                         }}
                                       >
-                                        {clip.weapon}
+                                        {clip.clip.weapon}
                                       </span>
                                     </h6>
                                   </div>
                                 </div>
 
                                 <div className="bottom">
-                                  <Link route="event" id={clip.event.id}>
+                                  <Link
+                                    route="event"
+                                    id={
+                                      clip.clip.events[0] === undefined
+                                        ? ""
+                                        : clip.clip.events[0].event.id
+                                    }
+                                  >
                                     <a>
                                       <img
                                         src={
-                                          clip.event === null
+                                          clip.clip.events[0] === undefined
                                             ? ""
-                                            : clip.event.image
+                                            : clip.clip.events[0].event.image
                                         }
                                         alt={
-                                          clip.event === null
+                                          clip.clip.events[0] === undefined
                                             ? ""
-                                            : clip.event.name
+                                            : clip.clip.events[0].event.name
                                         }
                                       />
                                       <div className="cut-text">
                                         <span>
-                                          {clip.event === null
+                                          {clip.clip.events[0] === undefined
                                             ? ""
-                                            : clip.event.name}
+                                            : clip.clip.events[0].event.name}
                                         </span>
                                       </div>
                                     </a>
@@ -457,17 +467,17 @@ class Player extends React.Component<Props, State> {
                                     <CircularProgressbar
                                       percentage={
                                         toFixed(
-                                          clip.ratings_aggregate.aggregate.avg
-                                            .rating
+                                          clip.clip.ratings_aggregate.aggregate
+                                            .avg.rating
                                         ) * 10
                                       }
                                       text={toFixed(
-                                        clip.ratings_aggregate.aggregate.avg
-                                          .rating
+                                        clip.clip.ratings_aggregate.aggregate
+                                          .avg.rating
                                       )}
                                       styles={circleStyle(
-                                        clip.ratings_aggregate.aggregate.avg
-                                          .rating
+                                        clip.clip.ratings_aggregate.aggregate
+                                          .avg.rating
                                       )}
                                     />
                                   </div>
@@ -480,12 +490,15 @@ class Player extends React.Component<Props, State> {
                                     {
                                       rating,
                                       userId: !isLoggedIn ? null : userId,
-                                      clipId: clip.id,
+                                      clipId: clip.clip.id,
                                       playerId: !playerId
                                         ? this.props.router.query.id
                                         : playerId,
                                       teamId: playerProfile.team.id,
-                                      eventId: clip.event.id
+                                      eventId:
+                                        clip.clip.events[0] === undefined
+                                          ? ""
+                                          : clip.clip.events[0].event.id
                                     }
                                   ]
                                 }}
@@ -495,7 +508,7 @@ class Player extends React.Component<Props, State> {
                                     onHide={this.onCloseModal}
                                     style={modalStyle()}
                                     aria-labelledby="modal-label"
-                                    show={!!this.state.open[clip.id]}
+                                    show={!!this.state.open[clip.clip.id]}
                                     renderBackdrop={this.renderBackdrop}
                                   >
                                     <div
@@ -516,18 +529,18 @@ class Player extends React.Component<Props, State> {
                                           }}
                                         >
                                           🎬{" "}
-                                          {clip.category +
+                                          {clip.clip.category +
                                             " on " +
-                                            clip.map +
+                                            clip.clip.map +
                                             " with a " +
-                                            clip.weapon}
+                                            clip.clip.weapon}
                                         </h4>
                                       </div>
                                       <div className="embed-responsive embed-responsive-16by9">
                                         <iframe
                                           className="embed-responsive-item"
                                           frameBorder="false"
-                                          src={clip.url}
+                                          src={clip.clip.url}
                                         />
                                       </div>
                                       <div
@@ -566,17 +579,17 @@ class Player extends React.Component<Props, State> {
                                             <CircularProgressbar
                                               percentage={
                                                 toFixed(
-                                                  clip.ratings_aggregate
+                                                  clip.clip.ratings_aggregate
                                                     .aggregate.avg.rating
                                                 ) * 10
                                               }
                                               text={toFixed(
-                                                clip.ratings_aggregate.aggregate
-                                                  .avg.rating
+                                                clip.clip.ratings_aggregate
+                                                  .aggregate.avg.rating
                                               )}
                                               styles={circleStyle(
-                                                clip.ratings_aggregate.aggregate
-                                                  .avg.rating
+                                                clip.clip.ratings_aggregate
+                                                  .aggregate.avg.rating
                                               )}
                                             />
                                           </div>

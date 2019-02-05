@@ -12,19 +12,23 @@ export const getSingleClip = gql`
       userId
       category
       weapon
-      eventId
-      player {
-        id
-        nickName
-        name
-        image
-        teamId
+      players {
+        player {
+          id
+          nickName
+          name
+          image
+          teamId
+        }
       }
-      event {
-        id
-        image
-        name
+      events {
+        event {
+          id
+          image
+          name
+        }
       }
+
       ratings_aggregate {
         aggregate {
           avg {
