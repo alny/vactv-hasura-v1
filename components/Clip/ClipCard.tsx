@@ -27,7 +27,6 @@ const ClipCard: React.SFC<any> = ({
   closeModal,
   renderBackdrop
 }) => {
-  console.log(clip.players[0].player.id);
   return (
     <div className={specificStyle}>
       <div className="inside">
@@ -57,20 +56,32 @@ const ClipCard: React.SFC<any> = ({
           </div>
         </div>
         <div className="bottom">
-          <Link route="player" id={clip.players[0].player.id}>
+          <Link
+            route="player"
+            id={clip.players === undefined ? "" : clip.players[0].player.id}
+          >
             <a>
               <img
-                src={clip.players === null ? "" : clip.players[0].player.image}
+                src={
+                  clip.players === undefined ? "" : clip.players[0].player.image
+                }
                 alt={
-                  clip.players === null ? "" : clip.players[0].player.nickName
+                  clip.players === undefined
+                    ? ""
+                    : clip.players[0].player.nickName
                 }
               />
             </a>
           </Link>
-          <Link route="player" id={clip.players[0].player.id}>
+          <Link
+            route="player"
+            id={clip.players === undefined ? "" : clip.players[0].player.id}
+          >
             <a>
               <span>
-                {clip.players === null ? "" : clip.players[0].player.nickName}
+                {clip.players === undefined
+                  ? ""
+                  : clip.players[0].player.nickName}
               </span>
             </a>
           </Link>
@@ -102,7 +113,7 @@ const ClipCard: React.SFC<any> = ({
               clipId: clip.id,
               playerId: clip.players[0].player.id,
               teamId: clip.players[0].player.teamId,
-              eventId: clip.eventId
+              eventId: clip.events[0].eventId
             }
           ]
         }}
@@ -150,23 +161,28 @@ const ClipCard: React.SFC<any> = ({
                   height: "28px"
                 }}
               >
-                <Link route="player" id={clip.players[0].player.id}>
+                <Link
+                  route="player"
+                  id={
+                    clip.players === undefined ? "" : clip.players[0].player.id
+                  }
+                >
                   <a>
                     <img
                       className="modalPlayerImg"
                       src={
-                        clip.players[0] === null
+                        clip.players === undefined
                           ? ""
                           : clip.players[0].player.image
                       }
                       alt={
-                        clip.players[0] === null
+                        clip.players === undefined
                           ? ""
                           : clip.players[0].player.nickName
                       }
                     />
                     <span className="modalPlayerImgText">
-                      {clip.players[0] === null
+                      {clip.players === undefined
                         ? ""
                         : clip.players[0].player.nickName}
                     </span>

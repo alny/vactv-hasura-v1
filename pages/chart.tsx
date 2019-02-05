@@ -53,7 +53,7 @@ class Chart extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: "today",
-      filters: {},
+      filters: { isPublic: { _eq: true } },
       open: false,
       rating: 0,
       weapon: null,
@@ -154,7 +154,15 @@ class Chart extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn } = this.props;
-    const { sort, orderBy, rating, category, map, weapon } = this.state;
+    const {
+      sort,
+      orderBy,
+      rating,
+      category,
+      map,
+      weapon,
+      filters
+    } = this.state;
 
     return (
       <Layout title="Vac.Tv | Charts" isLoggedIn={isLoggedIn}>
@@ -188,12 +196,15 @@ class Chart extends React.Component<Props, State> {
               <Query
                 query={getClipsWithFilter}
                 variables={{
+                  filters,
                   orderBy,
                   offset: 0,
                   limit: 8
                 }}
               >
                 {({ fetchMore, loading, error, data }) => {
+                  console.log("TCL: render -> data", data.clip);
+
                   if (loading)
                     return (
                       <i
@@ -369,24 +380,31 @@ class Chart extends React.Component<Props, State> {
                                 </div>
                               </div>
                               <div className="bottom">
-                                <Link route="player" id={clip.player.id}>
+                                <Link
+                                  route="player"
+                                  id={
+                                    clip.players[0] === undefined
+                                      ? ""
+                                      : clip.players[0].player.id
+                                  }
+                                >
                                   <a>
                                     <img
                                       src={
-                                        clip.player === null
+                                        clip.players[0] === undefined
                                           ? ""
-                                          : clip.player.image
+                                          : clip.players[0].player.image
                                       }
                                       alt={
-                                        clip.player === null
+                                        clip.players[0] === undefined
                                           ? ""
-                                          : clip.player.nickName
+                                          : clip.players[0].player.nickName
                                       }
                                     />
                                     <span>
-                                      {clip.player === null
+                                      {clip.players[0] === undefined
                                         ? ""
-                                        : clip.player.nickName}
+                                        : clip.players[0].player.nickName}
                                     </span>
                                   </a>
                                 </Link>
@@ -426,7 +444,10 @@ class Chart extends React.Component<Props, State> {
                                       ? null
                                       : this.props.loggedInUser.sub,
                                     clipId: clip.id,
-                                    playerId: clip.player.id
+                                    playerId:
+                                      clip.players[0] === undefined
+                                        ? ""
+                                        : clip.players[0].player.id
                                   }
                                 ]
                               }}
@@ -478,25 +499,33 @@ class Chart extends React.Component<Props, State> {
                                         height: "28px"
                                       }}
                                     >
-                                      <Link route="player" id={clip.player.id}>
+                                      <Link
+                                        route="player"
+                                        id={
+                                          clip.players[0] === undefined
+                                            ? ""
+                                            : clip.players[0].player.id
+                                        }
+                                      >
                                         <a>
                                           <img
                                             className="modalPlayerImg"
                                             src={
-                                              clip.player === null
+                                              clip.players[0] === undefined
                                                 ? ""
-                                                : clip.player.image
+                                                : clip.players[0].player.image
                                             }
                                             alt={
-                                              clip.player === null
+                                              clip.players[0] === undefined
                                                 ? ""
-                                                : clip.player.nickName
+                                                : clip.players[0].player
+                                                    .nickName
                                             }
                                           />
                                           <span className="modalPlayerImgText">
-                                            {clip.player === null
+                                            {clip.players[0] === undefined
                                               ? ""
-                                              : clip.player.nickName}
+                                              : clip.players[0].player.nickName}
                                           </span>
                                         </a>
                                       </Link>

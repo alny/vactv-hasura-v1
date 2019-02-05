@@ -109,7 +109,7 @@ class Events extends React.Component<Props, State> {
                           style={{ textTransform: "capitalize" }}
                           className="totalPlayerClips"
                         >
-                          Clips: {event.clips_aggregate.aggregate.count}
+                          Clips: {event.eventClips_aggregate.aggregate.count}
                         </span>
                         <div className="inside">
                           <Link route="event" id={event.id}>

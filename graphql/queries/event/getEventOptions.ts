@@ -33,6 +33,9 @@ export const FRONT_PAGE = gql`
           category
           userId
           weapon
+          events {
+            eventId
+          }
           players {
             player {
               id

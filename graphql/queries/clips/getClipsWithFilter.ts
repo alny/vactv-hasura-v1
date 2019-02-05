@@ -22,6 +22,7 @@ export const getClipsWithFilter = gql`
       userId
       category
       weapon
+      isPublic
       players {
         player {
           id
@@ -31,6 +32,7 @@ export const getClipsWithFilter = gql`
         }
       }
       events {
+        eventId
         event {
           id
           image

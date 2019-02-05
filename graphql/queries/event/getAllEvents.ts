@@ -27,7 +27,7 @@ export const getAllEvents = gql`
           }
         }
       }
-      clips_aggregate(where: { isPublic: { _eq: true } }) {
+      eventClips_aggregate {
         aggregate {
           count
         }

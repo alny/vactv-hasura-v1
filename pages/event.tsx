@@ -1,26 +1,14 @@
 import * as React from "react";
 import Layout from "../components/Layout";
 import Select from "react-select";
-import { rateOptions, sortMoreOptions } from "../utils/Options";
-import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
-import { ToastContainer, toast } from "react-toastify";
-import { Mutation } from "react-apollo";
-import {
-  emojiRating,
-  toFixed,
-  circleStyle,
-  modalStyle,
-  backdropStyle
-} from "../utils/Styles";
-import CircularProgressbar from "react-circular-progressbar";
-import { Modal } from "react-overlays";
+import { sortMoreOptions } from "../utils/Options";
+import { ToastContainer } from "react-toastify";
+import { backdropStyle } from "../utils/Styles";
 //@ts-ignore
-import { Link } from "../server/routes";
 import { withRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { getSingleEventClips } from "../graphql/queries/event/getSingleEvent";
-import { submitRate } from "../utils/SharedFunctions/submitRating";
 import ClipCard from "../components/Clip/ClipCard";
 
 type Props = {
@@ -63,7 +51,7 @@ class Event extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: null,
-      orderBy: { createdAt: "desc_nulls_last", id: "desc" },
+      orderBy: { id: "desc" },
       filters: { id: { _eq: this.props.router.query.id } },
       count: 0,
       open: false,
@@ -165,16 +153,16 @@ class Event extends React.Component<Props, State> {
         limit: 12
       }
     });
-    console.log(data.data.event[0]);
+    console.log(data.data.event);
     this.setState({
       loading: false,
-      clips: data.data.event[0].clips,
-      clipLength: data.data.event[0].clips.length,
+      clips: data.data.event[0].eventClips,
+      clipLength: data.data.event[0].eventClips.length,
       eventProfile: {
         id: data.data.event[0].id,
         name: data.data.event[0].name,
         image: data.data.event[0].image,
-        clipCount: data.data.event[0].clips_aggregate.aggregate.count
+        clipCount: data.data.event[0].eventClips_aggregate.aggregate.count
       }
     });
     console.log(isLoggedIn);

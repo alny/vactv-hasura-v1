@@ -3,7 +3,7 @@ import { gql } from "apollo-boost";
 export const getSingleEventClips = gql`
   query getSingleEventClips(
     $filters: event_bool_exp
-    $orderBy: [clip_order_by!]
+    $orderBy: [eventOnClip_order_by!]
     $offset: Int!
     $limit: Int!
   ) {
@@ -11,38 +11,42 @@ export const getSingleEventClips = gql`
       id
       image
       name
-      clips_aggregate(where: { isPublic: { _eq: true } }) {
+      eventClips_aggregate {
         aggregate {
           count
         }
       }
-      clips(
+      eventClips(
         order_by: $orderBy
         offset: $offset
         limit: $limit
-        where: { isPublic: { _eq: true } }
+        where: { clip: { isPublic: { _eq: true } } }
       ) {
-        id
-        title
-        thumbNail
-        createdAt
-        url
-        map
-        userId
-        category
-        weapon
-        player {
+        clip {
           id
-          image
-          name
-          nickName
-        }
-        ratings_aggregate {
-          aggregate {
-            avg {
-              rating
+          title
+          thumbNail
+          createdAt
+          url
+          map
+          isPublic
+          category
+          weapon
+          players {
+            player {
+              id
+              image
+              name
+              nickName
             }
-            count
+          }
+          ratings_aggregate {
+            aggregate {
+              avg {
+                rating
+              }
+              count
+            }
           }
         }
       }
