@@ -43,21 +43,21 @@ export const clipTypeOption = [
 ];
 
 export const fragmovieType = [
-  { value: "Team", label: "Team" },
-  { value: "Player", label: "Player" },
-  { value: "Event", label: "Event" },
-  { value: "Other", label: "Other" }
+  { value: "team", label: "Team" },
+  { value: "player", label: "Player" },
+  { value: "event", label: "Event" },
+  { value: "other", label: "Other" }
 ];
 
 export const tutorialType = [
-  { value: "Weapon", label: "Weapon" },
-  { value: "Smoke", label: "Smoke" },
-  { value: "Flash", label: "Flash" },
-  { value: "Tactics", label: "Tactics" },
-  { value: "Movement", label: "Movement" },
-  { value: "Spray Control", label: "Spray Control" },
-  { value: "Aim", label: "Aim" },
-  { value: "Tricks", label: "Tricks" },
+  { value: "weapon", label: "Weapon" },
+  { value: "smoke", label: "Smoke" },
+  { value: "flash", label: "Flash" },
+  { value: "tactics", label: "Tactics" },
+  { value: "movement", label: "Movement" },
+  { value: "spray control", label: "Spray Control" },
+  { value: "aim", label: "Aim" },
+  { value: "tricks", label: "Tricks" },
   { value: "Other", label: "Other" }
 ];
 

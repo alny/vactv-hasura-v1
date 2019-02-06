@@ -47,7 +47,6 @@ interface State {
   submitDisable: boolean;
   clipType: any;
   platform: String;
-  otherType: String;
   isChecked: boolean;
 }
 
@@ -73,7 +72,6 @@ class Add extends React.Component<Props, State> {
       eventsLoading: false,
       submitDisable: false,
       platform: "event",
-      otherType: "",
       isChecked: props.isChecked || false
     };
     this.handleChange = this.handleChange.bind(this);
@@ -99,7 +97,6 @@ class Add extends React.Component<Props, State> {
       this.setState({
         [name]: value.value,
         platform: "event",
-        otherType: "",
         player: "",
         event: "",
         weapon: "",
@@ -281,7 +278,6 @@ class Add extends React.Component<Props, State> {
       url,
       platform,
       clipType,
-      otherType,
       isChecked
     } = this.state;
     return (
@@ -388,9 +384,9 @@ class Add extends React.Component<Props, State> {
                       {clipType === "fragmovie" || clipType === "highlight" ? (
                         <Select
                           className="addSelect"
-                          onChange={this.handleSelectChange("otherType")}
+                          onChange={this.handleSelectChange("category")}
                           //@ts-ignore
-                          value={otherType ? otherType.value : ""}
+                          value={category ? category.value : ""}
                           placeholder={"Select A Type..."}
                           options={fragmovieType}
                         />
@@ -398,9 +394,9 @@ class Add extends React.Component<Props, State> {
                       {clipType === "tutorial" ? (
                         <Select
                           className="addSelect"
-                          onChange={this.handleSelectChange("otherType")}
+                          onChange={this.handleSelectChange("category")}
                           //@ts-ignore
-                          value={otherType ? otherType.value : ""}
+                          value={category ? category.value : ""}
                           placeholder={"Select Tutorial Type..."}
                           options={tutorialType}
                         />
