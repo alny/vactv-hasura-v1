@@ -156,6 +156,11 @@ class Browse extends React.Component<Props, State> {
 
   setFilters = () => {
     let orderByOption;
+    let filterOption: any = {
+      isPublic: { _eq: true },
+      type: { _eq: "pro" }
+    };
+
     if (this.state.sort === "Newest") {
       orderByOption = { createdAt: "desc_nulls_last", id: "desc" };
     }
@@ -171,15 +176,32 @@ class Browse extends React.Component<Props, State> {
         id: "desc"
       };
     }
-    this.setState({
-      filters: {
-        map: { _eq: this.state.map },
+    if (this.state.map) {
+      filterOption = { map: { _eq: this.state.map }, ...filterOption };
+    }
+    if (this.state.category) {
+      filterOption = {
         category: { _eq: this.state.category },
-        weapon: { _eq: this.state.weapon },
+        ...filterOption
+      };
+    }
+    if (this.state.weapon) {
+      filterOption = { weapon: { _eq: this.state.weapon }, ...filterOption };
+    }
+    if (this.state.player) {
+      filterOption = {
         players: { player: { id: { _eq: this.state.player } } },
+        ...filterOption
+      };
+    }
+    if (this.state.event) {
+      filterOption = {
         events: { event: { id: { _eq: this.state.event } } },
-        isPublic: { _eq: true }
-      },
+        ...filterOption
+      };
+    }
+    this.setState({
+      filters: filterOption,
       orderBy: orderByOption
     });
   };

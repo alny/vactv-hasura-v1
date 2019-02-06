@@ -180,7 +180,8 @@ class Discover extends React.Component<Props, State> {
       //@ts-ignore
       {
         [name]: value.value,
-        clipLength: 0
+        clipLength: 0,
+        isEmpty: false
       },
       () => this.filters()
     );

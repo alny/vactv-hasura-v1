@@ -60,8 +60,10 @@ class Team extends React.Component<Props, State> {
       sort: null,
       orderBy: { createdAt: "desc_nulls_last", id: "desc" },
       filters: {
-        player: {
-          teamId: { _eq: !teamId ? this.props.router.query.id : teamId }
+        players: {
+          player: {
+            teamId: { _eq: !teamId ? this.props.router.query.id : teamId }
+          }
         }
       },
       open: false,
