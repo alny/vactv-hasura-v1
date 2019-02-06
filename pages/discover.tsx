@@ -80,30 +80,6 @@ class Discover extends React.Component<Props, State> {
     });
   }
 
-  // getMoreClips = (fetchMore, offset) => {
-  //   // event.preventDefault();
-  //   fetchMore({
-  //     variables: {
-  //       orderBy: this.state.orderBy,
-  //       limit: 12,
-  //       offset: offset,
-  //       filters: this.state.filters
-  //     },
-  //     updateQuery: (prev, { fetchMoreResult }) => {
-  //       if (!fetchMoreResult.clip) return prev;
-  //       if (this.state.withFilter) {
-  //         this.setState({ withFilter: false });
-  //         return Object.assign({}, prev, {
-  //           clip: [...fetchMoreResult.clip]
-  //         });
-  //       }
-  //       return Object.assign({}, prev, {
-  //         clip: [...prev.clip, ...fetchMoreResult.clip]
-  //       });
-  //     }
-  //   });
-  // };
-
   getMoreClips = async () => {
     console.log(this.state.clipLength);
 
@@ -116,7 +92,7 @@ class Discover extends React.Component<Props, State> {
         limit: 12
       }
     });
-    if (data.data.clip.length) {
+    if (data.data.clip.length != 0) {
       this.setState({
         clips: [...this.state.clips, ...data.data.clip],
         clipLength: this.state.clipLength + data.data.clip.length
@@ -129,7 +105,6 @@ class Discover extends React.Component<Props, State> {
   };
 
   filters = async () => {
-    console.log("ERIRKIE");
     let orderByOption;
     let filterOption;
     var startDay = moment().startOf("day");
@@ -181,20 +156,19 @@ class Discover extends React.Component<Props, State> {
           ]
         });
     }
-    console.log("erlo");
     const data = await this.props.client.query({
       query: getClipsWithFilter,
       variables: {
         filters: filterOption,
-        offset: this.state.clipLength,
         orderBy: orderByOption,
+        offset: this.state.clipLength,
         limit: 12
       }
     });
-    console.log("TCL: filters -> data", data);
 
     this.setState({
-      orderBy: this.state.orderBy,
+      orderBy: orderByOption,
+      filters: filterOption,
       clips: [...data.data.clip],
       clipLength: data.data.clip.length
     });
@@ -205,7 +179,8 @@ class Discover extends React.Component<Props, State> {
     this.setState(
       //@ts-ignore
       {
-        [name]: value.value
+        [name]: value.value,
+        clipLength: 0
       },
       () => this.filters()
     );
@@ -251,7 +226,7 @@ class Discover extends React.Component<Props, State> {
                       menuPlacement="auto"
                       minMenuHeight={200}
                       className="sortBySelect"
-                      value={sort}
+                      value={sort.value}
                       isSearchable={false}
                       placeholder="Sort By"
                       options={sortOptions}
