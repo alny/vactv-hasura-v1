@@ -36,7 +36,6 @@ interface State {
   orderBy: any;
   open: any;
   rating: any;
-  withFilter: boolean;
   searchDisabled: boolean;
   clips: any;
   playerProfile: any;
@@ -66,7 +65,6 @@ class Player extends React.Component<Props, State> {
       count: 0,
       open: false,
       rating: 0,
-      withFilter: false,
       searchDisabled: false,
       clips: [],
       clipLength: 0,
@@ -109,18 +107,22 @@ class Player extends React.Component<Props, State> {
   setFilters = async () => {
     let orderByOption;
     if (this.state.sort === "Newest") {
-      orderByOption = { createdAt: "desc_nulls_last", id: "desc" };
+      orderByOption = { clip: { createdAt: "desc_nulls_last", id: "desc" } };
     }
     if (this.state.sort === "Most Votes") {
       orderByOption = {
-        ratings_aggregate: { count: "desc_nulls_last" },
-        id: "desc"
+        clip: {
+          ratings_aggregate: { count: "desc_nulls_last" },
+          id: "desc"
+        }
       };
     }
     if (this.state.sort === "Highest Rated") {
       orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
-        id: "desc"
+        clip: {
+          ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+          id: "desc"
+        }
       };
     }
     const data = await this.props.client.query({

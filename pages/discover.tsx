@@ -7,7 +7,6 @@ import Select from "react-select";
 import defaultPage from "../components/hocs/defaultPage";
 import { backdropStyle } from "../utils/Styles";
 import { ToastContainer } from "react-toastify";
-import InfiniteScroll from "react-infinite-scroll-component";
 import moment from "moment";
 import ClipCard from "../components/Clip/ClipCard";
 
@@ -24,6 +23,10 @@ interface State {
   open: any;
   rating: any;
   withFilter: any;
+  clips: any;
+  clipLength: any;
+  loading: boolean;
+  isEmpty: boolean;
 }
 
 class Discover extends React.Component<Props, State> {
@@ -35,14 +38,34 @@ class Discover extends React.Component<Props, State> {
         createdAt: "desc_nulls_last",
         id: "desc"
       },
-      filters: {},
+      filters: { isPublic: { _eq: true } },
       open: false,
       rating: 0,
-      withFilter: false
+      withFilter: false,
+      clips: [],
+      clipLength: 0,
+      loading: true,
+      isEmpty: false
     };
   }
 
-  componentDidMount() {}
+  async componentDidMount() {
+    const data = await this.props.client.query({
+      query: getClipsWithFilter,
+      variables: {
+        filters: { isPublic: { _eq: true } },
+        orderBy: this.state.orderBy,
+        offset: 0,
+        limit: 12
+      }
+    });
+    console.log(data);
+    this.setState({
+      loading: false,
+      clips: data.data.clip,
+      clipLength: data.data.clip.length
+    });
+  }
 
   onCloseModal = () => {
     this.setState({ open: false, rating: 0 });
@@ -57,54 +80,73 @@ class Discover extends React.Component<Props, State> {
     });
   }
 
-  getMoreClips = (fetchMore, offset) => {
-    // event.preventDefault();
-    fetchMore({
+  // getMoreClips = (fetchMore, offset) => {
+  //   // event.preventDefault();
+  //   fetchMore({
+  //     variables: {
+  //       orderBy: this.state.orderBy,
+  //       limit: 12,
+  //       offset: offset,
+  //       filters: this.state.filters
+  //     },
+  //     updateQuery: (prev, { fetchMoreResult }) => {
+  //       if (!fetchMoreResult.clip) return prev;
+  //       if (this.state.withFilter) {
+  //         this.setState({ withFilter: false });
+  //         return Object.assign({}, prev, {
+  //           clip: [...fetchMoreResult.clip]
+  //         });
+  //       }
+  //       return Object.assign({}, prev, {
+  //         clip: [...prev.clip, ...fetchMoreResult.clip]
+  //       });
+  //     }
+  //   });
+  // };
+
+  getMoreClips = async () => {
+    console.log(this.state.clipLength);
+
+    const data = await this.props.client.query({
+      query: getClipsWithFilter,
       variables: {
+        filters: this.state.filters,
+        offset: this.state.clipLength,
         orderBy: this.state.orderBy,
-        limit: 12,
-        offset: offset,
-        filters: this.state.filters
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult.clip) return prev;
-        if (this.state.withFilter) {
-          this.setState({ withFilter: false });
-          return Object.assign({}, prev, {
-            clip: [...fetchMoreResult.clip]
-          });
-        }
-        return Object.assign({}, prev, {
-          clip: [...prev.clip, ...fetchMoreResult.clip]
-        });
+        limit: 12
       }
     });
+    if (data.data.clip.length) {
+      this.setState({
+        clips: [...this.state.clips, ...data.data.clip],
+        clipLength: this.state.clipLength + data.data.clip.length
+      });
+    } else {
+      this.setState({
+        isEmpty: true
+      });
+    }
   };
 
-  filters = fetchMore => {
-    this.setState({ sort: "latest" });
-    //@ts-ignore
+  filters = async () => {
+    console.log("ERIRKIE");
+    let orderByOption;
+    let filterOption;
     var startDay = moment().startOf("day");
     var endDay = moment().endOf("day");
 
     if (this.state.sort === "today") {
-      this.setState(
-        {
-          orderBy: {
-            ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
-            id: "desc"
-          },
-          filters: {
-            _and: [
-              { createdAt: { _gte: startDay.toISOString() } },
-              { createdAt: { _lte: endDay.toISOString() } },
-              { isPublic: { _eq: true } }
-            ]
-          },
-          withFilter: true
-        },
-        () => this.getMoreClips(fetchMore, 0)
-      );
+      (orderByOption = {
+        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        id: "desc"
+      }),
+        (filterOption = {
+          _and: [
+            { createdAt: { _gte: startDay.toISOString() } },
+            { createdAt: { _lte: endDay.toISOString() } },
+            { isPublic: { _eq: true } }
+          ]
+        });
     }
     if (this.state.sort === "week") {
       var currentDate = moment();
@@ -112,55 +154,60 @@ class Discover extends React.Component<Props, State> {
       var weekStart = currentDate.clone().startOf("isoweek");
       //@ts-ignore
       var weekEnd = currentDate.clone().endOf("isoweek");
-      this.setState(
-        {
-          orderBy: {
-            ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
-            id: "desc"
-          },
-          filters: {
-            _and: [
-              { createdAt: { _gte: weekStart.toISOString() } },
-              { createdAt: { _lte: weekEnd.toISOString() } },
-              { isPublic: { _eq: true } }
-            ]
-          },
-          withFilter: true
-        },
-        () => this.getMoreClips(fetchMore, 0)
-      );
+      (orderByOption = {
+        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        id: "desc"
+      }),
+        (filterOption = {
+          _and: [
+            { createdAt: { _gte: weekStart.toISOString() } },
+            { createdAt: { _lte: weekEnd.toISOString() } },
+            { isPublic: { _eq: true } }
+          ]
+        });
     }
     if (this.state.sort === "month") {
       const startOfMonth = moment().startOf("month");
       const endOfMonth = moment().endOf("month");
-      this.setState(
-        {
-          orderBy: {
-            ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
-            id: "desc"
-          },
-          filters: {
-            _and: [
-              { createdAt: { _gte: startOfMonth } },
-              { createdAt: { _lte: endOfMonth } },
-              { isPublic: { _eq: true } }
-            ]
-          },
-          withFilter: true
-        },
-        () => this.getMoreClips(fetchMore, 0)
-      );
+      (orderByOption = {
+        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        id: "desc"
+      }),
+        (filterOption = {
+          _and: [
+            { createdAt: { _gte: startOfMonth } },
+            { createdAt: { _lte: endOfMonth } },
+            { isPublic: { _eq: true } }
+          ]
+        });
     }
+    console.log("erlo");
+    const data = await this.props.client.query({
+      query: getClipsWithFilter,
+      variables: {
+        filters: filterOption,
+        offset: this.state.clipLength,
+        orderBy: orderByOption,
+        limit: 12
+      }
+    });
+    console.log("TCL: filters -> data", data);
+
+    this.setState({
+      orderBy: this.state.orderBy,
+      clips: [...data.data.clip],
+      clipLength: data.data.clip.length
+    });
   };
 
-  handleSelectChange = (name, fetchMore) => value => {
+  handleSelectChange = name => value => {
     event.preventDefault();
     this.setState(
       //@ts-ignore
       {
         [name]: value.value
       },
-      () => this.filters(fetchMore)
+      () => this.filters()
     );
   };
 
@@ -176,7 +223,7 @@ class Discover extends React.Component<Props, State> {
   }
 
   render() {
-    const { sort, orderBy, rating } = this.state;
+    const { sort, clips, rating, loading, isEmpty } = this.state;
     const { isLoggedIn } = this.props;
     return (
       <Layout title="Vac.Tv | Discover Clips" isLoggedIn={isLoggedIn}>
@@ -188,105 +235,65 @@ class Discover extends React.Component<Props, State> {
         >
           <div style={{ paddingTop: "25px" }} className="freelancers sidebar">
             <div className="container">
-              <Query
-                query={getClipsWithFilter}
-                variables={{
-                  filters: { isPublic: { _eq: true } },
-                  orderBy,
-                  offset: 0,
-                  limit: 12
-                }}
-              >
-                {({ fetchMore, loading, error, data }) => {
-                  if (loading)
-                    return (
-                      <i
-                        className="fa fa-circle-o-notch fa-spin"
-                        style={{ fontSize: "24px" }}
-                      />
-                    );
-                  if (error) return `Error!: ${error}`;
-                  if (!data.clip) return `No Clips!`;
+              <>
+                <div className="above">
+                  <h1
+                    style={{
+                      marginBottom: "24px",
+                      textTransform: "capitalize"
+                    }}
+                  >
+                    Discover - {this.state.sort}
+                  </h1>
+                  <div className="buttons">
+                    <Select
+                      onChange={this.handleSelectChange("sort")}
+                      menuPlacement="auto"
+                      minMenuHeight={200}
+                      className="sortBySelect"
+                      value={sort}
+                      isSearchable={false}
+                      placeholder="Sort By"
+                      options={sortOptions}
+                    />
+                  </div>
+                </div>
 
-                  return (
-                    <>
-                      <div className="above">
-                        <h1
-                          style={{
-                            marginBottom: "24px",
-                            textTransform: "capitalize"
-                          }}
-                        >
-                          Discover - {this.state.sort}
-                        </h1>
-                        <div className="buttons">
-                          <Select
-                            onChange={this.handleSelectChange(
-                              "sort",
-                              fetchMore
-                            )}
-                            menuPlacement="auto"
-                            minMenuHeight={200}
-                            className="sortBySelect"
-                            value={sort}
-                            isSearchable={false}
-                            placeholder="Sort By"
-                            options={sortOptions}
-                          />
-                        </div>
-                      </div>
-
-                      <section>
-                        <InfiniteScroll
-                          dataLength={data.clip ? data.clip.length : 0}
-                          next={() =>
-                            this.getMoreClips(
-                              fetchMore,
-                              data.clip ? data.clip.length : 0
-                            )
-                          }
-                          style={{ overflow: "visible" }}
-                          hasMore={
-                            data.clip
-                              ? data.clip.length !==
-                                data.clip_aggregate.aggregate.count
-                              : false
-                          }
-                          loading={
-                            <i
-                              className="fa fa-circle-o-notch fa-spin"
-                              style={{ fontSize: "24px" }}
-                            />
-                          }
-                          endMessage={
-                            <p style={{ textAlign: "center" }}>
-                              <b>Yay! You have seen it all</b>
-                            </p>
-                          }
-                        >
-                          <div className="row">
-                            {data.clip.map(clip => (
-                              <ClipCard
-                                key={clip.id}
-                                specificStyle={"col-md-3"}
-                                props={this.props}
-                                isLoggedIn={isLoggedIn}
-                                clip={clip}
-                                rating={rating}
-                                onClick={this.onOpenModal.bind(this, clip.id)}
-                                handleChange={this.handleChange("rating")}
-                                showModal={!!this.state.open[clip.id]}
-                                closeModal={this.onCloseModal}
-                                renderBackdrop={this.renderBackdrop}
-                              />
-                            ))}
-                          </div>
-                        </InfiniteScroll>
-                      </section>
-                    </>
-                  );
-                }}
-              </Query>
+                <section>
+                  <div className="row">
+                    {loading ? (
+                      <div className="clipLoader" />
+                    ) : (
+                      clips.map(clip => (
+                        <ClipCard
+                          key={clip.id}
+                          specificStyle={"col-md-3"}
+                          props={this.props}
+                          isLoggedIn={isLoggedIn}
+                          clip={clip}
+                          rating={rating}
+                          onClick={this.onOpenModal.bind(this, clip.id)}
+                          handleChange={this.handleChange("rating")}
+                          showModal={!!this.state.open[clip.id]}
+                          closeModal={this.onCloseModal}
+                          renderBackdrop={this.renderBackdrop}
+                        />
+                      ))
+                    )}
+                  </div>
+                </section>
+              </>
+              {isEmpty ? null : (
+                <div className="load-more">
+                  <a
+                    onClick={() => this.getMoreClips()}
+                    className="btn btn-primary"
+                    rel="next"
+                  >
+                    Load More
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </main>

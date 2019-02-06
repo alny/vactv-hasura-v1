@@ -14,7 +14,6 @@ import { withRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { getSingleEventClips } from "../graphql/queries/event/getSingleEvent";
-import ClipCard from "../components/Clip/ClipCard";
 import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
 import { Mutation } from "react-apollo";
 import CircularProgressbar from "react-circular-progressbar";
@@ -37,7 +36,6 @@ interface State {
   filters: any;
   open: any;
   rating: any;
-  withFilter: boolean;
   searchDisabled: boolean;
   clips: any;
   eventProfile: any;
@@ -68,7 +66,6 @@ class Event extends React.Component<Props, State> {
       count: 0,
       open: false,
       rating: 0,
-      withFilter: false,
       searchDisabled: false,
       clips: [],
       clipLength: 0,
@@ -112,18 +109,27 @@ class Event extends React.Component<Props, State> {
     let orderByOption;
     this.setState({ clipLength: 0 });
     if (this.state.sort === "Newest") {
-      orderByOption = { createdAt: "desc_nulls_last", id: "desc" };
+      orderByOption = {
+        clip: {
+          createdAt: "desc_nulls_last",
+          id: "desc"
+        }
+      };
     }
     if (this.state.sort === "Most Votes") {
       orderByOption = {
-        ratings_aggregate: { count: "desc_nulls_last" },
-        id: "desc"
+        clip: {
+          ratings_aggregate: { count: "desc_nulls_last" },
+          id: "desc"
+        }
       };
     }
     if (this.state.sort === "Highest Rated") {
       orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
-        id: "desc"
+        clip: {
+          ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+          id: "desc"
+        }
       };
     }
     const data = await this.props.client.query({
