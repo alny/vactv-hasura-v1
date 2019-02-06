@@ -58,15 +58,17 @@ const ClipCard: React.SFC<any> = ({
         <div className="bottom">
           <Link
             route="player"
-            id={clip.players === undefined ? "" : clip.players[0].player.id}
+            id={clip.players[0] === undefined ? "" : clip.players[0].player.id}
           >
             <a>
               <img
                 src={
-                  clip.players === undefined ? "" : clip.players[0].player.image
+                  clip.players[0] === undefined
+                    ? ""
+                    : clip.players[0].player.image
                 }
                 alt={
-                  clip.players === undefined
+                  clip.players[0] === undefined
                     ? ""
                     : clip.players[0].player.nickName
                 }
@@ -75,11 +77,11 @@ const ClipCard: React.SFC<any> = ({
           </Link>
           <Link
             route="player"
-            id={clip.players === undefined ? "" : clip.players[0].player.id}
+            id={clip.players[0] === undefined ? "" : clip.players[0].player.id}
           >
             <a>
               <span>
-                {clip.players === undefined
+                {clip.players[0] === undefined
                   ? ""
                   : clip.players[0].player.nickName}
               </span>
@@ -111,9 +113,14 @@ const ClipCard: React.SFC<any> = ({
               rating,
               userId: !props.loggedInUser ? null : props.loggedInUser.sub,
               clipId: clip.id,
-              playerId: clip.players[0].player.id,
-              teamId: clip.players[0].player.teamId,
-              eventId: clip.events[0].eventId
+              playerId:
+                clip.players[0] === undefined ? "" : clip.players[0].player.id,
+              teamId:
+                clip.players[0] === undefined
+                  ? ""
+                  : clip.players[0].player.teamId,
+              eventId:
+                clip.events[0] === undefined ? "" : clip.events[0].eventId
             }
           ]
         }}
@@ -164,25 +171,27 @@ const ClipCard: React.SFC<any> = ({
                 <Link
                   route="player"
                   id={
-                    clip.players === undefined ? "" : clip.players[0].player.id
+                    clip.players[0] === undefined
+                      ? ""
+                      : clip.players[0].player.id
                   }
                 >
                   <a>
                     <img
                       className="modalPlayerImg"
                       src={
-                        clip.players === undefined
+                        clip.players[0] === undefined
                           ? ""
                           : clip.players[0].player.image
                       }
                       alt={
-                        clip.players === undefined
+                        clip.players[0] === undefined
                           ? ""
                           : clip.players[0].player.nickName
                       }
                     />
                     <span className="modalPlayerImgText">
-                      {clip.players === undefined
+                      {clip.players[0] === undefined
                         ? ""
                         : clip.players[0].player.nickName}
                     </span>

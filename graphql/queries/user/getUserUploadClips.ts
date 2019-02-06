@@ -22,17 +22,21 @@ export const getUserUploads = gql`
       userId
       category
       weapon
-      eventId
-      player {
-        id
-        nickName
-        image
-        teamId
+      players {
+        player {
+          id
+          nickName
+          image
+          teamId
+        }
       }
-      event {
-        id
-        image
-        name
+      events {
+        eventId
+        event {
+          id
+          image
+          name
+        }
       }
       ratings_aggregate {
         aggregate {

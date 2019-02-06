@@ -62,7 +62,7 @@ class Player extends React.Component<Props, State> {
     super(props);
     this.state = {
       sort: null,
-      orderBy: { id: "desc" },
+      orderBy: { clip: { id: "desc" } },
       count: 0,
       open: false,
       rating: 0,
@@ -430,7 +430,7 @@ class Player extends React.Component<Props, State> {
                                   <Link
                                     route="event"
                                     id={
-                                      clip.clip.events[0] === undefined
+                                      clip.clip.events === undefined
                                         ? ""
                                         : clip.clip.events[0].event.id
                                     }
@@ -438,19 +438,19 @@ class Player extends React.Component<Props, State> {
                                     <a>
                                       <img
                                         src={
-                                          clip.clip.events[0] === undefined
+                                          clip.clip.events === undefined
                                             ? ""
                                             : clip.clip.events[0].event.image
                                         }
                                         alt={
-                                          clip.clip.events[0] === undefined
+                                          clip.clip.events === undefined
                                             ? ""
                                             : clip.clip.events[0].event.name
                                         }
                                       />
                                       <div className="cut-text">
                                         <span>
-                                          {clip.clip.events[0] === undefined
+                                          {clip.clip.events === undefined
                                             ? ""
                                             : clip.clip.events[0].event.name}
                                         </span>
@@ -496,7 +496,7 @@ class Player extends React.Component<Props, State> {
                                         : playerId,
                                       teamId: playerProfile.team.id,
                                       eventId:
-                                        clip.clip.events[0] === undefined
+                                        clip.clip.events === undefined
                                           ? ""
                                           : clip.clip.events[0].event.id
                                     }

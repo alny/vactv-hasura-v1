@@ -447,7 +447,9 @@ class Chart extends React.Component<Props, State> {
                                     playerId:
                                       clip.players[0] === undefined
                                         ? ""
-                                        : clip.players[0].player.id
+                                        : clip.players[0].player.id,
+                                    teamId: clip.players[0].player.teamId,
+                                    eventId: clip.events[0].eventId
                                   }
                                 ]
                               }}

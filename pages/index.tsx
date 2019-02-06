@@ -7,8 +7,9 @@ import { backdropStyle, circleStyle, toFixed } from "../utils/Styles";
 import { ToastContainer } from "react-toastify";
 import { FRONT_PAGE } from "../graphql/queries/event/getEventOptions";
 //@ts-ignore
-import { Link } from "../server/routes";
+import { Link as Links } from "../server/routes";
 import ClipCard from "../components/Clip/ClipCard";
+import Link from "next/link";
 
 type Props = {
   isLoggedIn: boolean;
@@ -92,15 +93,15 @@ class Home extends React.Component<Props, State> {
                   return (
                     <div className="container">
                       <div className="above">
-                        <Link route="event" id={data.eventClips[0].id}>
+                        <Links route="event" id={data.eventClips[0].id}>
                           <a>
                             <h1 style={{ marginBottom: "24px" }}>
                               {data.eventClips[0].name} 🔥
                             </h1>
                           </a>
-                        </Link>
+                        </Links>
                         <div className="buttons">
-                          <Link route="event" id={data.eventClips[0].id}>
+                          <Links route="event" id={data.eventClips[0].id}>
                             <a>
                               🎬 Event Clips:{" "}
                               {
@@ -108,7 +109,7 @@ class Home extends React.Component<Props, State> {
                                   .aggregate.count
                               }{" "}
                             </a>
-                          </Link>
+                          </Links>
                         </div>
                       </div>
                       <section>
@@ -133,7 +134,7 @@ class Home extends React.Component<Props, State> {
                           ))}
                         </div>
                         <div className="above">
-                          <Link route="event" id={data.eventClips[0].id}>
+                          <Link href="/topplayers">
                             <a>
                               <h1 style={{ marginBottom: "24px" }}>
                                 Top Players 🏅
@@ -144,34 +145,28 @@ class Home extends React.Component<Props, State> {
                         <section>
                           <div className="row">
                             {data.topPlayers.map(player => (
-                              <div key={player.player.id} className="col-md-3">
+                              <div key={player.id} className="col-md-3">
                                 <span className="totalPlayerClips">
                                   Clips:{" "}
-                                  {
-                                    player.player.playerClips_aggregate
-                                      .aggregate.count
-                                  }
+                                  {player.playerClips_aggregate.aggregate.count}
                                 </span>
                                 <div className="inside">
-                                  <Link route="player" id={player.player.id}>
+                                  <Links route="player" id={player.id}>
                                     <a>
                                       <img
                                         className="card-img-top"
-                                        src={player.player.image}
-                                        alt={player.player.image}
+                                        src={player.image}
+                                        alt={player.image}
                                       />
                                     </a>
-                                  </Link>
+                                  </Links>
 
                                   <div className="middle">
                                     <div>
                                       <h3>
-                                        <Link
-                                          route="player"
-                                          id={player.player.id}
-                                        >
-                                          <a>{player.player.nickName}</a>
-                                        </Link>
+                                        <Links route="player" id={player.id}>
+                                          <a>{player.nickName}</a>
+                                        </Links>
                                       </h3>
                                       <h6
                                         style={{
@@ -184,18 +179,15 @@ class Home extends React.Component<Props, State> {
                                     </div>
                                   </div>
                                   <div className="bottom">
-                                    <Link
-                                      route="team"
-                                      id={player.player.team.id}
-                                    >
+                                    <Links route="team" id={player.team.id}>
                                       <a>
                                         <img
-                                          src={player.player.team.image}
-                                          alt={player.player.team.name}
+                                          src={player.team.image}
+                                          alt={player.team.name}
                                         />
-                                        <span>{player.player.team.name}</span>
+                                        <span>{player.team.name}</span>
                                       </a>
-                                    </Link>
+                                    </Links>
                                     <div
                                       style={{
                                         width: "32px",
@@ -206,17 +198,17 @@ class Home extends React.Component<Props, State> {
                                       <CircularProgressbar
                                         percentage={
                                           toFixed(
-                                            player.player.rating_aggregate
-                                              .aggregate.avg.rating
+                                            player.rating_aggregate.aggregate
+                                              .avg.rating
                                           ) * 10
                                         }
                                         text={toFixed(
-                                          player.player.rating_aggregate
-                                            .aggregate.avg.rating
+                                          player.rating_aggregate.aggregate.avg
+                                            .rating
                                         )}
                                         styles={circleStyle(
-                                          player.player.rating_aggregate
-                                            .aggregate.avg.rating
+                                          player.rating_aggregate.aggregate.avg
+                                            .rating
                                         )}
                                       />
                                     </div>

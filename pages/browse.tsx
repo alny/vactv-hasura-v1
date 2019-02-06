@@ -176,8 +176,8 @@ class Browse extends React.Component<Props, State> {
         map: { _eq: this.state.map },
         category: { _eq: this.state.category },
         weapon: { _eq: this.state.weapon },
-        player: { id: { _eq: this.state.player } },
-        event: { id: { _eq: this.state.event } },
+        players: { player: { id: { _eq: this.state.player } } },
+        events: { event: { id: { _eq: this.state.event } } },
         isPublic: { _eq: true }
       },
       orderBy: orderByOption

@@ -38,6 +38,7 @@ export const getSingleEventClips = gql`
               image
               name
               nickName
+              teamId
             }
           }
           ratings_aggregate {

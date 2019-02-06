@@ -55,37 +55,33 @@ export const FRONT_PAGE = gql`
         }
       }
     }
-    topPlayers: playerOnClip(
+    topPlayers: player(
       limit: 4
       order_by: {
-        player: {
-          rating_aggregate: {
-            avg: { rating: desc_nulls_last }
-            count: desc_nulls_last
-          }
+        rating_aggregate: {
+          avg: { rating: desc_nulls_last }
+          count: desc_nulls_last
         }
       }
     ) {
-      player {
+      id
+      image
+      name
+      nickName
+      team {
         id
         image
-        nickName
-        playerClips_aggregate {
-          aggregate {
-            count
-          }
+        name
+      }
+      playerClips_aggregate {
+        aggregate {
+          count
         }
-        team {
-          id
-          name
-          image
-        }
-        rating_aggregate {
-          aggregate {
-            count
-            avg {
-              rating
-            }
+      }
+      rating_aggregate {
+        aggregate {
+          avg {
+            rating
           }
         }
       }
