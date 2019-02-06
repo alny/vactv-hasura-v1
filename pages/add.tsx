@@ -349,8 +349,8 @@ class Add extends React.Component<Props, State> {
                       </div>
                     </div>
                     <div className="form-label-group">
-                      {clipType === "Fragmovie" ||
-                      clipType === "Highlight" ? null : (
+                      {clipType === "fragmovie" ||
+                      clipType === "highlight" ? null : (
                         <>
                           <Select
                             className="addSelect-Left"
