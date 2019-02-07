@@ -105,80 +105,82 @@ class Events extends React.Component<Props, State> {
                   ) : (
                     events.map((event, i) => (
                       <div key={event.id} className="col-md-3">
-                        <span
-                          style={{ textTransform: "capitalize" }}
-                          className="totalPlayerClips"
-                        >
-                          Clips: {event.eventClips_aggregate.aggregate.count}
-                        </span>
-                        <div className="inside">
-                          <Link route="event" id={event.id}>
-                            <a>
-                              <img
-                                className="card-img-top"
-                                src={event.image}
-                                alt={event.image}
-                              />
-                            </a>
-                          </Link>
-
-                          <div className="middle">
-                            <div>
-                              <Link route="event" id={event.id}>
-                                <h6
-                                  className="cut-text-2"
+                        <Link route="event" id={event.id}>
+                          <a>
+                            <div className="inside">
+                              <div className="middle">
+                                <div>
+                                  <Link route="event" id={event.id}>
+                                    <h6
+                                      className="cut-text-2"
+                                      style={{
+                                        textTransform: "capitalize",
+                                        fontSize: "15px",
+                                        fontWeight: 600
+                                      }}
+                                    >
+                                      {event.name}
+                                    </h6>
+                                  </Link>
+                                  <h5
+                                    style={{
+                                      textTransform: "uppercase",
+                                      fontSize: "12px",
+                                      fontWeight: 600,
+                                      display: "inline"
+                                    }}
+                                  >
+                                    {event.type}
+                                  </h5>
+                                  <span
+                                    style={{
+                                      textTransform: "capitalize",
+                                      float: "right",
+                                      fontSize: "12px",
+                                      fontWeight: 600,
+                                      display: "inline"
+                                    }}
+                                  >
+                                    Clips:{" "}
+                                    {event.eventClips_aggregate.aggregate.count}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="bottom">
+                                <Link route="event" id={event.id}>
+                                  <a>
+                                    <img src={event.image} alt={event.name} />
+                                    <span>{event.organizer}</span>
+                                  </a>
+                                </Link>
+                                <div
                                   style={{
-                                    textTransform: "capitalize",
-                                    fontSize: "15px",
-                                    fontWeight: 600
+                                    width: "32px",
+                                    display: "inline-block",
+                                    float: "right"
                                   }}
                                 >
-                                  {event.name}
-                                </h6>
-                              </Link>
-                              <h5
-                                className="cut-text-2"
-                                style={{
-                                  textTransform: "capitalize",
-                                  fontSize: "12px",
-                                  fontWeight: 600,
-                                  marginBottom: "0px"
-                                }}
-                              >
-                                {event.type}
-                              </h5>
+                                  <CircularProgressbar
+                                    percentage={
+                                      toFixed(
+                                        event.rating_aggregate.aggregate.avg
+                                          .rating
+                                      ) * 10
+                                    }
+                                    text={toFixed(
+                                      event.rating_aggregate.aggregate.avg
+                                        .rating
+                                    )}
+                                    styles={circleStyle(
+                                      event.rating_aggregate.aggregate.avg
+                                        .rating
+                                    )}
+                                  />
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                          <div className="bottom">
-                            <Link route="event" id={event.id}>
-                              <a>
-                                <img src={event.image} alt={event.name} />
-                                <span>{event.organizer}</span>
-                              </a>
-                            </Link>
-                            <div
-                              style={{
-                                width: "32px",
-                                display: "inline-block",
-                                float: "right"
-                              }}
-                            >
-                              <CircularProgressbar
-                                percentage={
-                                  toFixed(
-                                    event.rating_aggregate.aggregate.avg.rating
-                                  ) * 10
-                                }
-                                text={toFixed(
-                                  event.rating_aggregate.aggregate.avg.rating
-                                )}
-                                styles={circleStyle(
-                                  event.rating_aggregate.aggregate.avg.rating
-                                )}
-                              />
-                            </div>
-                          </div>
-                        </div>
+                          </a>
+                        </Link>
                       </div>
                     ))
                   )}
