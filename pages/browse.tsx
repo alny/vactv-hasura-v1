@@ -6,7 +6,8 @@ import {
   mapOptions,
   categoryOptions,
   weaponOptions,
-  rateOptions
+  rateOptions,
+  clipTypeOption
 } from "../utils/Options";
 import defaultPage from "../components/hocs/defaultPage";
 import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
@@ -53,6 +54,7 @@ interface State {
   playersLoading: boolean;
   events: [];
   eventsLoading: boolean;
+  type: any;
 }
 
 let playerOptions = [];
@@ -79,7 +81,8 @@ class Browse extends React.Component<Props, State> {
       players: [],
       playersLoading: false,
       events: [],
-      eventsLoading: false
+      eventsLoading: false,
+      type: null
     };
   }
 
@@ -133,7 +136,8 @@ class Browse extends React.Component<Props, State> {
       this.state.weapon ||
       this.state.sort ||
       this.state.player ||
-      this.state.event
+      this.state.event ||
+      this.state.type
     ) {
       this.getMoreClips(fetchMore, offset);
     } else {
@@ -157,8 +161,7 @@ class Browse extends React.Component<Props, State> {
   setFilters = () => {
     let orderByOption;
     let filterOption: any = {
-      isPublic: { _eq: true },
-      type: { _eq: "pro" }
+      isPublic: { _eq: true }
     };
 
     if (this.state.sort === "Newest") {
@@ -175,6 +178,9 @@ class Browse extends React.Component<Props, State> {
         ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
         id: "desc"
       };
+    }
+    if (this.state.type) {
+      filterOption = { type: { _eq: this.state.type }, ...filterOption };
     }
     if (this.state.map) {
       filterOption = { map: { _eq: this.state.map }, ...filterOption };
@@ -309,7 +315,7 @@ class Browse extends React.Component<Props, State> {
       weapon,
       player,
       event,
-      orderBy
+      type
     } = this.state;
     const { isLoggedIn } = this.props;
     return (
@@ -374,6 +380,18 @@ class Browse extends React.Component<Props, State> {
                                   </button>
                                 </h5>
                               </div>
+                            </div>
+                            <div className="browseFilter">
+                              <Select
+                                menuPlacement="auto"
+                                minMenuHeight={200}
+                                className="browseSelect"
+                                onChange={this.handleChange("type")}
+                                value={type ? type.value : ""}
+                                isSearchable={false}
+                                placeholder="Filter Type"
+                                options={clipTypeOption}
+                              />
                             </div>
                             <div className="browseFilter">
                               <Select

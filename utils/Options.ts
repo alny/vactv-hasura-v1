@@ -58,7 +58,7 @@ export const tutorialType = [
   { value: "spray control", label: "Spray Control" },
   { value: "aim", label: "Aim" },
   { value: "tricks", label: "Tricks" },
-  { value: "Other", label: "Other" }
+  { value: "other", label: "Other" }
 ];
 
 export const clipPlatform = [

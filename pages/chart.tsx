@@ -61,7 +61,13 @@ class Chart extends React.Component<Props, State> {
       category: null,
       showFilterModal: false,
       map: null,
-      orderBy: {}
+      orderBy: {
+        ratings_aggregate: {
+          avg: { rating: "desc_nulls_last" },
+          sum: { rating: "desc_nulls_last" }
+        },
+        id: "desc"
+      }
     };
   }
 
@@ -89,6 +95,34 @@ class Chart extends React.Component<Props, State> {
     if (this.state.weapon) {
       withFilters = { weapon: { _eq: this.state.weapon }, ...withFilters };
     }
+    if (this.state.sort === "week") {
+      var currentDate = moment();
+      //@ts-ignore
+      var weekStart = currentDate.clone().startOf("isoweek");
+      //@ts-ignore
+      var weekEnd = currentDate.clone().endOf("isoweek");
+
+      withFilters = {
+        _and: [
+          { createdAt: { _gte: weekStart.toISOString() } },
+          { createdAt: { _lte: weekEnd.toISOString() } },
+          { isPublic: { _eq: true }, ...withFilters }
+        ]
+      };
+    }
+    if (this.state.sort === "month") {
+      const startOfMonth = moment().startOf("month");
+      const endOfMonth = moment().endOf("month");
+
+      withFilters = {
+        _and: [
+          { createdAt: { _gte: startOfMonth } },
+          { createdAt: { _lte: endOfMonth } },
+          { isPublic: { _eq: true }, ...withFilters }
+        ]
+      };
+    }
+
     this.setState({
       filters: withFilters
     });
@@ -214,7 +248,10 @@ class Chart extends React.Component<Props, State> {
                             marginBottom: "24px"
                           }}
                         >
-                          This Month: Top 8
+                          {this.state.sort === "week" ||
+                          this.state.sort === "month"
+                            ? `This ${this.state.sort}: Top 8`
+                            : `${this.state.sort}: Top 8`}
                         </h1>
                         <div className="buttons">
                           <button

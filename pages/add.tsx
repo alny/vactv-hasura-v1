@@ -349,8 +349,21 @@ class Add extends React.Component<Props, State> {
                       </div>
                     </div>
                     <div className="form-label-group">
+                      {clipType === "tutorial" ? (
+                        <div style={{ marginBottom: "15px" }}>
+                          <Select
+                            className="addSelect"
+                            onChange={this.handleSelectChange("category")}
+                            //@ts-ignore
+                            value={category ? category.value : ""}
+                            placeholder={"Select Tutorial Type..."}
+                            options={tutorialType}
+                          />
+                        </div>
+                      ) : null}
                       {clipType === "fragmovie" ||
-                      clipType === "highlight" ? null : (
+                      clipType === "highlight" ||
+                      clipType === "" ? null : (
                         <>
                           <Select
                             className="addSelect-Left"
@@ -360,14 +373,24 @@ class Add extends React.Component<Props, State> {
                             placeholder="Select A Map..."
                             options={mapOptions}
                           />
-                          <Select
-                            className="addSelect-Right"
-                            onChange={this.handleSelectChange("weapon")}
-                            //@ts-ignore
-                            value={weapon ? weapon.value : ""}
-                            placeholder="Select A Weapon..."
-                            options={weaponOptions}
-                          />
+                          {category === "weapon" ||
+                          clipType === "pro" ||
+                          clipType === "user" ||
+                          category === "aim" ||
+                          category === "flash" ||
+                          category === "other" ||
+                          category === "tricks" ||
+                          category === "spray control" ||
+                          category === "smoke" ? (
+                            <Select
+                              className="addSelect-Right"
+                              onChange={this.handleSelectChange("weapon")}
+                              //@ts-ignore
+                              value={weapon ? weapon.value : ""}
+                              placeholder="Select A Weapon..."
+                              options={weaponOptions}
+                            />
+                          ) : null}
                         </>
                       )}
 
@@ -391,20 +414,10 @@ class Add extends React.Component<Props, State> {
                           options={fragmovieType}
                         />
                       ) : null}
-                      {clipType === "tutorial" ? (
-                        <Select
-                          className="addSelect"
-                          onChange={this.handleSelectChange("category")}
-                          //@ts-ignore
-                          value={category ? category.value : ""}
-                          placeholder={"Select Tutorial Type..."}
-                          options={tutorialType}
-                        />
-                      ) : null}
                     </div>
                     {clipType === "pro" ||
-                    clipType === "highlight" ||
-                    clipType === "fragmovie" ? (
+                    category === "player" ||
+                    category === "event" ? (
                       <div className="form-label-group">
                         <Select
                           className="addSelect-Left"
@@ -435,7 +448,7 @@ class Add extends React.Component<Props, State> {
                               ? eventOptions
                               : this.state.events
                           }
-                        />
+                        />{" "}
                         <div className="eventCheckBox">
                           <input
                             name="noEvent"
@@ -466,9 +479,12 @@ class Add extends React.Component<Props, State> {
                         options={clipPlatform}
                       />
                     ) : null}
+                    {clipType === "tutorial" || category === "player" ? (
+                      <br />
+                    ) : null}
                     <button
                       style={{
-                        marginTop: "80px",
+                        marginTop: "50px",
                         width: "100%",
                         maxWidth: "100%"
                       }}

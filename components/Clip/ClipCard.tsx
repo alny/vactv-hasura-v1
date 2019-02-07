@@ -82,7 +82,7 @@ const ClipCard: React.SFC<any> = ({
             <a>
               <span>
                 {clip.players[0] === undefined
-                  ? ""
+                  ? clip.type
                   : clip.players[0].player.nickName}
               </span>
             </a>

@@ -1,4 +1,8 @@
-import { createProClipSchema } from "../../utils/Yup/Schemas";
+import {
+  createProClipSchema,
+  createUserClipSchema,
+  tutorial
+} from "../../utils/Yup/Schemas";
 
 import { CREATE_PRO_CLIP_MUTATION } from "../../graphql/mutations/clips/createClipMutation";
 
@@ -11,20 +15,49 @@ export const clipTypeGen = (state, props) => {
     platform,
     clipType,
     title,
+    player,
+    event,
     otherType
   } = state;
 
   let choose: any = {};
+  if (clipType === "pro") {
+    choose.validator = createProClipSchema;
+    choose.validateData = {
+      url,
+      weapon,
+      category,
+      map,
+      player,
+      event,
+      clipType,
+      platform
+    };
+  }
+  if (clipType === "user") {
+    choose.validator = createUserClipSchema;
+    choose.validateData = {
+      url,
+      weapon,
+      category,
+      map,
+      clipType,
+      platform
+    };
+  }
+  if (clipType === "tutorial") {
+    choose.validator = tutorial;
+    choose.validateData = {
+      url,
+      weapon,
+      category,
+      map,
+      clipType,
+      player,
+      event
+    };
+  }
 
-  choose.validator = createProClipSchema;
-  choose.validateData = {
-    url,
-    weapon,
-    category,
-    map,
-    clipType,
-    platform
-  };
   choose.mutation = CREATE_PRO_CLIP_MUTATION;
   choose.variables = {
     url,
