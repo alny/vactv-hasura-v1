@@ -125,14 +125,21 @@ class Clip extends React.Component<Props, State> {
                                 <div className="user">
                                   <Link
                                     route="player"
-                                    id={data.clip[0].players[0].player.id}
+                                    id={
+                                      data.clip[0].players[0] === undefined
+                                        ? ""
+                                        : data.clip[0].players[0].player.id
+                                    }
                                   >
                                     <a>
                                       <img
                                         style={{ borderRadius: "50%" }}
                                         className="mr-3"
                                         src={
-                                          data.clip[0].players[0].player.image
+                                          data.clip[0].players[0] === undefined
+                                            ? ""
+                                            : data.clip[0].players[0].player
+                                                .image
                                         }
                                         alt="#"
                                       />
@@ -142,18 +149,24 @@ class Clip extends React.Component<Props, State> {
                                     <span>
                                       <Link
                                         route="player"
-                                        id={data.clip[0].players[0].player.id}
+                                        id={
+                                          data.clip[0].players[0] === undefined
+                                            ? ""
+                                            : data.clip[0].players[0].player.id
+                                        }
                                       >
                                         <a>
-                                          {
-                                            data.clip[0].players[0].player
-                                              .nickName
-                                          }
+                                          {data.clip[0].players[0] === undefined
+                                            ? ""
+                                            : data.clip[0].players[0].player
+                                                .nickName}
                                         </a>
                                       </Link>
                                     </span>
                                     <div className="star-rating">
-                                      {data.clip[0].players[0].player.name}
+                                      {data.clip[0].players[0] === undefined
+                                        ? ""
+                                        : data.clip[0].players[0].player.name}
                                     </div>
                                   </div>
                                   <div
@@ -208,7 +221,11 @@ class Clip extends React.Component<Props, State> {
                                     </span>
                                   </h4>
                                   <h2>Event</h2>
-                                  <p>{data.clip[0].events[0].event.name}</p>
+                                  <p>
+                                    {data.clip[0].events[0] === undefined
+                                      ? ""
+                                      : data.clip[0].events[0].event.name}
+                                  </p>
                                   <h2>Total votes:</h2>
                                   <p>
                                     {
@@ -226,12 +243,23 @@ class Clip extends React.Component<Props, State> {
                                             userId: !isLoggedIn ? null : userId,
                                             clipId: data.clip[0].id,
                                             playerId:
-                                              data.clip[0].players[0].player.id,
+                                              data.clip[0].players[0] ===
+                                              undefined
+                                                ? ""
+                                                : data.clip[0].players[0].player
+                                                    .id,
                                             teamId:
-                                              data.clip[0].players[0].player
-                                                .teamId,
+                                              data.clip[0].players[0] ===
+                                              undefined
+                                                ? ""
+                                                : data.clip[0].players[0].player
+                                                    .teamId,
                                             eventId:
-                                              data.clip[0].events[0].event.id
+                                              data.clip[0].events[0] ===
+                                              undefined
+                                                ? ""
+                                                : data.clip[0].events[0].event
+                                                    .id
                                           }
                                         ]
                                       }}
