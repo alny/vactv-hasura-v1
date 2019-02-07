@@ -9,7 +9,6 @@ export const createProClipSchema = yup.object().shape({
     .min(10)
     .required(),
   player: yup.string().required(),
-  event: yup.string(),
   weapon: yup.string().required(),
   category: yup.string().required(),
   platform: yup.string(),

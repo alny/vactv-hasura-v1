@@ -112,7 +112,7 @@ class Discover extends React.Component<Props, State> {
 
     if (this.state.sort === "today") {
       (orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        // ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
         id: "desc"
       }),
         (filterOption = {
@@ -130,7 +130,7 @@ class Discover extends React.Component<Props, State> {
       //@ts-ignore
       var weekEnd = currentDate.clone().endOf("isoweek");
       (orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        // ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
         id: "desc"
       }),
         (filterOption = {
@@ -145,7 +145,7 @@ class Discover extends React.Component<Props, State> {
       const startOfMonth = moment().startOf("month");
       const endOfMonth = moment().endOf("month");
       (orderByOption = {
-        ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
+        // ratings_aggregate: { avg: { rating: "desc_nulls_last" } },
         id: "desc"
       }),
         (filterOption = {

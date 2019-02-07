@@ -13,7 +13,7 @@ export const submitRate = async (rateClip, state, closeModal) => {
         closeModal();
       } else {
         notifyError();
-        closeModal();
+        // closeModal();
         console.log("Already rated 🤔");
       }
     } catch (error) {
