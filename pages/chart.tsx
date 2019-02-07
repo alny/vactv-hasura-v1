@@ -29,6 +29,7 @@ import {
 import { Link } from "../server/routes";
 import Links from "next/link";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
+import moment from "moment";
 
 type Props = {
   isLoggedIn: boolean;
@@ -52,21 +53,15 @@ class Chart extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      sort: "today",
-      filters: { isPublic: { _eq: true } },
+      sort: "week",
+      filters: {},
       open: false,
       rating: 0,
       weapon: null,
       category: null,
       showFilterModal: false,
       map: null,
-      orderBy: {
-        ratings_aggregate: {
-          avg: { rating: "desc_nulls_last" },
-          sum: { rating: "desc_nulls_last" }
-        },
-        id: "desc"
-      }
+      orderBy: {}
     };
   }
 
@@ -84,7 +79,7 @@ class Chart extends React.Component<Props, State> {
   }
 
   setFilters = () => {
-    let withFilters = {};
+    let withFilters: any = { isPublic: { _eq: true }, type: { _eq: "pro" } };
     if (this.state.map) {
       withFilters = { map: { _eq: this.state.map }, ...withFilters };
     }
@@ -95,37 +90,37 @@ class Chart extends React.Component<Props, State> {
       withFilters = { weapon: { _eq: this.state.weapon }, ...withFilters };
     }
     this.setState({
-      filters: withFilters,
-      orderBy: this.state.orderBy
+      filters: withFilters
     });
   };
 
   getMoreClips = fetchMore => {
     event.preventDefault();
-    if (this.state.category || this.state.map || this.state.weapon) {
-      fetchMore({
-        variables: {
-          offset: 0,
-          orderBy: this.state.orderBy,
-          filters: this.state.filters
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult.clip) return prev;
-          this.setState({
-            showFilterModal: false,
-            weapon: null,
-            category: null,
-            map: null
-          });
-          return Object.assign({}, prev, {
-            clip: [...fetchMoreResult.clip]
-          });
-        }
-      });
-    }
+    fetchMore({
+      variables: {
+        offset: 0,
+        orderBy: this.state.orderBy,
+        filters: this.state.filters
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult.clip) return prev;
+        this.setState({
+          showFilterModal: false,
+          weapon: null,
+          category: null,
+          map: null
+        });
+        return Object.assign({}, prev, {
+          clip: [...fetchMoreResult.clip]
+        });
+      }
+    });
   };
 
   handleChange = name => value => {
+    if (!value) {
+      return;
+    }
     this.setState(
       //@ts-ignore
       {
@@ -154,15 +149,7 @@ class Chart extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn } = this.props;
-    const {
-      sort,
-      orderBy,
-      rating,
-      category,
-      map,
-      weapon,
-      filters
-    } = this.state;
+    const { sort, rating, category, map, weapon } = this.state;
 
     return (
       <Layout title="Vac.Tv | Charts" isLoggedIn={isLoggedIn}>
@@ -196,8 +183,14 @@ class Chart extends React.Component<Props, State> {
               <Query
                 query={getClipsWithFilter}
                 variables={{
-                  filters,
-                  orderBy,
+                  filters: { isPublic: { _eq: true }, type: { _eq: "pro" } },
+                  orderBy: {
+                    ratings_aggregate: {
+                      avg: { rating: "desc_nulls_last" },
+                      sum: { rating: "desc_nulls_last" }
+                    },
+                    id: "desc"
+                  },
                   offset: 0,
                   limit: 8
                 }}
@@ -283,7 +276,7 @@ class Chart extends React.Component<Props, State> {
                                 minMenuHeight={200}
                                 className="chartSelect"
                                 onChange={this.handleChange("weapon")}
-                                value={sort}
+                                value={weapon ? weapon.value : ""}
                                 isSearchable={true}
                                 placeholder="Weapon"
                                 options={weaponOptions}
@@ -292,7 +285,8 @@ class Chart extends React.Component<Props, State> {
                                 menuPlacement="auto"
                                 minMenuHeight={200}
                                 className="chartSelect"
-                                value={sort}
+                                onChange={this.handleChange("sort")}
+                                value={sort ? sort.value : ""}
                                 isSearchable={false}
                                 placeholder="Sort By"
                                 options={sortChartOptions}
