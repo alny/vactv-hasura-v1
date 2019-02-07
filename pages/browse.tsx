@@ -6,28 +6,15 @@ import {
   mapOptions,
   categoryOptions,
   weaponOptions,
-  rateOptions,
   clipTypeOption
 } from "../utils/Options";
 import defaultPage from "../components/hocs/defaultPage";
-import { RATE_CLIP_MUTATION } from "../graphql/mutations/clips/rateClipMutation";
 import { ToastContainer, toast } from "react-toastify";
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import { getClipsWithFilter } from "../graphql/queries/clips/getClipsWithFilter";
-import {
-  emojiRating,
-  toFixed,
-  circleStyle,
-  modalStyle,
-  backdropStyle
-} from "../utils/Styles";
-import CircularProgressbar from "react-circular-progressbar";
-import { Modal } from "react-overlays";
-//@ts-ignore
-import { Link } from "../server/routes";
+import { backdropStyle } from "../utils/Styles";
 import { searchPlayer } from "../graphql/queries/player/searchPlayer";
 import { searchEvent } from "../graphql/queries/event/searchEvent";
-import { submitRate } from "../utils/SharedFunctions/submitRating";
 import ClipCard from "../components/Clip/ClipCard";
 
 type Props = {

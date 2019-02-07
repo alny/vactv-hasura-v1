@@ -20,6 +20,7 @@ import { withRouter } from "next/router";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { getTeamWithPlayers } from "../graphql/queries/team/getTeamWithPlayers";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
+import { rateObjects } from "../utils/SharedFunctions/rateClips";
 
 type Props = {
   isLoggedIn: boolean;
@@ -407,14 +408,12 @@ class Team extends React.Component<Props, State> {
                                 mutation={RATE_CLIP_MUTATION}
                                 variables={{
                                   objects: [
-                                    {
-                                      rating,
-                                      userId: !isLoggedIn ? null : userId,
-                                      clipId: clip.id,
-                                      playerId: clip.players[0].player.id,
-                                      teamId: clip.players[0].player.teamId,
-                                      eventId: clip.events[0].event.id
-                                    }
+                                    rateObjects(
+                                      clip,
+                                      this.state.rating,
+                                      isLoggedIn,
+                                      userId
+                                    )
                                   ]
                                 }}
                               >

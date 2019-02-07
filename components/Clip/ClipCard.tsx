@@ -14,6 +14,7 @@ import { RATE_CLIP_MUTATION } from "../../graphql/mutations/clips/rateClipMutati
 import Select from "react-select";
 import { rateOptions } from "../../utils/Options";
 import { submitRate } from "../../utils/SharedFunctions/submitRating";
+import { rateObjects } from "../../utils/SharedFunctions/rateClips";
 
 const ClipCard: React.SFC<any> = ({
   specificStyle,
@@ -109,19 +110,25 @@ const ClipCard: React.SFC<any> = ({
         mutation={RATE_CLIP_MUTATION}
         variables={{
           objects: [
-            {
+            rateObjects(
+              clip,
               rating,
-              userId: !props.loggedInUser ? null : props.loggedInUser.sub,
-              clipId: clip.id,
-              playerId:
-                clip.players[0] === undefined ? "" : clip.players[0].player.id,
-              teamId:
-                clip.players[0] === undefined
-                  ? ""
-                  : clip.players[0].player.teamId,
-              eventId:
-                clip.events[0] === undefined ? "" : clip.events[0].eventId
-            }
+              !props.loggedInUser ? null : props.loggedInUser,
+              !props.loggedInUser ? null : props.loggedInUser.sub
+            )
+            // {
+            //   rating,
+            //   userId: !props.loggedInUser ? null : props.loggedInUser.sub,
+            //   clipId: clip.id,
+            //   playerId:
+            //     clip.players[0] === undefined ? "" : clip.players[0].player.id,
+            //   teamId:
+            //     clip.players[0] === undefined
+            //       ? ""
+            //       : clip.players[0].player.teamId,
+            //   eventId:
+            //     clip.events[0] === undefined ? "" : clip.events[0].eventId
+            // }
           ]
         }}
       >
