@@ -327,7 +327,7 @@ class Event extends React.Component<Props, State> {
                                   <Link
                                     route="player"
                                     id={
-                                      clip.clip.players === undefined
+                                      clip.clip.players[0] === undefined
                                         ? ""
                                         : clip.clip.players[0].player.id
                                     }
@@ -335,19 +335,19 @@ class Event extends React.Component<Props, State> {
                                     <a>
                                       <img
                                         src={
-                                          clip.clip.players === undefined
+                                          clip.clip.players[0] === undefined
                                             ? ""
                                             : clip.clip.players[0].player.image
                                         }
                                         alt={
-                                          clip.clip.players === undefined
+                                          clip.clip.players[0] === undefined
                                             ? ""
                                             : clip.clip.players[0].player
                                                 .nickName
                                         }
                                       />
                                       <span>
-                                        {clip.clip.players === undefined
+                                        {clip.clip.players[0] === undefined
                                           ? ""
                                           : clip.clip.players[0].player
                                               .nickName}
@@ -453,7 +453,7 @@ class Event extends React.Component<Props, State> {
                                         <Link
                                           route="player"
                                           id={
-                                            clip.clip.players === undefined
+                                            clip.clip.players[0] === undefined
                                               ? ""
                                               : clip.clip.players[0].player.id
                                           }
@@ -462,20 +462,23 @@ class Event extends React.Component<Props, State> {
                                             <img
                                               className="modalPlayerImg"
                                               src={
-                                                clip.clip.players === undefined
+                                                clip.clip.players[0] ===
+                                                undefined
                                                   ? ""
                                                   : clip.clip.players[0].player
                                                       .image
                                               }
                                               alt={
-                                                clip.clip.players === undefined
+                                                clip.clip.players[0] ===
+                                                undefined
                                                   ? ""
                                                   : clip.clip.players[0].player
                                                       .nickName
                                               }
                                             />
                                             <span className="modalPlayerImgText">
-                                              {clip.clip.players === undefined
+                                              {clip.clip.players[0] ===
+                                              undefined
                                                 ? ""
                                                 : clip.clip.players[0].player
                                                     .nickName}
