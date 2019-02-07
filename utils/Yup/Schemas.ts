@@ -32,6 +32,20 @@ export const createUserClipSchema = yup.object().shape({
   clipType: yup.string().required()
 });
 
+export const fragmovieHighLight = yup.object().shape({
+  url: yup
+    .string()
+    .matches(/(youtube.com|twitch.tv|plays.tv|twitter.com)/, {
+      excludeEmptyString: true
+    })
+    .min(10)
+    .required(),
+  event: yup.string(),
+  category: yup.string().required(),
+  clipType: yup.string().required(),
+  player: yup.string()
+});
+
 export const tutorial = yup.object().shape({
   url: yup
     .string()

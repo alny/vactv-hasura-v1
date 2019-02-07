@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 export const getNotPublishedClips = gql`
   query getNotPublishedClips {
-    clip(where: { isPublic: { _eq: false }, type: { _eq: "pro" } }) {
+    clip(where: { isPublic: { _eq: false } }) {
       id
       title
       thumbNail

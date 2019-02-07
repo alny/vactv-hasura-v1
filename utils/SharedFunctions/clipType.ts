@@ -1,7 +1,8 @@
 import {
   createProClipSchema,
   createUserClipSchema,
-  tutorial
+  tutorial,
+  fragmovieHighLight
 } from "../../utils/Yup/Schemas";
 
 import { CREATE_PRO_CLIP_MUTATION } from "../../graphql/mutations/clips/createClipMutation";
@@ -45,13 +46,27 @@ export const clipTypeGen = (state, props) => {
       platform
     };
   }
-  if (clipType === "tutorial") {
+  if (
+    clipType === "tutorial" ||
+    clipType === "highlight" ||
+    clipType === "fragmovie"
+  ) {
     choose.validator = tutorial;
     choose.validateData = {
       url,
       weapon,
       category,
       map,
+      clipType,
+      player,
+      event
+    };
+  }
+  if (clipType === "highlight" || clipType === "fragmovie") {
+    choose.validator = fragmovieHighLight;
+    choose.validateData = {
+      url,
+      category,
       clipType,
       player,
       event

@@ -254,68 +254,26 @@ class Navbar extends React.Component<Props, State> {
                   </div>
                 </li>
                 <li className={this.isActive("/browse")}>
-                  <div className="dropdown">
-                    <a
-                      href="#"
-                      className="nav-link"
-                      role="button"
-                      data-toggle="dropdown"
-                    >
+                  <Link href="/browse">
+                    <a className="nav-link">
                       Browse{" "}
                       <i
-                        style={{ fontWeight: 600, fontSize: "14px" }}
-                        className="fa fa-crosshairs"
+                        style={{
+                          position: "relative",
+                          top: "1px",
+                          left: "3px",
+                          fontWeight: 600,
+                          fontSize: "14px"
+                        }}
+                        className="fas fa-crosshairs"
                       />
                     </a>
-                    <div
-                      style={{ left: "10%" }}
-                      className="dropdown-menu dropdown-menu-right"
-                    >
-                      <div className="middle">
-                        <Link href="/browse">
-                          <a className="dropdown-item">
-                            <i
-                              style={{ marginRight: "8px" }}
-                              className="fas fa-play"
-                            />
-                            Clips
-                          </a>
-                        </Link>
-                        <Link href="/soon">
-                          <a className="dropdown-item">
-                            <i
-                              style={{ marginRight: "8px" }}
-                              className="fas fa-magic"
-                            />
-                            Highlights
-                          </a>
-                        </Link>
-                        <Link href="/tutorials">
-                          <a className="dropdown-item">
-                            <i
-                              style={{ marginRight: "8px" }}
-                              className="fas fa-graduation-cap"
-                            />
-                            Tutorials
-                          </a>
-                        </Link>
-                        <Link href="/soon">
-                          <a className="dropdown-item">
-                            <i
-                              style={{ marginRight: "8px" }}
-                              className="fas fa-video"
-                            />
-                            Fragmovies
-                          </a>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </li>
                 <li className={this.isActive("/charts")}>
                   <Link href="/chart">
                     <a className="nav-link">
-                      Top Rated{" "}
+                      Charts{" "}
                       <i
                         style={{
                           position: "relative",
