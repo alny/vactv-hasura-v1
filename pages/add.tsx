@@ -20,8 +20,10 @@ import { searchEvent } from "../graphql/queries/event/searchEvent";
 import { clipTypeGen } from "../utils/SharedFunctions/clipType";
 import {
   CREATE_PLAYER_ON_CLIP_MUTATION,
-  CREATE_EVENT_ON_CLIP_MUTATION
+  CREATE_EVENT_ON_CLIP_MUTATION,
+  CREATE_PRO_CLIP_MUTATION
 } from "../graphql/mutations/clips/createClipMutation";
+import { testerSchema } from "../utils/Yup/Schemas";
 
 type Props = {
   statusCode: any;
@@ -71,7 +73,7 @@ class Add extends React.Component<Props, State> {
       events: [],
       eventsLoading: false,
       submitDisable: false,
-      platform: "event",
+      platform: "",
       isChecked: props.isChecked || false
     };
     this.handleChange = this.handleChange.bind(this);
@@ -84,7 +86,11 @@ class Add extends React.Component<Props, State> {
   }
 
   handleCheckBoxChange() {
-    this.setState({ isChecked: !this.state.isChecked, event: null });
+    this.setState({
+      isChecked: !this.state.isChecked,
+      event: "",
+      platform: ""
+    });
   }
 
   handleSelectChange = name => value => {
@@ -96,7 +102,7 @@ class Add extends React.Component<Props, State> {
       //@ts-ignore
       this.setState({
         [name]: value.value,
-        platform: "event",
+        platform: "",
         player: "",
         event: "",
         weapon: "",
@@ -124,20 +130,18 @@ class Add extends React.Component<Props, State> {
 
     const notifySuccess = () =>
       toast.success("😄 Clip successfully submitted!");
-    const notifyError = error => toast.warn(error);
+    const notifyError = error => toast.warn("😋 " + error);
 
     let options = clipTypeGen(this.state, this.props);
-    if (!options.validator) {
-      return;
-    }
-    await options.validator
-      .validate(options.validateData)
+
+    await testerSchema(this.state)
+      .validate(this.state)
       .then(async () => {
         this.setState({ submitDisable: true });
         try {
           console.log(this.state);
           const clip = await this.props.client.mutate({
-            mutation: options.mutation,
+            mutation: CREATE_PRO_CLIP_MUTATION,
             variables: {
               objects: [options.variables]
             }
@@ -441,6 +445,7 @@ class Add extends React.Component<Props, State> {
                           //@ts-ignore
                           value={event ? event.value : ""}
                           isClearable={true}
+                          isDisabled={isChecked}
                           isLoading={this.state.eventsLoading}
                           placeholder="Search for Event e.g. 'Blast Pro'"
                           options={

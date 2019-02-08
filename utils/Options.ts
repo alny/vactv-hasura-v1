@@ -44,9 +44,7 @@ export const clipTypeOption = [
 
 export const fragmovieType = [
   { value: "team", label: "Team" },
-  { value: "player", label: "Player" },
-  { value: "event", label: "Event" },
-  { value: "other", label: "Other" }
+  { value: "player", label: "Player" }
 ];
 
 export const tutorialType = [

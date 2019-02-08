@@ -41,7 +41,7 @@ const ClipCard: React.SFC<any> = ({
               <Link route="clip" id={clip.id}>
                 <a>
                   {clip.category}{" "}
-                  {/* {emojiRating(clip.ratings_aggregate.aggregate.avg.rating)} */}
+                  {emojiRating(clip.ratings_aggregate.aggregate.avg.rating)}
                 </a>
               </Link>
             </h3>
@@ -116,19 +116,6 @@ const ClipCard: React.SFC<any> = ({
               !props.loggedInUser ? null : props.loggedInUser,
               !props.loggedInUser ? null : props.loggedInUser.sub
             )
-            // {
-            //   rating,
-            //   userId: !props.loggedInUser ? null : props.loggedInUser.sub,
-            //   clipId: clip.id,
-            //   playerId:
-            //     clip.players[0] === undefined ? "" : clip.players[0].player.id,
-            //   teamId:
-            //     clip.players[0] === undefined
-            //       ? ""
-            //       : clip.players[0].player.teamId,
-            //   eventId:
-            //     clip.events[0] === undefined ? "" : clip.events[0].eventId
-            // }
           ]
         }}
       >
