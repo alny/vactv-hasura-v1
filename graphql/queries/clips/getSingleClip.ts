@@ -12,6 +12,8 @@ export const getSingleClip = gql`
       userId
       category
       weapon
+      platform
+      type
       players {
         player {
           id

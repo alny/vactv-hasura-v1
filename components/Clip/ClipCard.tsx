@@ -45,14 +45,23 @@ const ClipCard: React.SFC<any> = ({
                 </a>
               </Link>
             </h3>
+
             <h6
               style={{
                 textTransform: "capitalize",
                 fontSize: "12px"
               }}
             >
-              🌍 {clip.map} | 💢{" "}
-              <span style={{ textTransform: "uppercase" }}>{clip.weapon}</span>
+              {clip.map ? "🌍 " + clip.map : "📺 " + clip.type} |
+              <span style={{ textTransform: "uppercase" }}>
+                {clip.weapon ? (
+                  " 💢 " + clip.weapon
+                ) : (
+                  <span style={{ textTransform: "capitalize" }}>
+                    {" 💢 " + clip.category}
+                  </span>
+                )}
+              </span>
             </h6>
           </div>
         </div>
@@ -89,23 +98,36 @@ const ClipCard: React.SFC<any> = ({
               </a>
             </Link>
           )}
-
-          <Link
-            route="player"
-            id={clip.players[0] === undefined ? "" : clip.players[0].player.id}
-          >
-            <a>
-              <span>
-                {clip.players[0] === undefined ? (
-                  <span style={{ textTransform: "capitalize" }}>
-                    {clip.type === "user" ? clip.platform : clip.type}
-                  </span>
-                ) : (
-                  clip.players[0].player.nickName
-                )}
-              </span>
-            </a>
-          </Link>
+          {clip.players[0] === undefined ? (
+            <span>
+              {clip.players[0] === undefined ? (
+                <span style={{ textTransform: "capitalize" }}>
+                  {clip.type === "user" ? clip.platform : clip.type}
+                </span>
+              ) : (
+                clip.players[0].player.nickName
+              )}
+            </span>
+          ) : (
+            <Link
+              route="player"
+              id={
+                clip.players[0] === undefined ? "" : clip.players[0].player.id
+              }
+            >
+              <a>
+                <span>
+                  {clip.players[0] === undefined ? (
+                    <span style={{ textTransform: "capitalize" }}>
+                      {clip.type === "user" ? clip.platform : clip.type}
+                    </span>
+                  ) : (
+                    clip.players[0].player.nickName
+                  )}
+                </span>
+              </a>
+            </Link>
+          )}
 
           <div
             style={{

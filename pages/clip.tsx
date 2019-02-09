@@ -88,13 +88,13 @@ class Clip extends React.Component<Props, State> {
     } = this.props;
     const { rating } = this.state;
     return (
-      <Layout title="Vac.Tv | Pro Clip" isLoggedIn={isLoggedIn}>
+      <Layout title="Vac.Tv | Clip" isLoggedIn={isLoggedIn}>
         <main>
           <section>
             <div className="freelancer">
               <div className="container">
                 <div className="above">
-                  <h1>Pro Clip</h1>
+                  <h1>Clip</h1>
                   <div className="buttons">
                     <a href="#">
                       Share Clip <i className="fa fa-angle-right" />

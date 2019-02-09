@@ -259,7 +259,8 @@ class Discover extends React.Component<Props, State> {
                   </div>
                 </section>
               </>
-              {isEmpty ? null : (
+
+              {clips.length < 12 || isEmpty ? null : (
                 <div className="load-more">
                   <a
                     onClick={() => this.getMoreClips()}

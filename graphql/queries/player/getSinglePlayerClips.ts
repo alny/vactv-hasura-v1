@@ -46,6 +46,8 @@ export const getSinglePlayerClips = gql`
           userId
           category
           weapon
+          type
+          platform
           events {
             event {
               id

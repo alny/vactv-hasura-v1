@@ -98,7 +98,6 @@ class Add extends React.Component<Props, State> {
       return;
     }
     if (name === "clipType") {
-      console.log(name);
       //@ts-ignore
       this.setState({
         [name]: value.value,

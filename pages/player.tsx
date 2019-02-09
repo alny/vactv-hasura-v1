@@ -416,13 +416,24 @@ class Player extends React.Component<Props, State> {
                                         fontSize: "12px"
                                       }}
                                     >
-                                      🌍 {clip.clip.map} | 💢{" "}
+                                      {clip.clip.map
+                                        ? "🌍 " + clip.clip.map
+                                        : "📺 " + clip.clip.type}{" "}
+                                      |
                                       <span
-                                        style={{
-                                          textTransform: "uppercase"
-                                        }}
+                                        style={{ textTransform: "uppercase" }}
                                       >
-                                        {clip.clip.weapon}
+                                        {clip.clip.weapon ? (
+                                          " 💢 " + clip.clip.weapon
+                                        ) : (
+                                          <span
+                                            style={{
+                                              textTransform: "capitalize"
+                                            }}
+                                          >
+                                            {" 💢 " + clip.clip.category}
+                                          </span>
+                                        )}
                                       </span>
                                     </h6>
                                   </div>

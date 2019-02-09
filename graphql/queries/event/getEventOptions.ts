@@ -23,7 +23,7 @@ export const FRONT_PAGE = gql`
           count
         }
       }
-      eventClips(limit: 4) {
+      eventClips(limit: 4, where: { clip: { isPublic: { _eq: true } } }) {
         clip {
           id
           title
@@ -75,7 +75,7 @@ export const FRONT_PAGE = gql`
         image
         name
       }
-      playerClips_aggregate {
+      playerClips_aggregate(where: { clip: { isPublic: { _eq: true } } }) {
         aggregate {
           count
         }
