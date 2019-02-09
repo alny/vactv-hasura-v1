@@ -12,7 +12,7 @@ export const getUserClips = gql`
           count
         }
       }
-      ratings_aggregate {
+      ratings_aggregate(where: { clipByclipid: { type: { _eq: "user" } } }) {
         aggregate {
           count
           avg {
@@ -20,7 +20,11 @@ export const getUserClips = gql`
           }
         }
       }
-      clipsByuserid(limit: $limit, offset: $offset) {
+      clipsByuserid(
+        where: { type: { _eq: "user" } }
+        limit: $limit
+        offset: $offset
+      ) {
         id
         title
         thumbNail

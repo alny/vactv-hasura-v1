@@ -348,13 +348,24 @@ class User extends React.Component<Props, State> {
                                       fontSize: "12px"
                                     }}
                                   >
-                                    🌍 {clip.map} | 💢{" "}
+                                    {clip.map
+                                      ? "🌍 " + clip.map
+                                      : "📺 " + clip.type}{" "}
+                                    |
                                     <span
-                                      style={{
-                                        textTransform: "uppercase"
-                                      }}
+                                      style={{ textTransform: "uppercase" }}
                                     >
-                                      {clip.weapon}
+                                      {clip.weapon ? (
+                                        " 💢 " + clip.weapon
+                                      ) : (
+                                        <span
+                                          style={{
+                                            textTransform: "capitalize"
+                                          }}
+                                        >
+                                          {" 💢 " + clip.category}
+                                        </span>
+                                      )}
                                     </span>
                                   </h6>
                                 </div>
@@ -366,8 +377,10 @@ class User extends React.Component<Props, State> {
                                   alt="#"
                                 />
                                 <div className="cut-text">
-                                  <span>
-                                    {clip.type === null ? "" : clip.type}
+                                  <span style={{ textTransform: "capitalize" }}>
+                                    {clip.type === "user"
+                                      ? clip.platform
+                                      : clip.type}
                                   </span>
                                 </div>
                                 <div
