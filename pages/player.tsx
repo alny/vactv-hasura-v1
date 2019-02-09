@@ -153,33 +153,30 @@ class Player extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    if (isValid(playerId || this.props.router.query.id)) {
-      const data = await this.props.client.query({
-        query: getSinglePlayerClips,
-        variables: {
-          playerId: !playerId ? this.props.router.query.id : playerId,
-          orderBy: this.state.orderBy,
-          offset: 0,
-          limit: 12
+    const data = await this.props.client.query({
+      query: getSinglePlayerClips,
+      variables: {
+        playerId: !playerId ? this.props.router.query.id : playerId,
+        orderBy: this.state.orderBy,
+        offset: 0,
+        limit: 12
+      }
+    });
+    if (data.data.player) {
+      this.setState({
+        loading: false,
+        clips: data.data.player[0].playerClips,
+        clipLength: data.data.player[0].playerClips.length,
+        playerProfile: {
+          id: data.data.player[0].id,
+          name: data.data.player[0].name,
+          nickName: data.data.player[0].nickName,
+          image: data.data.player[0].image,
+          rating: data.data.player[0].rating_aggregate,
+          clipCount: data.data.player[0].playerClips_aggregate.aggregate.count,
+          team: data.data.player[0].team
         }
       });
-      if (data.data.player) {
-        this.setState({
-          loading: false,
-          clips: data.data.player[0].playerClips,
-          clipLength: data.data.player[0].playerClips.length,
-          playerProfile: {
-            id: data.data.player[0].id,
-            name: data.data.player[0].name,
-            nickName: data.data.player[0].nickName,
-            image: data.data.player[0].image,
-            rating: data.data.player[0].rating_aggregate,
-            clipCount:
-              data.data.player[0].playerClips_aggregate.aggregate.count,
-            team: data.data.player[0].team
-          }
-        });
-      }
     }
   }
 
