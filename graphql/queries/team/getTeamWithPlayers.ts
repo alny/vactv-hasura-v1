@@ -23,6 +23,8 @@ export const getTeamWithPlayers = gql`
       userId
       category
       weapon
+      type
+      platform
       players {
         player {
           id
