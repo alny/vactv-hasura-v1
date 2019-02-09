@@ -139,6 +139,7 @@ class Browse extends React.Component<Props, State> {
       event: null,
       weapon: null,
       category: null,
+      type: null,
       map: null,
       sort: null,
       withFilter: true

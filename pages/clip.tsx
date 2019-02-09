@@ -137,7 +137,7 @@ class Clip extends React.Component<Props, State> {
                                         className="mr-3"
                                         src={
                                           data.clip[0].players[0] === undefined
-                                            ? ""
+                                            ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                             : data.clip[0].players[0].player
                                                 .image
                                         }

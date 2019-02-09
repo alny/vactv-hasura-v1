@@ -246,7 +246,7 @@ class Player extends React.Component<Props, State> {
                               src={
                                 playerProfile.team
                                   ? playerProfile.team.image
-                                  : null
+                                  : "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                               }
                               alt=""
                             />
@@ -441,12 +441,12 @@ class Player extends React.Component<Props, State> {
                                       <img
                                         src={
                                           clip.clip.events[0] === undefined
-                                            ? ""
+                                            ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                             : clip.clip.events[0].event.image
                                         }
                                         alt={
                                           clip.clip.events[0] === undefined
-                                            ? ""
+                                            ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                             : clip.clip.events[0].event.name
                                         }
                                       />
@@ -556,12 +556,12 @@ class Player extends React.Component<Props, State> {
                                           className="modalPlayerImg"
                                           src={
                                             playerProfile === null
-                                              ? ""
+                                              ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                               : playerProfile.image
                                           }
                                           alt={
                                             playerProfile === null
-                                              ? ""
+                                              ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                               : playerProfile.nickName
                                           }
                                         />

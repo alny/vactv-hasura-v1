@@ -33,6 +33,8 @@ export const FRONT_PAGE = gql`
           category
           userId
           weapon
+          platform
+          type
           events {
             eventId
           }

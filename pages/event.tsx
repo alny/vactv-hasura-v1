@@ -217,7 +217,11 @@ class Event extends React.Component<Props, State> {
                       <div className="singlePlayer">
                         <a href="#">
                           <img
-                            src={eventProfile ? eventProfile.image : null}
+                            src={
+                              eventProfile
+                                ? eventProfile.image
+                                : "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
+                            }
                             alt=""
                           />
                         </a>
@@ -464,14 +468,14 @@ class Event extends React.Component<Props, State> {
                                               src={
                                                 clip.clip.players[0] ===
                                                 undefined
-                                                  ? ""
+                                                  ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                                   : clip.clip.players[0].player
                                                       .image
                                               }
                                               alt={
                                                 clip.clip.players[0] ===
                                                 undefined
-                                                  ? ""
+                                                  ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                                   : clip.clip.players[0].player
                                                       .nickName
                                               }

@@ -23,6 +23,8 @@ export const getClipsWithFilter = gql`
       category
       weapon
       isPublic
+      type
+      platform
       players {
         player {
           id

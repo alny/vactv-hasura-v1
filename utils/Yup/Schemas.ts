@@ -5,24 +5,16 @@ export const testerSchema = data => {
   let objData: any = {
     url: yup
       .string()
-      .matches(/(youtube.com|twitch.tv|plays.tv|twitter.com)/, {
-        excludeEmptyString: true
-      })
-      .min(10)
-      .required(),
-    category: yup.string().required(),
-    clipType: yup.string().required()
+      .matches(
+        /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/,
+        "Invalid URL"
+      )
+      .min(10, "Min 15 characters long")
+      .required("Invalid URL!"),
+    category: yup.string().required("Category is required!"),
+    clipType: yup.string().required("Type is required!")
   };
-  const {
-    player,
-    event,
-    weapon,
-    map,
-    clipType,
-    platform,
-    category,
-    isChecked
-  } = data;
+  const { clipType, category, isChecked } = data;
 
   if (clipType === "pro" || clipType === "user") {
     if (isChecked && clipType === "pro") {
@@ -91,19 +83,6 @@ export const testerSchema = data => {
         ...objData
       };
     }
-    // if (isChecked && category === "team") {
-    //   objData = {
-    //     team: yup.string().required(),
-    //     platform: yup.string().required(),
-    //     ...objData
-    //   };
-    // } else {
-    //   objData = {
-    //     team: yup.string().required(),
-    //     // event: yup.string().required(),
-    //     ...objData
-    //   };
-    // }
   }
 
   return yup.object().shape(objData);

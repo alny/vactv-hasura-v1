@@ -260,12 +260,12 @@ class Moderator extends React.Component<Props, State> {
                                       <img
                                         src={
                                           clip.players[0] === undefined
-                                            ? ""
+                                            ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                             : clip.players[0].player.image
                                         }
                                         alt={
                                           clip.players[0] === undefined
-                                            ? ""
+                                            ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                             : clip.players[0].player.nickName
                                         }
                                       />
@@ -357,12 +357,12 @@ class Moderator extends React.Component<Props, State> {
                                           className="modalPlayerImg"
                                           src={
                                             clip.players[0] === undefined
-                                              ? ""
+                                              ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                               : clip.players[0].player.image
                                           }
                                           alt={
                                             clip.players[0] === undefined
-                                              ? ""
+                                              ? "https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
                                               : clip.players[0].player.nickName
                                           }
                                         />
