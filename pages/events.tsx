@@ -104,10 +104,74 @@ class Events extends React.Component<Props, State> {
                     <div className="clipLoader" />
                   ) : (
                     events.map((event, i) => (
-                      <div key={event.id} className="col-md-3">
+                      <div key={event.id} className="col-md-4">
                         <Link route="event" id={event.id}>
                           <a>
                             <div className="inside">
+                              <div
+                                style={{ borderBottom: "1px solid #f6f5f9" }}
+                                className="bottom"
+                              >
+                                <img src={event.image} alt={event.nickName} />
+                                <span className="cut-text-2">{event.name}</span>
+
+                                <div
+                                  style={{
+                                    width: "32px",
+                                    display: "inline-block",
+                                    float: "right"
+                                  }}
+                                >
+                                  <CircularProgressbar
+                                    percentage={
+                                      toFixed(
+                                        event.rating_aggregate.aggregate.avg
+                                          .rating
+                                      ) * 10
+                                    }
+                                    text={toFixed(
+                                      event.rating_aggregate.aggregate.avg
+                                        .rating
+                                    )}
+                                    styles={circleStyle(
+                                      event.rating_aggregate.aggregate.avg
+                                        .rating
+                                    )}
+                                  />
+                                </div>
+                              </div>
+                              <div className="middle">
+                                <h6
+                                  style={{
+                                    textTransform: "capitalize",
+                                    fontSize: "12px",
+                                    fontWeight: 600
+                                  }}
+                                >
+                                  <span>🎥 {event.organizer}</span>
+                                </h6>
+                                <h6
+                                  style={{
+                                    textTransform: "capitalize",
+                                    fontSize: "12px",
+                                    marginTop: "20px",
+                                    fontWeight: 800
+                                  }}
+                                >
+                                  {event.type}
+                                  <span
+                                    style={{
+                                      float: "right"
+                                    }}
+                                  >
+                                    {" "}
+                                    Clips:{" "}
+                                    {event.eventClips_aggregate.aggregate.count}
+                                  </span>
+                                </h6>
+                              </div>
+                            </div>
+                            {/* <div className="inside">
                               <div className="middle">
                                 <div>
                                   <Link route="event" id={event.id}>
@@ -140,7 +204,7 @@ class Events extends React.Component<Props, State> {
                                       fontWeight: 600,
                                       display: "inline"
                                     }}
-                                  >
+                                  > 
                                     Clips:{" "}
                                     {event.eventClips_aggregate.aggregate.count}
                                   </span>
@@ -178,7 +242,7 @@ class Events extends React.Component<Props, State> {
                                   />
                                 </div>
                               </div>
-                            </div>
+                            </div> */}
                           </a>
                         </Link>
                       </div>
