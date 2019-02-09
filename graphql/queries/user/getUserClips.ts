@@ -7,12 +7,20 @@ export const getUserClips = gql`
       image
       username
       userId
-      userclipsByuserid_aggregate {
+      clipsByuserid_aggregate {
         aggregate {
           count
         }
       }
-      userclipsByuserid(limit: $limit, offset: $offset) {
+      ratings_aggregate {
+        aggregate {
+          count
+          avg {
+            rating
+          }
+        }
+      }
+      clipsByuserid(limit: $limit, offset: $offset) {
         id
         title
         thumbNail
@@ -22,20 +30,14 @@ export const getUserClips = gql`
         userId
         category
         weapon
+        platform
+        type
         ratings_aggregate {
           aggregate {
             avg {
               rating
             }
             count
-          }
-        }
-      }
-      userratingsByuserid_aggregate {
-        aggregate {
-          count
-          avg {
-            rating
           }
         }
       }
