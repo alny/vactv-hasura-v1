@@ -16,6 +16,7 @@ import { backdropStyle } from "../utils/Styles";
 import { searchPlayer } from "../graphql/queries/player/searchPlayer";
 import { searchEvent } from "../graphql/queries/event/searchEvent";
 import ClipCard from "../components/Clip/ClipCard";
+import { searchTeam } from "../graphql/queries/team/searchTeam";
 
 type Props = {
   isLoggedIn: boolean;
@@ -31,6 +32,7 @@ interface State {
   open: any;
   rating: any;
   player: any;
+  team: any;
   event: any;
   weapon: any;
   category: any;
@@ -40,12 +42,15 @@ interface State {
   players: [];
   playersLoading: boolean;
   events: [];
+  teamLoading: boolean;
+  teams: [];
   eventsLoading: boolean;
   type: any;
 }
 
 let playerOptions = [];
 let eventOptions = [];
+let teamOptions = [];
 let timeout: any = 0;
 
 class Browse extends React.Component<Props, State> {
@@ -59,6 +64,7 @@ class Browse extends React.Component<Props, State> {
       open: false,
       rating: 0,
       player: null,
+      team: null,
       event: null,
       weapon: null,
       category: null,
@@ -69,6 +75,8 @@ class Browse extends React.Component<Props, State> {
       playersLoading: false,
       events: [],
       eventsLoading: false,
+      teams: [],
+      teamLoading: false,
       type: null
     };
   }
@@ -123,6 +131,7 @@ class Browse extends React.Component<Props, State> {
       this.state.weapon ||
       this.state.sort ||
       this.state.player ||
+      this.state.team ||
       this.state.event ||
       this.state.type
     ) {
@@ -136,6 +145,7 @@ class Browse extends React.Component<Props, State> {
   clearSearchState = () => {
     this.setState({
       player: null,
+      team: null,
       event: null,
       weapon: null,
       category: null,
@@ -185,6 +195,12 @@ class Browse extends React.Component<Props, State> {
     if (this.state.player) {
       filterOption = {
         players: { player: { id: { _eq: this.state.player } } },
+        ...filterOption
+      };
+    }
+    if (this.state.team) {
+      filterOption = {
+        players: { player: { teamId: { _eq: this.state.team } } },
         ...filterOption
       };
     }
@@ -257,7 +273,7 @@ class Browse extends React.Component<Props, State> {
           playersLoading: false
         });
       }
-    }, 500);
+    }, 1000);
   }
 
   doEventSearch(evt) {
@@ -290,7 +306,39 @@ class Browse extends React.Component<Props, State> {
         events: [...eventOptions],
         eventsLoading: false
       });
-    }, 500);
+    }, 1000);
+  }
+  doTeamSearch(evt) {
+    var searchText = evt; // this is the search text
+    if (timeout) clearTimeout(timeout);
+    if (!evt) {
+      return;
+    }
+    teamOptions = [];
+    this.setState({ teams: [], teamLoading: true });
+    timeout = setTimeout(async () => {
+      console.log(searchText);
+      const data = await this.props.client.query({
+        query: searchTeam,
+        variables: {
+          filters: {
+            name: { _ilike: "%" + searchText + "%" }
+          }
+        }
+      });
+      await data.data.team.forEach(element => {
+        var newOption = {
+          value: element.id,
+          label: element.name
+        };
+        teamOptions.push(newOption);
+      });
+      //@ts-ignore
+      this.setState({
+        teams: [...teamOptions],
+        teamLoading: false
+      });
+    }, 1000);
   }
 
   render() {
@@ -303,7 +351,8 @@ class Browse extends React.Component<Props, State> {
       weapon,
       player,
       event,
-      type
+      type,
+      team
     } = this.state;
     const { isLoggedIn } = this.props;
     return (
@@ -421,7 +470,6 @@ class Browse extends React.Component<Props, State> {
                               <Select
                                 onInputChange={evt => this.doPlayerSearch(evt)}
                                 onChange={this.handleChange("player")}
-                                //@ts-ignore
                                 value={player ? player.value : ""}
                                 isClearable={true}
                                 isLoading={this.state.playersLoading}
@@ -433,22 +481,25 @@ class Browse extends React.Component<Props, State> {
                                 }
                               />
                             </div>
-                            {/* <div className="browseFilter">
+                            <div className="browseFilter">
                               <Select
-                                menuPlacement="auto"
-                                minMenuHeight={200}
-                                className="browseSelect"
-                                value={event ? event.value : ""}
-                                isSearchable={false}
-                                placeholder="Filter Team"
-                                options={weaponOptions}
+                                onInputChange={evt => this.doTeamSearch(evt)}
+                                onChange={this.handleChange("team")}
+                                value={team ? team.value : ""}
+                                isClearable={true}
+                                isLoading={this.state.teamLoading}
+                                placeholder="Search for Team"
+                                options={
+                                  this.state.teams.length > 0
+                                    ? teamOptions
+                                    : this.state.teams
+                                }
                               />
-                            </div> */}
+                            </div>
                             <div className="browseFilter">
                               <Select
                                 onInputChange={evt => this.doEventSearch(evt)}
                                 onChange={this.handleChange("event")}
-                                //@ts-ignore
                                 value={event ? event.value : ""}
                                 isClearable={true}
                                 isLoading={this.state.eventsLoading}

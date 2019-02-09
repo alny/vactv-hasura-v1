@@ -32,11 +32,11 @@ class Layout extends React.Component<Props> {
           />
           <meta
             name="description"
-            content="Vac.Tv - Watch & Rate CS:GO Clips! Clips, Videos, Frags, Pro Players, Pro Teams, Events, Weapons, Categories and more!"
+            content="Vac.Tv - Watch & Rate CS:GO Clips! Clips, Videos, Frags, Pro Players, Pro Teams, Events, Weapons, Tutorials, Fragmovies, Highlights  Categories and more!"
           />
           <meta
             name="twitter:card"
-            defaultValue="Vac.Tv - Watch & Rate CS:GO Clips! Clips, Videos, Frags, Pro Players, Pro Teams, Events, Weapons, Categories and more!"
+            defaultValue="Vac.Tv - Watch & Rate CS:GO Clips! Clips, Videos, Frags, Pro Players, Pro Teams, Events, Weapons, Tutorials, Fragmovies, Highlights Categories and more!"
           />
           <meta
             property="og:title"
@@ -48,7 +48,7 @@ class Layout extends React.Component<Props> {
           <meta property="og:site_name" content="Vac.Tv" />
           <meta
             property="og:description"
-            content="Vac.Tv - Watch & Rate CS:GO Clips! Clips, Videos, Frags, Pro Players, Pro Teams, Events, Weapons, Categories and more!"
+            content="Vac.Tv - Watch & Rate CS:GO Clips! Clips, Videos, Frags, Pro Players, Pro Teams, Events, Weapons,Tutorials, Fragmovies, Highlights  Categories and more!"
           />
 
           <link rel="icon" href="/static/img/favicon_v2.png" />

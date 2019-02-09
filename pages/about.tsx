@@ -37,7 +37,8 @@ class About extends React.Component<Props, State> {
                               <div className="info">
                                 <h2>Vac.Tv</h2>
                                 <span>
-                                  <i className="fa fa-map-marker" /> Denmark
+                                  <i className="fas fa-map-marker-alt" />{" "}
+                                  de_tuscan
                                 </span>
                               </div>
                             </div>
