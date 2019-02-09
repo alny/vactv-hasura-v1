@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const testerSchema = data => {
+export const validationSchema = data => {
   console.log("TCL: data", data);
   let objData: any = {
     url: yup
@@ -67,19 +67,12 @@ export const testerSchema = data => {
       console.log(objData);
       objData = {
         player: yup.string().required(),
-        platform: yup.string().required(),
         ...objData
       };
-    } else if (isChecked && category === "team") {
+    }
+    if (isChecked && category === "team") {
       objData = {
         team: yup.string().required(),
-        platform: yup.string().required(),
-        ...objData
-      };
-    } else {
-      objData = {
-        player: yup.string().required(),
-        event: yup.string().required(),
         ...objData
       };
     }

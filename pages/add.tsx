@@ -23,7 +23,8 @@ import {
   CREATE_EVENT_ON_CLIP_MUTATION,
   CREATE_PRO_CLIP_MUTATION
 } from "../graphql/mutations/clips/createClipMutation";
-import { testerSchema } from "../utils/Yup/Schemas";
+import { validationSchema } from "../utils/Yup/Schemas";
+import { searchTeam } from "../graphql/queries/team/searchTeam";
 
 type Props = {
   statusCode: any;
@@ -46,6 +47,9 @@ interface State {
   playersLoading: boolean;
   events: [];
   eventsLoading: boolean;
+  teamLoading: boolean;
+  teams: [];
+  team: any;
   submitDisable: boolean;
   clipType: any;
   platform: String;
@@ -54,6 +58,7 @@ interface State {
 
 let playerOptions = [];
 let eventOptions = [];
+let teamOptions = [];
 let timeout: any = 0;
 
 class Add extends React.Component<Props, State> {
@@ -62,6 +67,7 @@ class Add extends React.Component<Props, State> {
     this.state = {
       player: "",
       event: "",
+      team: "",
       weapon: "",
       category: "",
       map: "",
@@ -72,6 +78,8 @@ class Add extends React.Component<Props, State> {
       playersLoading: false,
       events: [],
       eventsLoading: false,
+      teams: [],
+      teamLoading: false,
       submitDisable: false,
       platform: "",
       isChecked: props.isChecked || false
@@ -103,6 +111,7 @@ class Add extends React.Component<Props, State> {
         [name]: value.value,
         platform: "",
         player: "",
+        team: "",
         event: "",
         weapon: "",
         category: "",
@@ -133,7 +142,7 @@ class Add extends React.Component<Props, State> {
 
     let options = clipTypeGen(this.state, this.props);
 
-    await testerSchema(this.state)
+    await validationSchema(this.state)
       .validate(this.state)
       .then(async () => {
         this.setState({ submitDisable: true });
@@ -178,9 +187,9 @@ class Add extends React.Component<Props, State> {
           }
 
           if (clip.data.insert_clip) {
-            // this.setState({ submitDisable: true });
+            this.setState({ submitDisable: true });
             notifySuccess();
-            // setTimeout(() => Router.replace("/"), 3000);
+            setTimeout(() => Router.replace("/"), 3000);
             return;
           }
         } catch (error) {
@@ -233,7 +242,7 @@ class Add extends React.Component<Props, State> {
           playersLoading: false
         });
       }
-    }, 500);
+    }, 1500);
   }
 
   doEventSearch(evt) {
@@ -266,7 +275,40 @@ class Add extends React.Component<Props, State> {
         events: [...eventOptions],
         eventsLoading: false
       });
-    }, 500);
+    }, 1500);
+  }
+
+  doTeamSearch(evt) {
+    var searchText = evt; // this is the search text
+    if (timeout) clearTimeout(timeout);
+    if (!evt) {
+      return;
+    }
+    teamOptions = [];
+    this.setState({ teams: [], teamLoading: true });
+    timeout = setTimeout(async () => {
+      console.log(searchText);
+      const data = await this.props.client.query({
+        query: searchTeam,
+        variables: {
+          filters: {
+            name: { _ilike: "%" + searchText + "%" }
+          }
+        }
+      });
+      await data.data.team.forEach(element => {
+        var newOption = {
+          value: element.id,
+          label: element.name
+        };
+        teamOptions.push(newOption);
+      });
+      //@ts-ignore
+      this.setState({
+        teams: [...teamOptions],
+        teamLoading: false
+      });
+    }, 1500);
   }
 
   render() {
@@ -277,7 +319,7 @@ class Add extends React.Component<Props, State> {
       map,
       weapon,
       event,
-      title,
+      team,
       url,
       platform,
       clipType,
@@ -408,14 +450,16 @@ class Add extends React.Component<Props, State> {
                         />
                       ) : null}
                       {clipType === "fragmovie" || clipType === "highlight" ? (
-                        <Select
-                          className="addSelect"
-                          onChange={this.handleSelectChange("category")}
-                          //@ts-ignore
-                          value={category ? category.value : ""}
-                          placeholder={"Select A Type..."}
-                          options={fragmovieType}
-                        />
+                        <>
+                          <Select
+                            className="addSelect"
+                            onChange={this.handleSelectChange("category")}
+                            //@ts-ignore
+                            value={category ? category.value : ""}
+                            placeholder={"Select A Type..."}
+                            options={fragmovieType}
+                          />
+                        </>
                       ) : null}
                     </div>
                     {clipType === "pro" ||
@@ -473,7 +517,24 @@ class Add extends React.Component<Props, State> {
                         </div>
                       </div>
                     ) : null}
-                    {clipType === "user" || isChecked ? (
+                    {category === "team" ? (
+                      <Select
+                        className="addSelect-Left"
+                        onInputChange={evt => this.doTeamSearch(evt)}
+                        onChange={this.handleSelectChange("team")}
+                        //@ts-ignore
+                        value={team ? team.value : ""}
+                        isClearable={true}
+                        isLoading={this.state.teamLoading}
+                        placeholder="Search for Team e.g. 'Astralis'"
+                        options={
+                          this.state.teams.length > 0
+                            ? teamOptions
+                            : this.state.teams
+                        }
+                      />
+                    ) : null}
+                    {clipType === "user" ? (
                       <Select
                         className="addSelect"
                         onChange={this.handleSelectChange("platform")}
@@ -483,7 +544,9 @@ class Add extends React.Component<Props, State> {
                         options={clipPlatform}
                       />
                     ) : null}
-                    {clipType === "tutorial" || category === "player" ? (
+                    {clipType === "tutorial" ||
+                    category === "player" ||
+                    category === "team" ? (
                       <br />
                     ) : null}
                     <button
@@ -495,7 +558,7 @@ class Add extends React.Component<Props, State> {
                       className="btn btn-lg btn-primary btn-block"
                       type="submit"
                       onClick={e => this.handleSubmit(e)}
-                      // disabled={this.state.submitDisable}
+                      disabled={this.state.submitDisable}
                     >
                       Submit Clip
                     </button>
