@@ -384,6 +384,8 @@ class Event extends React.Component<Props, State> {
                             <Mutation
                               mutation={RATE_CLIP_MUTATION}
                               variables={{
+                                userId: !isLoggedIn ? null : userId,
+                                rating,
                                 objects: [
                                   {
                                     rating,

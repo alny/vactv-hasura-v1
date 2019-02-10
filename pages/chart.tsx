@@ -468,6 +468,8 @@ class Chart extends React.Component<Props, State> {
                             <Mutation
                               mutation={RATE_CLIP_MUTATION}
                               variables={{
+                                userId: !this.props.loggedInUser,
+                                rating,
                                 objects: [
                                   {
                                     rating,

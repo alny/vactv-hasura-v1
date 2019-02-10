@@ -2,6 +2,7 @@ import { gql } from "apollo-boost";
 
 export const getUserUploads = gql`
   query getUserUploads(
+    $userId: String!
     $filters: clip_bool_exp
     $orderBy: [clip_order_by!]
     $limit: Int!
@@ -49,7 +50,15 @@ export const getUserUploads = gql`
         }
       }
     }
-    clip_aggregate(where: { _and: [$filters] }) {
+    rating_aggregate(where: { userId: { _eq: $userId } }) {
+      aggregate {
+        count
+        sum {
+          rating
+        }
+      }
+    }
+    clip_aggregate(where: { userId: { _eq: $userId } }) {
       aggregate {
         count
       }

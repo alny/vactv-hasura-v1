@@ -149,6 +149,8 @@ const ClipCard: React.SFC<any> = ({
       <Mutation
         mutation={RATE_CLIP_MUTATION}
         variables={{
+          userId: !props.loggedInUser ? null : props.loggedInUser.sub,
+          rating,
           objects: [
             rateObjects(
               clip,

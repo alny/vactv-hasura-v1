@@ -150,7 +150,7 @@ class Navbar extends React.Component<Props, State> {
                           </h3>
                         </div>
                         <div className="middle">
-                          <Link href="/soon">
+                          <Link href="/profile">
                             <a className="dropdown-item">
                               <i className="fa fa-user-circle" />
                               Your Profile
@@ -169,12 +169,6 @@ class Navbar extends React.Component<Props, State> {
                             <a className="dropdown-item">
                               <i className="fa fa-plus" />
                               Add Clip
-                            </a>
-                          </Link>
-                          <Link href="/uploads">
-                            <a className="dropdown-item">
-                              <i className="fa fa-film" />
-                              Your Uploads
                             </a>
                           </Link>
                           <a

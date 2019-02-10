@@ -418,6 +418,8 @@ class Team extends React.Component<Props, State> {
                               <Mutation
                                 mutation={RATE_CLIP_MUTATION}
                                 variables={{
+                                  userId,
+                                  rating: this.state.rating,
                                   objects: [
                                     rateObjects(
                                       clip,
