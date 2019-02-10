@@ -148,7 +148,7 @@ class Events extends React.Component<Props, State> {
                                     fontWeight: 600
                                   }}
                                 >
-                                  <span>🎥 {event.organizer}</span>
+                                  <span>Organizer: {event.organizer}</span>
                                 </h6>
                                 <h6
                                   style={{
