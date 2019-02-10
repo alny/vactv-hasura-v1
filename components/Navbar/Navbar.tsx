@@ -17,6 +17,7 @@ interface State {
   name: string;
   image: string;
   id: string;
+  credits: Number;
 }
 
 class Navbar extends React.Component<Props, State> {
@@ -25,7 +26,8 @@ class Navbar extends React.Component<Props, State> {
     this.state = {
       id: "",
       name: "Loading",
-      image: ""
+      image: "",
+      credits: 0
     };
   }
 
@@ -36,7 +38,8 @@ class Navbar extends React.Component<Props, State> {
       this.setState({
         id: user.id,
         name: user.name,
-        image: user.image
+        image: user.image,
+        credits: user.credits
       });
     }
   }
@@ -58,7 +61,7 @@ class Navbar extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn, role } = this.props;
-    const { image, name } = this.state;
+    const { image, name, credits } = this.state;
 
     return (
       <header>
@@ -113,15 +116,6 @@ class Navbar extends React.Component<Props, State> {
                       type="submit"
                     >
                       Join/Login{" "}
-                      {/* <i
-                        style={{
-                          position: "relative",
-                          top: "1px",
-                          left: "5px",
-                          fontSize: "14px"
-                        }}
-                        className="fas fa-sign-in-alt"
-                      /> */}
                     </button>
                   </a>
                 </div>
@@ -146,7 +140,7 @@ class Navbar extends React.Component<Props, State> {
                             <img src={this.state.image} alt={this.state.name} />
                           </a> */}
                           <h3>
-                            <a href="#"> Level 1 | Credits: 0 </a>
+                            <a href="#"> Level 1 | Credits: {credits} </a>
                           </h3>
                         </div>
                         <div className="middle">

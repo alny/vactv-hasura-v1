@@ -3,14 +3,14 @@ import Layout from "../components/Layout";
 import Select from "react-select";
 import { sortMoreOptions } from "../utils/Options";
 import { ToastContainer, toast } from "react-toastify";
-import { backdropStyle } from "../utils/Styles";
+import { backdropStyle, toFixed, circleStyle } from "../utils/Styles";
 //@ts-ignore
 import { Link } from "../server/routes";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getUserUploads } from "../graphql/queries/user/getUserUploadClips";
 import privatePage from "../components/hocs/privatePage";
-import { submitRate } from "../utils/SharedFunctions/submitRating";
 import ClipCard from "../components/Clip/ClipCard";
+import CircularProgressbar from "react-circular-progressbar";
 
 type Props = {
   isLoggedIn: boolean;
@@ -33,6 +33,8 @@ interface State {
   clipLength: any;
   loading: boolean;
   sum: Number;
+  avg: Number;
+  ratingCount: Number;
 }
 
 class Profile extends React.Component<Props, State> {
@@ -50,7 +52,9 @@ class Profile extends React.Component<Props, State> {
       clips: [],
       clipLength: 0,
       loading: true,
-      sum: 0
+      sum: 0,
+      avg: 0,
+      ratingCount: 0
     };
   }
 
@@ -157,7 +161,9 @@ class Profile extends React.Component<Props, State> {
       clips: data.data.clip,
       clipLength: data.data.clip.length,
       count: data.data.clip_aggregate.aggregate.count,
+      ratingCount: data.data.rating_aggregate.aggregate.count,
       sum: data.data.rating_aggregate.aggregate.sum.rating,
+      avg: data.data.rating_aggregate.aggregate.avg.rating,
       loading: false
     });
   }
@@ -168,7 +174,7 @@ class Profile extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn } = this.props;
-    const { rating, clips, loading, sum } = this.state;
+    const { rating, clips, loading, sum, avg, ratingCount } = this.state;
     return (
       <Layout title="Vac.Tv | Profile" isLoggedIn={isLoggedIn}>
         <main>
@@ -232,12 +238,24 @@ class Profile extends React.Component<Props, State> {
                           style={{
                             fontSize: "16px",
                             fontWeight: 600,
-                            marginRight: "10px"
+                            marginRight: "82px"
                           }}
                         >
-                          Total Clips:
+                          Vac Score:
                         </span>
-                        <span className="totalRating">{this.state.count}</span>
+                        <div
+                          style={{
+                            width: "42px",
+                            display: "inline-block",
+                            float: "right"
+                          }}
+                        >
+                          <CircularProgressbar
+                            percentage={toFixed(avg) * 10}
+                            text={toFixed(avg)}
+                            styles={circleStyle(avg)}
+                          />
+                        </div>
                       </div>
                       <div className="singlePlayer">
                         <span
@@ -250,6 +268,30 @@ class Profile extends React.Component<Props, State> {
                           Credits Earned:
                         </span>
                         <span className="totalRating">{sum}</span>
+                      </div>
+                      <div className="singlePlayer">
+                        <span
+                          style={{
+                            fontSize: "16px",
+                            fontWeight: 600,
+                            marginRight: "10px"
+                          }}
+                        >
+                          Total Ratings:
+                        </span>
+                        <span className="totalRating">{ratingCount}</span>
+                      </div>
+                      <div className="singlePlayer">
+                        <span
+                          style={{
+                            fontSize: "16px",
+                            fontWeight: 600,
+                            marginRight: "10px"
+                          }}
+                        >
+                          Total Clips:
+                        </span>
+                        <span className="totalRating">{this.state.count}</span>
                       </div>
                     </div>
                   </div>

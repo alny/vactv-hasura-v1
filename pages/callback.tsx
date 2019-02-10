@@ -14,6 +14,7 @@ const getOneUser = gql`
     user(where: { userId: { _eq: $userId } }) {
       id
       userId
+      credits
     }
   }
 `;
@@ -61,6 +62,7 @@ class Callback extends Component<Props> {
                 : response.data.insert_user.returning[0].id,
               name: result.idTokenPayload.name,
               image: result.idTokenPayload.picture,
+              credits: foundUser ? foundUser.data.user[0].credits : 0,
               nickName: result.idTokenPayload.nickname
             };
             localStorage.setItem("user", JSON.stringify(user));

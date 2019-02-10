@@ -46,7 +46,6 @@ export const getUserUploads = gql`
           avg {
             rating
           }
-          count
         }
       }
     }
@@ -54,6 +53,9 @@ export const getUserUploads = gql`
       aggregate {
         count
         sum {
+          rating
+        }
+        avg {
           rating
         }
       }
