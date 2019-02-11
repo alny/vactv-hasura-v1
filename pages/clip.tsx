@@ -108,9 +108,8 @@ class Clip extends React.Component<Props, State> {
                   }}
                 >
                   {({ loading, error, data }) => {
-                    console.log("TCL: render -> data", data);
                     if (loading) return <div className="loader" />;
-                    if (error) return `Error!: ${error}`;
+                    if (error) return `No Clip!`;
                     if (
                       typeof data.clip != "undefined" &&
                       data.clip != null &&

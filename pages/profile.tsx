@@ -35,6 +35,7 @@ interface State {
   sum: Number;
   avg: Number;
   ratingCount: Number;
+  userId: String;
 }
 
 class Profile extends React.Component<Props, State> {
@@ -54,7 +55,8 @@ class Profile extends React.Component<Props, State> {
       loading: true,
       sum: 0,
       avg: 0,
-      ratingCount: 0
+      ratingCount: 0,
+      userId: ""
     };
   }
 
@@ -143,6 +145,7 @@ class Profile extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
+    var user: any = JSON.parse(localStorage.getItem("user"));
     const data = await this.props.client.query({
       query: getUserUploads,
       variables: {
@@ -164,7 +167,8 @@ class Profile extends React.Component<Props, State> {
       ratingCount: data.data.rating_aggregate.aggregate.count,
       sum: data.data.rating_aggregate.aggregate.sum.rating,
       avg: data.data.rating_aggregate.aggregate.avg.rating,
-      loading: false
+      loading: false,
+      userId: user.id
     });
   }
 
@@ -174,14 +178,22 @@ class Profile extends React.Component<Props, State> {
 
   render() {
     const { isLoggedIn } = this.props;
-    const { rating, clips, loading, sum, avg, ratingCount } = this.state;
+    const {
+      rating,
+      clips,
+      loading,
+      sum,
+      avg,
+      ratingCount,
+      userId
+    } = this.state;
     return (
       <Layout title="Vac.Tv | Profile" isLoggedIn={isLoggedIn}>
         <main>
           <div className="freelancers sidebar">
             <div className="container">
               <div className="above">
-                <h1>Profile</h1>
+                <h1>Private Profile</h1>
                 <div className="buttons">
                   <Select
                     menuPlacement="auto"
@@ -292,6 +304,19 @@ class Profile extends React.Component<Props, State> {
                           Total Clips:
                         </span>
                         <span className="totalRating">{this.state.count}</span>
+                      </div>
+                      <div className="singlePlayer">
+                        <Link route="user" id={userId}>
+                          <a>
+                            <button className="btn btn-primary">
+                              <i
+                                style={{ marginRight: "10px" }}
+                                className="fas fa-share-square"
+                              />
+                              Public Profile
+                            </button>
+                          </a>
+                        </Link>
                       </div>
                     </div>
                   </div>

@@ -21,6 +21,7 @@ import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { getTeamWithPlayers } from "../graphql/queries/team/getTeamWithPlayers";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
 import { rateObjects } from "../utils/SharedFunctions/rateClips";
+import { isValid } from "../utils/SharedFunctions/isUUIDValid";
 
 type Props = {
   isLoggedIn: boolean;
@@ -144,35 +145,37 @@ class Team extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    const data = await this.props.client.query({
-      query: getTeamWithPlayers,
-      variables: {
-        filters: {
-          players: {
-            player: {
-              teamId: { _eq: !teamId ? this.props.router.query.id : teamId }
+    if (isValid(teamId || this.props.router.query.id)) {
+      const data = await this.props.client.query({
+        query: getTeamWithPlayers,
+        variables: {
+          filters: {
+            players: {
+              player: {
+                teamId: { _eq: !teamId ? this.props.router.query.id : teamId }
+              }
             }
+          },
+          teamId: !teamId ? this.props.router.query.id : teamId,
+          orderBy: this.state.orderBy,
+          offset: 0,
+          limit: 12
+        }
+      });
+      if (data.data.team[0]) {
+        this.setState({
+          loading: false,
+          clips: data.data.clip,
+          clipLength: data.data.clip.length,
+          teamProfile: {
+            id: data.data.team[0].id,
+            name: data.data.team[0].name,
+            image: data.data.team[0].image,
+            players: data.data.team[0].players
           }
-        },
-        teamId: !teamId ? this.props.router.query.id : teamId,
-        orderBy: this.state.orderBy,
-        offset: 0,
-        limit: 12
+        });
       }
-    });
-    console.log(data.data.clip[0]);
-    this.setState({
-      loading: false,
-      clips: data.data.clip,
-      clipLength: data.data.clip.length,
-      teamProfile: {
-        id: data.data.team[0].id,
-        name: data.data.team[0].name,
-        image: data.data.team[0].image,
-        players: data.data.team[0].players
-      }
-    });
-    console.log(this.state);
+    }
   }
 
   handleChange = name => value => {

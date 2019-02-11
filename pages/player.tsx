@@ -172,7 +172,7 @@ class Player extends React.Component<Props, State> {
           limit: 12
         }
       });
-      if (data.data.player) {
+      if (data.data.player[0]) {
         this.setState({
           loading: false,
           clips: data.data.player[0].playerClips,

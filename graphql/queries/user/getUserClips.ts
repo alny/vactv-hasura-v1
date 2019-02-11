@@ -7,7 +7,7 @@ export const getUserClips = gql`
       image
       username
       userId
-      clipsByuserid_aggregate {
+      clipsByuserid_aggregate(where: { type: { _eq: "user" } }) {
         aggregate {
           count
         }

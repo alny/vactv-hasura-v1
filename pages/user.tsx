@@ -18,9 +18,17 @@ import { Modal } from "react-overlays";
 import { Link } from "../server/routes";
 import { withRouter } from "next/router";
 import { getUserClips } from "../graphql/queries/user/getUserClips";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { getTokenForBrowser, getTokenForServer } from "../components/Auth/auth";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
+import {
+  FacebookShareButton,
+  GooglePlusShareButton,
+  TwitterShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  GooglePlusIcon
+} from "react-share";
+import { isValid } from "../utils/SharedFunctions/isUUIDValid";
 
 type Props = {
   isLoggedIn: boolean;
@@ -162,29 +170,33 @@ class User extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    console.log(this.props.router.query.id);
-    const data = await this.props.client.query({
-      query: getUserClips,
-      variables: {
-        filters: { id: { _eq: this.props.router.query.id } },
-        offset: 0,
-        limit: 12
+    if (isValid(userId || this.props.router.query.id)) {
+      console.log(this.props.router.query.id);
+      const data = await this.props.client.query({
+        query: getUserClips,
+        variables: {
+          filters: { id: { _eq: this.props.router.query.id } },
+          offset: 0,
+          limit: 12
+        }
+      });
+      if (data.data.user[0]) {
+        this.setState({
+          loading: false,
+          clips: data.data.user[0].clipsByuserid,
+          clipLength: data.data.user[0].clipsByuserid.length,
+          userProfile: {
+            id: data.data.user[0].id,
+            image: data.data.user[0].image,
+            username: data.data.user[0].username,
+            rating: data.data.user[0].ratings_aggregate.aggregate.avg.rating,
+            ratingCount: data.data.user[0].ratings_aggregate.aggregate.count,
+            clipsCount:
+              data.data.user[0].clipsByuserid_aggregate.aggregate.count
+          }
+        });
       }
-    });
-    console.log(data.data);
-    this.setState({
-      loading: false,
-      clips: data.data.user[0].clipsByuserid,
-      clipLength: data.data.user[0].clipsByuserid.length,
-      userProfile: {
-        id: data.data.user[0].id,
-        image: data.data.user[0].image,
-        username: data.data.user[0].username,
-        rating: data.data.user[0].ratings_aggregate.aggregate.avg.rating,
-        ratingCount: data.data.user[0].ratings_aggregate.aggregate.count,
-        clipsCount: data.data.user[0].clipsByuserid_aggregate.aggregate.count
-      }
-    });
+    }
   }
 
   renderBackdrop(props) {
@@ -297,6 +309,35 @@ class User extends React.Component<Props, State> {
                         <span className="totalRating">
                           {userProfile.clipsCount ? userProfile.clipsCount : 0}
                         </span>
+                      </div>
+                      <div className="singlePlayer">
+                        <span
+                          style={{
+                            fontSize: "16px",
+                            fontWeight: 600,
+                            marginRight: "10px"
+                          }}
+                        >
+                          Share Profile:
+                        </span>
+                        <FacebookShareButton
+                          url={`https://vactv-web.herokuapp.com/user/${
+                            this.props.router.query.id
+                          }`}
+                          quote={"Test"}
+                          className="Demo__some-network__share-button"
+                        >
+                          <FacebookIcon size={32} round />
+                        </FacebookShareButton>
+                        <TwitterShareButton
+                          url={`https://vactv-web.herokuapp.com/user/${
+                            this.props.router.query.id
+                          }`}
+                          quote={"Test"}
+                          className="Demo__some-network__share-button"
+                        >
+                          <TwitterIcon size={32} round />
+                        </TwitterShareButton>
                       </div>
                     </div>
                   </div>
@@ -470,16 +511,8 @@ class User extends React.Component<Props, State> {
                                     >
                                       <img
                                         className="modalPlayerImg"
-                                        src={
-                                          playerProfile === null
-                                            ? ""
-                                            : playerProfile.image
-                                        }
-                                        alt={
-                                          playerProfile === null
-                                            ? ""
-                                            : playerProfile.nickName
-                                        }
+                                        src="https://s3.eu-central-1.amazonaws.com/vactv/vacPlaceholder.jpg"
+                                        alt=""
                                       />
                                       <span className="modalPlayerImgText">
                                         {playerProfile === null

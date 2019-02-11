@@ -21,6 +21,7 @@ import { Modal } from "react-overlays";
 //@ts-ignore
 import { Link } from "../server/routes";
 import { submitRate } from "../utils/SharedFunctions/submitRating";
+import { isValid } from "../utils/SharedFunctions/isUUIDValid";
 
 type Props = {
   isLoggedIn: boolean;
@@ -166,28 +167,32 @@ class Event extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    const data = await this.props.client.query({
-      query: getSingleEventClips,
-      variables: {
-        filters: {
-          id: { _eq: !eventId ? this.props.router.query.id : eventId }
-        },
-        orderBy: this.state.orderBy,
-        offset: 0,
-        limit: 12
+    if (isValid(eventId || this.props.router.query.id)) {
+      const data = await this.props.client.query({
+        query: getSingleEventClips,
+        variables: {
+          filters: {
+            id: { _eq: !eventId ? this.props.router.query.id : eventId }
+          },
+          orderBy: this.state.orderBy,
+          offset: 0,
+          limit: 12
+        }
+      });
+      if (data.data.event[0]) {
+        this.setState({
+          loading: false,
+          clips: data.data.event[0].eventClips,
+          clipLength: data.data.event[0].eventClips.length,
+          eventProfile: {
+            id: data.data.event[0].id,
+            name: data.data.event[0].name,
+            image: data.data.event[0].image,
+            clipCount: data.data.event[0].eventClips_aggregate.aggregate.count
+          }
+        });
       }
-    });
-    this.setState({
-      loading: false,
-      clips: data.data.event[0].eventClips,
-      clipLength: data.data.event[0].eventClips.length,
-      eventProfile: {
-        id: data.data.event[0].id,
-        name: data.data.event[0].name,
-        image: data.data.event[0].image,
-        clipCount: data.data.event[0].eventClips_aggregate.aggregate.count
-      }
-    });
+    }
   }
 
   renderBackdrop(props) {
