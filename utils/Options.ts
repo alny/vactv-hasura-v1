@@ -96,6 +96,7 @@ export const categoryOptions = [
   { value: "Ninja Defuse", label: "Ninja Defuse" },
   { value: "Outsmarted", label: "Outsmarted" },
   { value: "Flash Kill", label: "Flash Kill" },
+  { value: "Smoke Kill", label: "Smoke Kill" },
   { value: "Sneaky Beaky", label: "Sneaky Beaky" },
   { value: "Knife Kill", label: "Knife Kill" },
   { value: "Epic Fail", label: "Epic Fail" },
