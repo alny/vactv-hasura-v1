@@ -170,33 +170,32 @@ class User extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    if (isValid(userId || this.props.router.query.id)) {
-      console.log(this.props.router.query.id);
-      const data = await this.props.client.query({
-        query: getUserClips,
-        variables: {
-          filters: { id: { _eq: this.props.router.query.id } },
-          offset: 0,
-          limit: 12
+    // if (isValid(userId || this.props.router.query.id)) {
+    console.log(this.props.router.query.id);
+    const data = await this.props.client.query({
+      query: getUserClips,
+      variables: {
+        filters: { id: { _eq: this.props.router.query.id } },
+        offset: 0,
+        limit: 12
+      }
+    });
+    if (data.data.user[0]) {
+      this.setState({
+        loading: false,
+        clips: data.data.user[0].clipsByuserid,
+        clipLength: data.data.user[0].clipsByuserid.length,
+        userProfile: {
+          id: data.data.user[0].id,
+          image: data.data.user[0].image,
+          username: data.data.user[0].username,
+          rating: data.data.user[0].ratings_aggregate.aggregate.avg.rating,
+          ratingCount: data.data.user[0].ratings_aggregate.aggregate.count,
+          clipsCount: data.data.user[0].clipsByuserid_aggregate.aggregate.count
         }
       });
-      if (data.data.user[0]) {
-        this.setState({
-          loading: false,
-          clips: data.data.user[0].clipsByuserid,
-          clipLength: data.data.user[0].clipsByuserid.length,
-          userProfile: {
-            id: data.data.user[0].id,
-            image: data.data.user[0].image,
-            username: data.data.user[0].username,
-            rating: data.data.user[0].ratings_aggregate.aggregate.avg.rating,
-            ratingCount: data.data.user[0].ratings_aggregate.aggregate.count,
-            clipsCount:
-              data.data.user[0].clipsByuserid_aggregate.aggregate.count
-          }
-        });
-      }
     }
+    // }
   }
 
   renderBackdrop(props) {
