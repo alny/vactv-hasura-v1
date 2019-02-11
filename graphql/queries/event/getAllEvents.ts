@@ -19,7 +19,6 @@ export const getAllEvents = gql`
       organizer
       year
       type
-      nameSlug
       rating_aggregate {
         aggregate {
           avg {
