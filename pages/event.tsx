@@ -78,7 +78,7 @@ class Event extends React.Component<Props, State> {
   }
 
   onCloseModal = () => {
-    this.setState({ open: false });
+    this.setState({ open: false, rating: 0 });
   };
 
   onOpenModal(id, event) {
