@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 export const getUserClips = gql`
   query getUserClips(
-    $userId: String!
+    $userId: uuid!
     $filters: user_bool_exp
     $offset: Int!
     $limit: Int!
@@ -19,7 +19,10 @@ export const getUserClips = gql`
       }
       ratings_aggregate(
         where: {
-          clipByclipid: { type: { _eq: "user" }, userId: { _eq: $userId } }
+          clipByclipid: {
+            type: { _eq: "user" }
+            user: { id: { _eq: $userId } }
+          }
         }
       ) {
         aggregate {

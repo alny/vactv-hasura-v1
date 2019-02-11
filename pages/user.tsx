@@ -170,7 +170,6 @@ class User extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    console.log(this.props.router.query.id);
     const data = await this.props.client.query({
       query: getUserClips,
       variables: {
