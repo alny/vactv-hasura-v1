@@ -49,7 +49,7 @@ export const getUserUploads = gql`
         }
       }
     }
-    rating_aggregate(where: { userId: { _eq: $userId } }) {
+    rating_aggregate(where: { clipByclipid: { userId: { _eq: $userId } } }) {
       aggregate {
         count
         sum {

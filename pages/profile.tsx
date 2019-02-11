@@ -279,7 +279,7 @@ class Profile extends React.Component<Props, State> {
                         >
                           Credits Earned:
                         </span>
-                        <span className="totalRating">{sum}</span>
+                        <span className="totalRating">{sum ? sum : 0}</span>
                       </div>
                       <div className="singlePlayer">
                         <span

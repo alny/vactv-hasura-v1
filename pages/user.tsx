@@ -170,12 +170,12 @@ class User extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    // if (isValid(userId || this.props.router.query.id)) {
     console.log(this.props.router.query.id);
     const data = await this.props.client.query({
       query: getUserClips,
       variables: {
         filters: { id: { _eq: this.props.router.query.id } },
+        userId: this.props.router.query.id,
         offset: 0,
         limit: 12
       }
@@ -195,7 +195,6 @@ class User extends React.Component<Props, State> {
         }
       });
     }
-    // }
   }
 
   renderBackdrop(props) {

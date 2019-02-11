@@ -1,7 +1,12 @@
 import { gql } from "apollo-boost";
 
 export const getUserClips = gql`
-  query getUserClips($filters: user_bool_exp, $offset: Int!, $limit: Int!) {
+  query getUserClips(
+    $userId: String!
+    $filters: user_bool_exp
+    $offset: Int!
+    $limit: Int!
+  ) {
     user(where: { _and: [$filters] }) {
       id
       image
@@ -12,7 +17,11 @@ export const getUserClips = gql`
           count
         }
       }
-      ratings_aggregate(where: { clipByclipid: { type: { _eq: "user" } } }) {
+      ratings_aggregate(
+        where: {
+          clipByclipid: { type: { _eq: "user" }, userId: { _eq: $userId } }
+        }
+      ) {
         aggregate {
           count
           avg {
