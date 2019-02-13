@@ -226,30 +226,6 @@ class Home extends React.Component<Props, State> {
                 }
               }}
             </Query>
-            {/* <div className="career-single">
-              <div className="container">
-                <div className="col-md-12">
-                  <section>
-                    <div className="inside">
-                      <div className="top">
-                        <h2 style={{ marginBottom: "0px", marginLeft: "44%" }}>
-                          How To
-                        </h2>
-                      </div>
-                      <div style={{ textAlign: "center" }} className="job">
-                        <img src="/static/img/logo_dark.png" />
-                        <h4>1. Join the community</h4>
-                        <p>Due to the rapid growth and expansion of company</p>
-                        <h4>2. Watch and Rate Clips</h4>
-                        <p>Due to the rapid growth and expansion of company</p>
-                        <h4>3. Add and Share Clips</h4>
-                        <p>Due to the rapid growth and expansion of company</p>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-              </div>
-            </div> */}
           </div>
         </main>
         <ToastContainer />
