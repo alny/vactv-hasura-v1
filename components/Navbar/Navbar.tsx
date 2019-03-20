@@ -4,9 +4,6 @@ import Router from "next/router";
 import { login, logout } from "../Auth/auth0";
 import { deleteToken } from "../Auth/auth";
 import defaultPage from "../../components/hocs/defaultPage";
-//@ts-ignore
-import { Link as Routes } from "../../server/routes";
-
 type Props = {
   isLoggedIn: boolean;
   loggedInUser: any;
